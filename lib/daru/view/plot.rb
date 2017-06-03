@@ -39,8 +39,8 @@ module Daru
       end
 
       # generat html file
-      def export_html(path="./plot.html")
-        self.export_html(@plt, path="./plot.html")
+      def export_html_file(path="./plot.html")
+        self.export_html_file(@plt, path="./plot.html")
       end
 
 

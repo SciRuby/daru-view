@@ -1,4 +1,4 @@
-require_relative 'nyaplot/core.rb'
+
 require 'daru'
 require 'nyaplot'
 
@@ -12,9 +12,11 @@ module Daru
           when data.is_a?(Daru::DataFrame)
             # define method called plot_obj in daru/plotting/../NyaplotLibrary
             # to get the plot object.
-            return data.plot options
+            data.plot options
+            return data.plot_obj
           when data.is_a?(Daru::Vector)
-            return data.plot options
+            data.plot options
+            return data.plot_obj
           else
             # TODO: add more cases e.g. Array of rows
             ArgumentError
@@ -23,17 +25,21 @@ module Daru
 
         def init_script
           init = Nyaplot.generate_init_code
-          path = File.expand_path("../templates/nyaplot/init_script.erb", __FILE__)
+          path = File.expand_path("../../templates/nyaplot/init_script.erb", __FILE__)
           template = File.read(path)
-          ERB.new(template).result(binding)
+          ERB.new(template).result(binding).html_safe
         end
 
         def generate_body(plot)
-          plot.to_iruby[1]
+          plot.to_iruby[1].html_safe
         end
 
-        def export_html(plot, path="./plot.html")
-          plot.export_html
+        def export_html_file(plot, path="./plot.html")
+          plot.export_html path
+        end
+
+        def show_iruby(plot)
+          plot.show
         end
 
       end
