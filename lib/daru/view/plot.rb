@@ -1,7 +1,7 @@
 module Daru
   module View
     class Plot
-      attr_reader :plt
+      attr_reader :chart
       attr_accessor :adapter
 
       # @example
@@ -9,7 +9,7 @@ module Daru
       # Daru::View::Plot.new df, type: :bar, x: :a, y: :b
       #
       def initialize(data, options= {})
-        @plt = plot_data data, options
+        @chart = plot_data data, options
       end
 
       def adapter=(adapter)
@@ -23,7 +23,7 @@ module Daru
 
       # display in IRuby notebook
       def show_in_iruby
-        self.adapter.show_in_iruby @plt
+        self.adapter.show_in_iruby @chart
       end
 
       # dependent js file, to include in head tag
@@ -33,12 +33,12 @@ module Daru
 
       # generat html code, to include in body tag
       def div
-        self.adapter.generate_body(@plt)
+        self.adapter.generate_body(@chart)
       end
 
       # generat html file
       def export_html_file(path="./plot.html")
-        self.adapter.export_html_file(@plt, path="./plot.html")
+        self.adapter.export_html_file(@chart, path)
       end
 
       private

@@ -25,4 +25,8 @@ Things you may want to cover:
 
 `rails s`
 
+goto:
+ localhost:3000/nyaplot
+ localhost:3000/highcharts
+
 * ...

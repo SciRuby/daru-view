@@ -1,6 +1,10 @@
 <br>
 <%=raw @bar_graph.div %>
-
+<%=raw @bar_graph.export_html_file('1.html') %>
 <br>
 
 <%=raw @scatter_graph.div %>
+<%=raw @scatter_graph.export_html_file('2.html') %>
+
+<%= @df_line.div.html_safe %>
+<%=raw @df_line.export_html_file('3.html') %>

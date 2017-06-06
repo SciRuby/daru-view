@@ -21,7 +21,7 @@ module Daru
           end
         end
 
-        def export_html_file(plot, path="./plot.html")
+        def export_html_file(plot, path)
           plot.export_html path
         end
 

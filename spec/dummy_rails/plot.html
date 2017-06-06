@@ -1,0 +1,61 @@
+<html lang='en'>
+<head>
+  <title>Nyaplot</title>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
+  <script>if(window['d3'] === undefined ||
+   window['Nyaplot'] === undefined){
+    var path = {"d3":"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min","downloadable":"http://cdn.rawgit.com/domitry/d3-downloadable/master/d3-downloadable"};
+
+
+
+    var shim = {"d3":{"exports":"d3"},"downloadable":{"exports":"downloadable"}};
+
+    require.config({paths: path, shim:shim});
+
+
+require(['d3'], function(d3){window['d3']=d3;console.log('finished loading d3');require(['downloadable'], function(downloadable){window['downloadable']=downloadable;console.log('finished loading downloadable');
+
+	var script = d3.select("head")
+	    .append("script")
+	    .attr("src", "http://cdn.rawgit.com/domitry/Nyaplotjs/master/release/nyaplot.js")
+	    .attr("async", true);
+
+	script[0][0].onload = script[0][0].onreadystatechange = function(){
+
+
+	    var event = document.createEvent("HTMLEvents");
+	    event.initEvent("load_nyaplot",false,false);
+	    window.dispatchEvent(event);
+	    console.log('Finished loading Nyaplotjs');
+
+	};
+
+
+});});
+}
+</script>
+</head>
+<body><div id='vis-a369b013-2567-4441-b07a-0dfe8ee269b5'></div>
+<script>
+(function(){
+    var render = function(){
+        var model = {"panes":[{"properties":{"diagrams":[{"properties":{"type":"line","options":{"x":"a","y":"b"},"data":"af6f12b9-849c-4d95-9b55-86ea57f2508c"},"xrange":[0,7],"yrange":[0,5]}],"options":{}}}],"data":{"af6f12b9-849c-4d95-9b55-86ea57f2508c":{"name":"af6f12b9-849c-4d95-9b55-86ea57f2508c","rows":[{"a":1,"b":1,"c":1},{"a":3,"b":5,"c":6},{"a":5,"b":2,"c":7},{"a":7,"b":5,"c":2},{"a":5,"b":1,"c":6},{"a":0,"b":0,"c":0}]}},"extension":[]}
+        var id_name = '#vis-a369b013-2567-4441-b07a-0dfe8ee269b5';
+        Nyaplot.core.parse(model, id_name);
+
+        require(['downloadable'], function(downloadable){
+          var svg = d3.select(id_name).select("svg");
+	  if(!svg.empty())
+	    svg.call(downloadable().filename('fig'));
+	});
+    };
+    if(window['Nyaplot']==undefined){
+        window.addEventListener('load_nyaplot', render, false);
+	return;
+    } else {
+       render();
+    }
+})();
+</script>
+</body>
+</html>
