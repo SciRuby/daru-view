@@ -17,7 +17,7 @@ module Daru
             data.plot options
           else
             # TODO: add more cases e.g. Array of rows
-            ArgumentError
+            raise ArgumentError, "For Nyaplot Library, data must be in Daru::Vector or Daru::DataFrame. \n You can change the plotting library using the code : \n ` Daru::View.plotting_library = :highcharts` or other library."
           end
         end
 
@@ -38,6 +38,10 @@ module Daru
 
         def generate_body(plot)
           plot.to_iruby[1]
+        end
+
+        def init_iruby
+          Nyaplot.init_iruby
         end
 
       end

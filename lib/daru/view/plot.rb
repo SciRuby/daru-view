@@ -8,14 +8,16 @@ module Daru
       # df = Daru::DataFrame.new({a:['A', 'B', 'C', 'D', 'E'], b:[10,20,30,40,50]})
       # Daru::View::Plot.new df, type: :bar, x: :a, y: :b
       #
+      # Set the new adapter(plotting library) ,for example highcharts:
+      #
+      # Daru::View.plotting_library = :highcharts
+      #
       def initialize(data, options= {})
         @chart = plot_data data, options
       end
 
       def adapter=(adapter)
         require "daru/view/adapters/#{adapter}"
-        # extend Module::const_get(
-        #   "Daru::View::Adapter::#{adapter.to_s.capitalize}Adapter")
         @adapter = Daru::View::Adapter.const_get(
           adapter.to_s.capitalize + 'Adapter')
 
@@ -39,6 +41,10 @@ module Daru
       # generat html file
       def export_html_file(path="./plot.html")
         self.adapter.export_html_file(@chart, path)
+      end
+
+      def init_iruby
+        self.adapter.init_iruby
       end
 
       private

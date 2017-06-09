@@ -14,7 +14,31 @@ module Daru
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end
-      end # def end
+      end
+
+      # Load the dependent JS files in IRuby notebook. Those JS will help in
+      # plotting the charts in IRuby cell.
+      #
+      # @example
+      #
+      # To load the dependent JS file for Nyaplot library
+      # plotting system (Nyaplot.js, d3.js):
+      #
+      # Daru::View.load_lib_in_iruby('Nyaplot')
+      #
+      # To load the HighCharts dependent JS
+      # files (highcharts.js, highcharts-3d.js, highstock.js):
+      #
+      # Daru::View.load_lib_in_iruby('HighCharts')
+      #
+      def load_lib_in_iruby(library)
+        require "daru/view/adapters/#{library}/iruby_notebook"
+        if library.match('HighCharts')
+          library = 'LazyHighCharts'
+        end
+        Object.const_get(library).init_iruby
+      end
+
     end
   end
 end
