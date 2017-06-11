@@ -1,3 +1,5 @@
+require_relative 'layout_helper_iruby'
+
 module LazyHighCharts
   class HighChart
     # @example
