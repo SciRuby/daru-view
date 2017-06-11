@@ -5,5 +5,8 @@ gem 'rbczmq'
 gem 'ffi-rzmq'
 gem 'iruby'
 
+# todo: fetch from the github
+gem 'daru', path: '/Users/shekharrajak/Documents/gsoc17/daru'
+
 # daru-view
 gemspec  :path => '../../'

@@ -10,9 +10,11 @@ module LazyHighCharts
 
   # Enable to show plots on IRuby notebook
   def self.init_iruby(
-    dependent_js=['highcharts.js']
+    dependent_js=['highcharts.js', 'highcharts-3d.js']
   )
-    # , 'highcharts-3d.js', 'highstock.js'
+    # todo: include highstock.js for highstock
+    # Highstock.js includes the highcharts.js, so only one of them required.
+    # see: https://www.highcharts.com/errors/16
     js = self.generate_init_code(dependent_js)
     IRuby.display(IRuby.javascript(js))
   end

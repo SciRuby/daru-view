@@ -23,17 +23,21 @@ module Daru
           when data.is_a?(Array)
             data
           else
-            # TODO: add more cases e.g. Array of rows
-            ArgumentError
+            # TODO: error msg
+            raise ArgumentError
           end
 
           # todo : for multiple series need some modification
           @chart = LazyHighCharts::HighChart.new('graph') do |f|
+            # chart option may contains : :type, :options3d, :margin
+            f.chart(options[:chart]) unless options[:chart].nil?
             f.title({:text=> options[:title]}) unless options[:title].nil?
 
             series_type = options[:type]
             series_name = options[:name]
             f.series(:type=> series_type, :name=> series_name, :data=> data)
+
+            f.plotOptions(options[:plotOptions]) unless options[:plotOptions].nil?
           end
           @chart
         end
