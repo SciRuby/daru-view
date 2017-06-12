@@ -55,18 +55,19 @@ module Daru
           end
 
           # todo : for multiple series need some modification
+          #
+          # There are many options present in Highcharts so it is better to use
+          # directly all the options. That means Daru::View will behave same
+          # as LazyHighCharts when `data` is an Array and `options` are passed.
+          #
           @chart = LazyHighCharts::HighChart.new('graph') do |f|
-            # chart option may contains : :type, :options3d, :margin
-            f.chart(options[:chart]) unless options[:chart].nil?
-
-            f.title({:text=> options[:title]}) unless options[:title].nil?
-            f.subtitle({:text=> options[:subtitle]}) unless options[:subtitle].nil?
+            # all the options present in `options` and about the
+            # series (means name, type, data) used in f.series(..)
+            f.options = options
 
             series_type = options[:type] unless options[:type].nil?
             series_name = options[:name] unless options[:name].nil?
             f.series(:type=> series_type, :name=> series_name, :data=> data)
-
-            f.plotOptions(options[:plotOptions]) unless options[:plotOptions].nil?
           end
           @chart
         end
@@ -106,6 +107,11 @@ module Daru
         def init_iruby
           LazyHighCharts.init_iruby
         end
+
+        def add_series(data, name, type, plot)
+          plot.series(:type=> type, :name=> name, :data=> data)
+        end
+
       end
     end # Adapter end
   end

@@ -5,6 +5,7 @@ module Daru
       attr_accessor :adapter
 
       # @example
+      #
       # df = Daru::DataFrame.new({a:['A', 'B', 'C', 'D', 'E'], b:[10,20,30,40,50]})
       # Daru::View::Plot.new df, type: :bar, x: :a, y: :b
       #
@@ -43,8 +44,20 @@ module Daru
         self.adapter.export_html_file(@chart, path)
       end
 
+      # load the corresponding JS files in IRuby notebook.
+      # This is done automatically when plotting library is set using
+      # Daru::View.plotting_library = :new_library
       def init_iruby
         self.adapter.init_iruby
+      end
+
+      def add_series(data, name, type)
+        case adapter
+        when :highcharts
+          self.add_series(data, name, type, @chart)
+        else
+          raise("Method `add-series` is not valid for #{self.adapter}.to_s.capitalize library.")
+        end
       end
 
       private
