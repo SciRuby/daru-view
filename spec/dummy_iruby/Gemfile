@@ -5,8 +5,8 @@ gem 'rbczmq'
 gem 'ffi-rzmq'
 gem 'iruby'
 
-# todo: fetch from the github
-gem 'daru', path: '/Users/shekharrajak/Documents/gsoc17/daru'
+# fetch from the github master branch
+gem 'daru', :git => 'https://github.com/SciRuby/daru.git'
 
 # daru-view
 gemspec  :path => '../../'

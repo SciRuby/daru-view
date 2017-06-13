@@ -1,6 +1,7 @@
 require 'lazy_high_charts'
 require_relative 'highcharts/iruby_notebook'
 require_relative 'highcharts/display'
+require_relative 'highcharts/core_ext/string'
 
 module Daru
   module View
@@ -108,8 +109,11 @@ module Daru
           LazyHighCharts.init_iruby
         end
 
-        def add_series(data, name, type, plot)
-          plot.series(:type=> type, :name=> name, :data=> data)
+        # Generally, in opts Hash, :name, :type, :data , :center=> [X, Y],
+        # :size=> Integer, :showInLegend=> Bool, etc may present.
+        def add_series(plot, opts={})
+          plot.series(opts)
+          plot
         end
 
       end
