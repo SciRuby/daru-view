@@ -1,13 +1,14 @@
+GIT
+  remote: https://github.com/SciRuby/daru.git
+  revision: 573bd593c0b575c0e48edac13e1ccff26d670351
+  specs:
+    daru (0.1.5)
+      backports
+
 PATH
   remote: ../..
   specs:
     daru-view (0.1.0)
-
-PATH
-  remote: /Users/shekharrajak/Documents/gsoc17/daru
-  specs:
-    daru (0.1.5)
-      backports
 
 GEM
   remote: http://rubygems.org/

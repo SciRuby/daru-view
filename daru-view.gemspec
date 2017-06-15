@@ -36,5 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'lazy_high_charts'
   # lazy_high_charts dependency
   spec.add_development_dependency 'actionview'
+
+  # spec.add_development_dependency "iruby"
 end
 

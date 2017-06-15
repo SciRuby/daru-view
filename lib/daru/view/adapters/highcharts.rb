@@ -1,6 +1,7 @@
 require 'lazy_high_charts'
 require_relative 'highcharts/iruby_notebook'
 require_relative 'highcharts/display'
+require_relative 'highcharts/core_ext/string'
 
 module Daru
   module View
@@ -10,6 +11,33 @@ module Daru
 
         # Read : https://www.highcharts.com/docs/chart-concepts to understand
         # the highcharts option concept.
+        #
+        # todo : this docs must be improved
+        # options :
+        # => :x
+        # => :y
+        # => :data
+        # => :type
+        # => :name
+        # => :chart
+        #       => :type
+        #       => :options3d
+        #       => :margin
+        # => :title
+        # => :subtitle
+        # => :plotOptions
+        #
+        # @param [Hash] options the options to create a chart with.
+        # @option opts [String] :title The chart title
+        # @option opts [String] :subtitle The chart subtitle
+        # @option opts [String/Symbol] :type The chart type
+        # @option opts [Daru::Vector / Array] :x X Axis data
+        # @option opts [Daru::Vector / Array] :y Y Axis data
+        # @option opts [Hash] :chart The chart options(there are many options in chart Hash, same as LazyHighCahrts or HighCharts)
+        # @option opts [Hash] :plotOptions The plot options, how the plot type is configured
+        #
+        # @param [Array/Daru::DataFrame/Daru::Vector] data
+        #
         def init(data, options)
           case
           when data.is_a?(Daru::DataFrame)
@@ -28,16 +56,19 @@ module Daru
           end
 
           # todo : for multiple series need some modification
+          #
+          # There are many options present in Highcharts so it is better to use
+          # directly all the options. That means Daru::View will behave same
+          # as LazyHighCharts when `data` is an Array and `options` are passed.
+          #
           @chart = LazyHighCharts::HighChart.new('graph') do |f|
-            # chart option may contains : :type, :options3d, :margin
-            f.chart(options[:chart]) unless options[:chart].nil?
-            f.title({:text=> options[:title]}) unless options[:title].nil?
+            # all the options present in `options` and about the
+            # series (means name, type, data) used in f.series(..)
+            f.options = options
 
-            series_type = options[:type]
-            series_name = options[:name]
+            series_type = options[:type] unless options[:type].nil?
+            series_name = options[:name] unless options[:name].nil?
             f.series(:type=> series_type, :name=> series_name, :data=> data)
-
-            f.plotOptions(options[:plotOptions]) unless options[:plotOptions].nil?
           end
           @chart
         end
@@ -77,6 +108,14 @@ module Daru
         def init_iruby
           LazyHighCharts.init_iruby
         end
+
+        # Generally, in opts Hash, :name, :type, :data , :center=> [X, Y],
+        # :size=> Integer, :showInLegend=> Bool, etc may present.
+        def add_series(plot, opts={})
+          plot.series(opts)
+          plot
+        end
+
       end
     end # Adapter end
   end
