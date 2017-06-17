@@ -17,6 +17,10 @@ module LazyHighCharts
     #
     # Highstock.js includes the highcharts.js, so only one of them required.
     # see: https://www.highcharts.com/errors/16
+    #
+    # , 'modules/exporting.js' : for the exporting button
+    # data.js for getting data as csv or html table.
+    # 'highcharts-more.js' : for arearange and some other chart type
     js = self.generate_init_code(dependent_js)
     IRuby.display(IRuby.javascript(js))
   end

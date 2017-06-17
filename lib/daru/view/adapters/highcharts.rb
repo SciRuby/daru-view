@@ -38,7 +38,7 @@ module Daru
         #
         # @param [Array/Daru::DataFrame/Daru::Vector] data
         #
-        def init(data, options)
+        def init(data=[], options)
           case
           when data.is_a?(Daru::DataFrame)
             # TODO : Currently I didn't find use case for multi index.

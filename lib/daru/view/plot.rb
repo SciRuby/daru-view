@@ -28,7 +28,7 @@ module Daru
       #
       # Daru::View.plotting_library = :highcharts
       #
-      def initialize(data, options= {})
+      def initialize(data=[], options={})
         @chart = plot_data data, options
       end
 
