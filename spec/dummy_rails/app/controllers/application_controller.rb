@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def highcharts
+    # line charts
 
   end
 end
