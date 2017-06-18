@@ -4,6 +4,11 @@ Daru (Data Analysis in RUby) is a library for analysis, manipulation and visuali
 
 It is a plugin gem to Data Analysis in RUby(Daru) for visualisation of data
 
+## Examples :
+
+- [IRuby notebook examples](http://nbviewer.jupyter.org/github/shekharrajak/daru-view/tree/master/spec/dummy_iruby/)
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
