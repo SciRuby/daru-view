@@ -1,5 +1,7 @@
 require "daru/view/version"
 require "daru/view/plot"
+require 'daru/view/adapters/highcharts/display'
+require 'daru/view/adapters/nyaplot/display'
 
 module Daru
   module View
@@ -52,6 +54,27 @@ module Daru
         Object.const_get(library).init_iruby
       end
 
+      # dependent script for the library. It must be added in the head tag
+      # of the web application.
+      #
+      # @example
+      #
+      # dep_js = Daru::View.dependent_script(:highcharts)
+      #
+      # use in Rails app : <%=raw dep_js %>
+      #
+      def dependent_script(lib= :nyaplot)
+        case lib
+        when :nyaplot
+          Nyaplot.init_script
+        when :highcharts
+          LazyHighCharts.init_script
+        else
+          raise ArgumentError, "Unsupported library #{lib}"
+        end
+
+      end
+
     end
-  end
+  end # view end
 end

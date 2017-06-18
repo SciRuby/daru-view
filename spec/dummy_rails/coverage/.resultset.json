@@ -157,10 +157,6 @@
         1,
         null
       ],
-      "/Users/shekharrajak/Documents/gsoc17/daru-view/spec/dummy_rails/app/helpers/application_helper.rb": [
-        1,
-        null
-      ],
       "/Users/shekharrajak/Documents/gsoc17/daru-view/spec/dummy_rails/app/controllers/application_controller.rb": [
         1,
         1,
@@ -186,9 +182,14 @@
         1,
         null,
         null,
+        null,
+        null
+      ],
+      "/Users/shekharrajak/Documents/gsoc17/daru-view/spec/dummy_rails/app/helpers/application_helper.rb": [
+        1,
         null
       ]
     },
-    "timestamp": 1496565814
+    "timestamp": 1497775428
   }
 }

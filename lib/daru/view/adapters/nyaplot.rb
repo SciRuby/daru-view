@@ -1,5 +1,4 @@
 
-require 'daru'
 require 'nyaplot'
 require_relative 'nyaplot/iruby_notebook'
 
@@ -31,10 +30,7 @@ module Daru
         end
 
         def init_script
-          init = Nyaplot.generate_init_code
-          path = File.expand_path("../../templates/nyaplot/init_script.erb", __FILE__)
-          template = File.read(path)
-          ERB.new(template).result(binding)
+          Nyaplot.init_script
         end
 
         def generate_body(plot)

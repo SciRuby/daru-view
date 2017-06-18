@@ -2,7 +2,7 @@ module Daru
   module View
     class Plot
 
-      attr_reader :chart
+      attr_reader :chart, :data, :options
       attr_accessor :adapter
       class << self
 
@@ -30,6 +30,8 @@ module Daru
       #
       def initialize(data=[], options={})
         @chart = plot_data data, options
+        @data = data
+        @options = options
       end
 
       # display in IRuby notebook
@@ -37,7 +39,15 @@ module Daru
         @adapter.show_in_iruby @chart
       end
 
-      # dependent js file, to include in head tag
+      # dependent js file, to include in head tag using the plot object.
+      # @example:
+      # plot_obj.init_script
+      #
+      # Note :
+      # User can directly put the dependent script file into the head tag
+      # using `Daru::View.dependent_script(:highcharts), by default it loads
+      # Nyaplot JS files.
+      #
       def init_script
         @adapter.init_script
       end
