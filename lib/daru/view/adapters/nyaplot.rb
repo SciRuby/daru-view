@@ -15,9 +15,9 @@ module Daru
             data.plot options
           when data.is_a?(Daru::Vector)
             data.plot options
-          else
-            # TODO: add more cases e.g. Array of rows
-            raise ArgumentError, "For Nyaplot Library, data must be in Daru::Vector or Daru::DataFrame.\n You can change the plotting library using the code : \n ` Daru::View.plotting_library = :highcharts` or other library."
+          # else
+          #   # TODO: add more cases e.g. Array of rows
+          #   raise ArgumentError, "For Nyaplot Library, data must be in Daru::Vector or Daru::DataFrame.\n You can change the plotting library using the code : \n ` Daru::View.plotting_library = :highcharts` or other library."
           end
         end
 

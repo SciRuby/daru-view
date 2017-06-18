@@ -78,7 +78,7 @@ module Daru
         end
 
         def generate_body(plot)
-          plot.show_in_html
+          plot.to_html
         end
 
         def export_html_file(plot, path="./plot.html")
