@@ -209,6 +209,16 @@ bar_graph2 = Daru::View::Plot.new(data_df, type: :bar, x: :c)
 
 ```
 
+- User can try examples added in spec/dummy_rails. To setup the rails app run following commands :
+
+```
+bundle install
+bundle exec rails s
+
+```
+Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts to see the Highcharts examples.
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
