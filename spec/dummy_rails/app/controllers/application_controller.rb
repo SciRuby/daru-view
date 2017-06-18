@@ -110,6 +110,57 @@ class ApplicationController < ActionController::Base
     }]
     @line_log = Daru::View::Plot.new(series_dt[0][:data], opts)
     @line_log.chart.series_data = series_dt
+
+    # 3d column chart
+    opts = {
+        title: {
+          text: 'Column 3d demo'
+      },
+
+      tooltip: {
+          headerFormat: '<b>{series.name}</b><br />',
+          pointFormat: 'x = {point.x}, y = {point.y}'
+      },
+      chart: {
+        :defaultSeriesType=>"column" , :margin=> 75,
+        options3d: {
+            enabled: true,
+            alpha: 15,
+            beta: 15,
+            depth: 50,
+            viewDistance: 25}
+        },
+      plotOptions: {
+        :column=>{
+            :allowPointSelect=>true,
+            :cursor=>"pointer" ,
+            :dataLabels=>{
+              :enabled=>true,
+              :color=>"black",
+              :style=>{
+                :font=>"13px Trebuchet MS, Verdana, sans-serif"
+              }
+            },
+            depth: 25
+
+          }
+        },
+      legend: {
+        :layout=> 'vertical',
+        :style=> {
+          :left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'}
+        },
+      adapter: :highcharts
+    }
+
+    series_dt = [{
+      :type=> 'column',
+      :name=> 'Browser share',
+      :data=> [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+    }]
+    @col_3d = Daru::View::Plot.new(series_dt[0][:data], opts)
+    @col_3d.chart.series_data = series_dt
+
   end
 
    private
