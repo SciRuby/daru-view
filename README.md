@@ -122,62 +122,6 @@ line_graph = Daru::View::Plot.new(series_dt, opts)
 
 ```
 
-HighCharts example :
-
-```ruby
-
-# set the library, to plot charts
-Daru::View.plotting_library = :highcharts
-
-# options for the charts
-opts = {
-      chart: {defaultSeriesType: 'line'},
-      title: {
-        text: 'Solar Employment Growth by Sector, 2010-2016'
-        },
-
-      subtitle: {
-          text: 'Source: thesolarfoundation.com'
-      },
-
-      yAxis: {
-          title: {
-              text: 'Number of Employees'
-          }
-      },
-      legend: {
-          layout: 'vertical',
-          align: 'right',
-          verticalAlign: 'middle'
-      },
-
-      plotOptions: {
-          # this is not working. Find the bug
-          # series: {
-          #     pointStart: 43934
-          # }
-      },
-  }
-
-# data for the charts
-series_dt = ([{
-      name: 'Tokyo',
-      data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-  }, {
-      name: 'London',
-      data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-  }])
-
-# initialize
-line_graph = Daru::View::Plot.new(series_dt, opts)
-
-# Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
-
-<%=raw line_graph.div %>
-
-# Now refresh the page, you will be able to see your graph.
-
-```
 
 Nyaplot example :
 
