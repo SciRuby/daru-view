@@ -39,7 +39,7 @@ module Daru
       # To load the dependent JS file for Nyaplot library
       # plotting system (Nyaplot.js, d3.js):
       #
-      # Daru::View.load_lib_in_iruby('Nyaplot')
+      # Daru::View.load_lib_in_iruby('nyaplot')
       #
       # To load the HighCharts dependent JS
       # files (highcharts.js, highcharts-3d.js, highstock.js):
@@ -50,8 +50,10 @@ module Daru
         require "daru/view/adapters/#{library}/iruby_notebook"
         if library.match('highcharts')
           library = 'LazyHighCharts'
+          Object.const_get(library).init_iruby
+        else
+          Object.const_get(library.capitalize).init_iruby
         end
-        Object.const_get(library).init_iruby
       end
 
       # dependent script for the library. It must be added in the head tag
