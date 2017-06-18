@@ -1,10 +1,15 @@
 module Nyaplot
   # generate initializing code
-  def self.generate_init_code(dependent_js)
+  def self.generate_init_code_offline(dependent_js)
     js_dir = File.expand_path("../../js/nyaplot_js", __FILE__)
     path = File.expand_path("../../../templates/nyaplot/init.inline.js.erb", __FILE__)
     template = File.read(path)
     ERB.new(template).result(binding)
+  end
+
+  # generate initializing code
+  def self.generate_init_code_online
+    # todo : better than present Nyaplot.generate_init_code
   end
 
   # Enable to show plots on IRuby notebook

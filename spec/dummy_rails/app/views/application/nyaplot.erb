@@ -1,10 +1,43 @@
 <br>
-<%=raw @bar_graph.div %>
-<%=raw @bar_graph.export_html_file('1.html') %>
+<h3> Bar Graph</h3>
+<p>
+  <b>Data : </b>
+  <%=raw @bar_graph.data %>
+  <br>
+  <b>Options</b>
+  <%=raw @bar_graph.options %>
+  <br>
+  <b>Chart : </b>
+  <br>
+  <%=raw @bar_graph.div %>
+</p>
+
+
 <br>
+<br>
+<h3> Scatter Graph</h3><br>
+<p>
+  <b>Data : </b>
+  <%=raw @scatter_graph.data %>
+  <br>
+  <b>Options</b>
+  <%=raw @scatter_graph.options %>
+  <br>
+  <b>Chart : </b>
+  <br>
+  <%=raw @scatter_graph.div %>
+</p>
 
-<%=raw @scatter_graph.div %>
-<%=raw @scatter_graph.export_html_file('2.html') %>
 
-<%= @df_line.div.html_safe %>
-<%=raw @df_line.export_html_file('3.html') %>
+<h3> Line Graph</h3><br>
+<p>
+  <b>Data : </b>
+  <%=raw @df_line.data %>
+  <br>
+  <b>Options</b>
+  <%=raw @df_line.options %>
+  <br>
+  <b>Chart : </b>
+  <br>
+  <%= @df_line.div.html_safe %>
+</p>

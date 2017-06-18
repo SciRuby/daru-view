@@ -1,6 +1,18 @@
 require_relative 'layout_helper_iruby'
+require_relative 'iruby_notebook'
 
 module LazyHighCharts
+
+  def self.init_script(
+    dependent_js=['highcharts.js', 'highcharts-3d.js', 'highstock.js']
+  )
+    js =  ""
+    js << "\n<script type='text/javascript'>"
+    js << LazyHighCharts.generate_init_code(dependent_js)
+    js << "\n</script>"
+    js
+  end
+
   class HighChart
     # @example
     #

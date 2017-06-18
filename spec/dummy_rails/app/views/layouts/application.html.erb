@@ -8,7 +8,7 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
     <!-- dependent script -->
-    <%=raw @bar_graph.init_script %>
+    <%=raw Daru::View.dependent_script(:nyaplot) %>
 
   </head>
 
