@@ -15,7 +15,7 @@ module Daru
       # New plotting library is set. Same time Daru::View::Plot.adapter is set.
       def plotting_library= lib
         case lib
-        when :gruff, :nyaplot, :highcharts
+        when :nyaplot, :highcharts
           @plotting_library = lib
         else
           raise ArgumentError, "Unsupported library #{lib}"
@@ -25,7 +25,7 @@ module Daru
         # When code is running in console/terminal then IRuby NameError.
         # Since IRuby methods can't work in console.
         begin
-          load_lib_in_iruby lib.to_s.capitalize if defined? IRuby
+          load_lib_in_iruby lib.to_s if defined? IRuby
         rescue NameError
           ;
         end
@@ -44,11 +44,11 @@ module Daru
       # To load the HighCharts dependent JS
       # files (highcharts.js, highcharts-3d.js, highstock.js):
       #
-      # Daru::View.load_lib_in_iruby('Highcharts')
+      # Daru::View.load_lib_in_iruby('highcharts')
       #
       def load_lib_in_iruby(library)
         require "daru/view/adapters/#{library}/iruby_notebook"
-        if library.match('Highcharts')
+        if library.match('highcharts')
           library = 'LazyHighCharts'
         end
         Object.const_get(library).init_iruby
