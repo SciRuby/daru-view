@@ -11,5 +11,5 @@ A sample app to see the daru-view examples
 
 Now go to :
 
-http://localhost:4567/highcharts
-http://localhost:4567/nyaplot
+    http://localhost:4567/highcharts
+    http://localhost:4567/nyaplot
