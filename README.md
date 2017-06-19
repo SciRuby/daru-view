@@ -112,11 +112,11 @@ series_dt = ([{
   }])
 
 # initialize
-line_graph = Daru::View::Plot.new(series_dt, opts)
+@line_graph = Daru::View::Plot.new(series_dt, opts)
 
 # Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
 
-<%=raw line_graph.div %>
+<%=raw @line_graph.div %>
 
 # Now refresh the page, you will be able to see your graph.
 
