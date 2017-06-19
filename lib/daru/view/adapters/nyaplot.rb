@@ -1,6 +1,7 @@
 
 require 'nyaplot'
 require_relative 'nyaplot/iruby_notebook'
+require 'daru'
 
 module Daru
   module View

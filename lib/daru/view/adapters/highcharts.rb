@@ -2,6 +2,7 @@ require 'lazy_high_charts'
 require_relative 'highcharts/iruby_notebook'
 require_relative 'highcharts/display'
 require_relative 'highcharts/core_ext/string'
+require 'daru'
 
 module Daru
   module View
