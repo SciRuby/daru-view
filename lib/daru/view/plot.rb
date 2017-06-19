@@ -28,10 +28,21 @@ module Daru
       #
       # Daru::View.plotting_library = :highcharts
       #
+      # To use a particular apdater in certain plot object(s), then user
+      # must pass the adapter in `options` hash. e.g. `adapter: :highcharts`
+      #
       def initialize(data=[], options={})
-        @chart = plot_data data, options
         @data = data
         @options = options
+        self.adapter = options[:adapter] unless options[:adapter].nil?
+        @chart = plot_data data, options
+      end
+
+      # instance method
+      def adapter=(adapter)
+        require "daru/view/adapters/#{adapter}"
+        @adapter = Daru::View::Adapter.const_get(
+            adapter.to_s.capitalize + 'Adapter')
       end
 
       # display in IRuby notebook
@@ -83,7 +94,7 @@ module Daru
       def plot_data data, options
         # class variable @@aapter is used in instance variable @adapter.
         # so in each object `adapter` variable can be accessed.
-        @adapter = @@adapter
+        @adapter = @@adapter if @adapter.nil?
         @adapter.init(data, options)
       end
     end

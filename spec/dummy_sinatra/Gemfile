@@ -1,0 +1,9 @@
+source "https://rubygems.org"
+
+# daru is not added in gemspec
+gem "daru", git: 'https://github.com/SciRuby/daru.git'
+gem 'nyaplot', git: 'https://github.com/sciruby/nyaplot.git'
+# Specify your gem's dependencies in lazy_high_charts.gemspec
+gemspec  :path => '../../'
+
+gem "sinatra"

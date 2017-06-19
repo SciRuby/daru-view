@@ -2,6 +2,7 @@ require 'lazy_high_charts'
 require_relative 'highcharts/iruby_notebook'
 require_relative 'highcharts/display'
 require_relative 'highcharts/core_ext/string'
+require 'daru'
 
 module Daru
   module View
@@ -78,7 +79,7 @@ module Daru
         end
 
         def generate_body(plot)
-          plot.show_in_html
+          plot.to_html
         end
 
         def export_html_file(plot, path="./plot.html")
