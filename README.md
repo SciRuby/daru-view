@@ -2,6 +2,8 @@
 
 Daru (Data Analysis in RUby) is a library for analysis, manipulation and visualization of data. Daru-view is for easy and interactive plotting in web application & IRuby notebook. It can work in frameworks like Rails, Sinatra, Nanoc and hopefully in others too.
 
+Docs : http://www.rubydoc.info/github/Shekharrajak/daru-view/
+
 It is a plugin gem to Data Analysis in RUby(Daru) for visualisation of data
 
 ## Examples :
