@@ -62,13 +62,13 @@ def highchart_example
           y: 80,
           floating: true,
           borderWidth: 1,
-          backgroundColor: "((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF')".js_code,
+          backgroundColor: '#FFFFFF',
           shadow: true
       },
       credits: {
           enabled: false
       },
-      # adapter: :highcharts
+      adapter: :highcharts
     }
 
     series_dt = [
@@ -83,10 +83,12 @@ def highchart_example
           data: [1052, 954, 4250, 740, 38]
       }
     ]
-    @bar_basic = Daru::View::Plot.new([107, 31, 635, 203, 2], opts)
-    # @bar_basic.chart.series_data = series_dt
-    # @bar_basic.chart.options = opts
+    @bar_basic = Daru::View::Plot.new([], opts)
+    @bar_basic.add_series(series_dt[0])
+    @bar_basic.add_series(series_dt[1])
+    @bar_basic.add_series(series_dt[2])
 
+    # @line_graph = Daru::View::Plot.new(data= make_random_series(3), adapter: :highcharts, name: 'spline1', type: 'spline', title: 'Irregular spline')
 end
 
 
@@ -107,16 +109,6 @@ def nyaplot_example
       c: [1, 6, 7, 2, 6, 0]
       }, index: 'a'..'f')
     @df_line = Daru::View::Plot.new df, type: :line, x: :a, y: :b, adapter: :nyaplot
-end
-
-def irregular_time_example()
-  @chart = LazyHighCharts::HighChart.new('graph') do |f|
-    f.title({ text: "Irregular Time Example"})
-    f.xAxis({type: 'datetime' })
-    f.series(:type=> 'spline', :data=> make_random_series(1))
-    f.series(:type=> 'spline', :data=> make_random_series(2))
-    f.series(:type=> 'spline', :data=> make_random_series(3))
-  end
 end
 
 def make_random_series(step)

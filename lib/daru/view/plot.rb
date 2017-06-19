@@ -1,3 +1,4 @@
+
 module Daru
   module View
     class Plot
