@@ -40,7 +40,8 @@ gem 'ffi-rzmq'
 gem 'iruby'
 
 # fetch from the github master branch
-gem 'daru', :git => 'https://github.com/SciRuby/daru.git'
+gem "daru", git: 'https://github.com/SciRuby/daru.git'
+gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
 gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
 ```
 
@@ -50,18 +51,24 @@ gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
 
 ### Use in web application
 
-#### Rails application
-
 - Add this line in your Gemfile :
 ```ruby
 gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
+gem "daru", git: 'https://github.com/SciRuby/daru.git'
+gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
 ```
+
+_Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added as development_dependency. Since daru-view required the latest github version of the Daru and Nyaplot gem and we can't fetch gem from the github in the gemspec.
+
+#### Rails application
 
 - In controller, do the data analysis process using daru operations and get the DataFrame/Vectors.
 
 - Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
 
 - In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
+
+The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
 
 - Plot library using by passing `data` and `options` :
 
@@ -146,19 +153,19 @@ data_df = Daru::DataFrame.new({
 data_df.to_category :c
 
 # initialize
-bar_graph1 = Daru::View::Plot.new(data_vector ,opts)
-bar_graph2 = Daru::View::Plot.new(data_df, type: :bar, x: :c)
+@bar_graph1 = Daru::View::Plot.new(data_vector ,opts)
+@bar_graph2 = Daru::View::Plot.new(data_df, type: :bar, x: :c)
 
 # Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
 
-<%=raw bar_graph1.div %>
-<%=raw bar_graph2.div %>
+<%=raw @bar_graph1.div %>
+<%=raw @bar_graph2.div %>
 
 # Now refresh the page, you will be able to see your graph.
 
 ```
 
-- User can try examples added in spec/dummy_rails. To setup the rails app run following commands :
+- User can try examples, that is added in spec/dummy_rails. To setup the rails app, run following commands :
 
 ```
 bundle install
@@ -166,6 +173,38 @@ bundle exec rails s
 
 ```
 Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts to see the Highcharts examples.
+
+
+#### Sinatra application
+
+
+- In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
+
+The line `<%= Daru::View.dependent_script(:highcharts) %>` for sinatra app , must be added in the layout file of the application(inside the head tag).
+
+
+```ruby
+# In side the `app.rb` user must do data analysis process using daru features and define the Daru::View::Plot class instance variables to pass into the webpages in the `view` files. You will understand this better, if you will try to run sinatra app present in the `spec/dummy_sinatra`
+
+# Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
+
+<%= @line_graph.div %>
+
+<%= @bar_graph1.div %>
+<%= @bar_graph2.div %>
+
+# Now refresh the page, you will be able to see your graph.
+
+```
+
+- User can try examples, that is added in spec/dummy_sinatra. To setup the rails app, run following commands :
+
+```
+bundle install
+bundle exec ruby app.rb
+
+```
+Now go to the http://localhost:4567/nyaplot to see the Nyaplot examples or http://localhost:4567/highcharts to see the Highcharts examples.
 
 
 ## Development
