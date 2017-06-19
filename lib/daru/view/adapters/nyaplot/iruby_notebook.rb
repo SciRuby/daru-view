@@ -21,7 +21,7 @@ module Nyaplot
     #
     # Highstock.js includes the highcharts.js, so only one of them required.
     # see: https://www.highcharts.com/errors/16
-    js = self.generate_init_code(dependent_js)
+    js = self.generate_init_code
     IRuby.display(IRuby.javascript(js))
   end
 end
