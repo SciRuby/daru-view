@@ -24,12 +24,13 @@ module LazyHighCharts
     # `IRuby.display chart.to_html, mime: 'text/html'`
     # to get the same chart in IRuby notebook.
     #
-    def to_html
-      high_chart(random_canvas_id, self)
+    def to_html(placeholder=random_canvas_id)
+      high_chart(placeholder, self)
     end
 
     def show_in_iruby(placeholder=random_canvas_id)
-      IRuby.html high_chart(placeholder, self)
+      # todo : placeholder pass, in plot#div
+      IRuby.html high_chart_iruby(placeholder, self)
     end
 
   end
