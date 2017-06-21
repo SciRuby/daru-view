@@ -2,14 +2,13 @@ require_relative 'layout_helper_iruby'
 require_relative 'iruby_notebook'
 
 module LazyHighCharts
-
   def self.init_script(
     dependent_js=['highcharts.js', 'highcharts-3d.js', 'highstock.js']
   )
-    js =  ""
-    js << "\n<script type='text/javascript'>"
+    js =  ''
+    js << '\n<script type=\'text/javascript\'>'
     js << LazyHighCharts.generate_init_code(dependent_js)
-    js << "\n</script>"
+    js << '\n</script>'
     js
   end
 
@@ -25,13 +24,18 @@ module LazyHighCharts
     # to get the same chart in IRuby notebook.
     #
     def to_html(placeholder=random_canvas_id)
+      chart_hash_must_be_present
       high_chart(placeholder, self)
     end
 
     def show_in_iruby(placeholder=random_canvas_id)
-      # todo : placeholder pass, in plot#div
+      # TODO : placeholder pass, in plot#div
+      chart_hash_must_be_present
       IRuby.html high_chart_iruby(placeholder, self)
     end
 
-  end
+    def chart_hash_must_be_present
+      options[:chart] ||= {}
+    end
+  end # class end
 end
