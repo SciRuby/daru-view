@@ -37,6 +37,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry', '~> 0.10'
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'lazy_high_charts'
+  spec.add_development_dependency 'rubocop'
+
   # lazy_high_charts dependency
   spec.add_development_dependency 'actionview'
 
