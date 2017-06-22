@@ -209,6 +209,16 @@ bundle exec ruby app.rb
 Now go to the http://localhost:4567/nyaplot to see the Nyaplot examples or http://localhost:4567/highcharts to see the Highcharts examples.
 
 
+## Update to latest js library. Additional command line
+
+  To update to the current highcharts.js directly from http://code.highcharts.com/",  you can always run
+
+    rake highcharts:update
+
+  And it will be copied to your adapters/js/highcharts_js directory.
+
+  Similarly for other libraries.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
