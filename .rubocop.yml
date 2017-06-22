@@ -15,6 +15,7 @@ AllCops:
     - 'profile/*'
     - 'bin/*'
     - 'daru-view.gemspec'
+    - '**/*.rake'
   DisplayCopNames: true
   TargetRubyVersion: 2.0
 
