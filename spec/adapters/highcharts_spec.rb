@@ -12,7 +12,6 @@ describe Daru::View::Plot, 'plotting with highcharts' do
     @flot = Daru::View::Plot.new(@data, @options)
   end
 
-  # this is almost all flotomatic stuff
   describe "initialization" do
     it "shouldn't generate a nil placeholder" do
       expect(Daru::View::Plot.new.chart.placeholder).not_to be_nil
