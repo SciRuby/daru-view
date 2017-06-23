@@ -1,5 +1,6 @@
 require 'spec_helper.rb'
 
+# some specs from lazy_high_charts specs
 describe Daru::View::Plot, 'plotting with highcharts' do
   before { Daru::View.plotting_library = :highcharts }
   before(:each) do
