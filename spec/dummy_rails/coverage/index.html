@@ -14,7 +14,7 @@
       <img src="./assets/0.10.1/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2017-06-20T11:01:00+05:30">2017-06-20T11:01:00+05:30</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2017-06-23T14:01:45+05:30">2017-06-23T14:01:45+05:30</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -24,8 +24,8 @@
     (<span class="covered_percent"><span class="green">94.83%</span></span>
      covered at
      <span class="covered_strength">
-       <span class="green">
-         1.76
+       <span class="red">
+         0.96
        </span>
     </span> hits/line)
   </h2>
@@ -57,7 +57,7 @@
         <td>29</td>
         <td>29</td>
         <td>0</td>
-        <td>2.6</td>
+        <td>1.0</td>
       </tr>
       
       <tr>
@@ -229,8 +229,8 @@
     (<span class="covered_percent"><span class="green">94.83%</span></span>
      covered at
      <span class="covered_strength">
-       <span class="green">
-         1.76
+       <span class="red">
+         0.96
        </span>
     </span> hits/line)
   </h2>
@@ -262,7 +262,7 @@
         <td>29</td>
         <td>29</td>
         <td>0</td>
-        <td>2.6</td>
+        <td>1.0</td>
       </tr>
       
       <tr>
@@ -450,8 +450,8 @@
           <code class="ruby">  def nyaplot</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="7">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="7">
+          <span class="hits">1</span>
           
           <code class="ruby">    dv = Daru::Vector.new [:a, :a, :a, :b, :b, :c], type: :category</code>
         </li>
@@ -462,8 +462,8 @@
           <code class="ruby">    # default adapter is nyaplot only</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="9">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="9">
+          <span class="hits">1</span>
           
           <code class="ruby">    @bar_graph = Daru::View::Plot.new(dv, type: :bar, adapter: :nyaplot)</code>
         </li>
@@ -474,8 +474,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="11">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="11">
+          <span class="hits">1</span>
           
           <code class="ruby">    df = Daru::DataFrame.new({b: [11,12,13,14,15], a: [1,2,3,4,5],</code>
         </li>
@@ -498,8 +498,8 @@
           <code class="ruby">      index: [:one, :two, :three, :four, :five])</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="15">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="15">
+          <span class="hits">1</span>
           
           <code class="ruby">    @scatter_graph = Daru::View::Plot.new df, type: :scatter, x: :a, y: :b, adapter: :nyaplot</code>
         </li>
@@ -510,8 +510,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="17">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="17">
+          <span class="hits">1</span>
           
           <code class="ruby">    df = Daru::DataFrame.new({</code>
         </li>
@@ -540,8 +540,8 @@
           <code class="ruby">      }, index: &#39;a&#39;..&#39;f&#39;)</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="22">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="22">
+          <span class="hits">1</span>
           
           <code class="ruby">    @df_line = Daru::View::Plot.new df, type: :line, x: :a, y: :b, adapter: :nyaplot</code>
         </li>
@@ -570,8 +570,8 @@
           <code class="ruby">    # line chart : inverted axis</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="27">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="27">
+          <span class="hits">1</span>
           
           <code class="ruby">    opts = {</code>
         </li>
@@ -888,8 +888,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="80">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="80">
+          <span class="hits">1</span>
           
           <code class="ruby">    data = [[0, 15], [10, -50], [20, -56.5], [30, -46.5], [40, -22.1],</code>
         </li>
@@ -900,8 +900,8 @@
           <code class="ruby">                  [50, -2.5], [60, -27.7], [70, -55.7], [80, -76.5]]</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="82">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="82">
+          <span class="hits">1</span>
           
           <code class="ruby">    @line_inv = Daru::View::Plot.new(data, opts)</code>
         </li>
@@ -918,8 +918,8 @@
           <code class="ruby">    # line chart : chart with line-log-axis/</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="85">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="85">
+          <span class="hits">1</span>
           
           <code class="ruby">    opts = {</code>
         </li>
@@ -1050,8 +1050,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="107">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="107">
+          <span class="hits">1</span>
           
           <code class="ruby">    series_dt = [{</code>
         </li>
@@ -1074,14 +1074,14 @@
           <code class="ruby">    }]</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="111">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="111">
+          <span class="hits">1</span>
           
           <code class="ruby">    @line_log = Daru::View::Plot.new(series_dt[0][:data], opts)</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="112">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="112">
+          <span class="hits">1</span>
           
           <code class="ruby">    @line_log.chart.series_data = series_dt</code>
         </li>
@@ -1098,8 +1098,8 @@
           <code class="ruby">    # 3d column chart</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="115">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="115">
+          <span class="hits">1</span>
           
           <code class="ruby">    opts = {</code>
         </li>
@@ -1344,8 +1344,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="156">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="156">
+          <span class="hits">1</span>
           
           <code class="ruby">    series_dt = [{</code>
         </li>
@@ -1374,14 +1374,14 @@
           <code class="ruby">    }]</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="161">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="161">
+          <span class="hits">1</span>
           
           <code class="ruby">    @col_3d = Daru::View::Plot.new(series_dt[0][:data], opts)</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="162">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="162">
+          <span class="hits">1</span>
           
           <code class="ruby">    @col_3d.chart.series_data = series_dt</code>
         </li>
@@ -1416,8 +1416,8 @@
           <code class="ruby">    def resolve_layout</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="168">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="2" data-linenumber="168">
+          <span class="hits">2</span>
           
           <code class="ruby">     case action_name</code>
         </li>
@@ -1428,14 +1428,14 @@
           <code class="ruby">       when &quot;highcharts&quot;</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="170">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="170">
+          <span class="hits">1</span>
           
           <code class="ruby">        Daru::View.plotting_library = :highcharts</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="171">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="171">
+          <span class="hits">1</span>
           
           <code class="ruby">        &quot;highcharts_layout&quot;</code>
         </li>
@@ -1446,14 +1446,14 @@
           <code class="ruby">       else</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="173">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="173">
+          <span class="hits">1</span>
           
           <code class="ruby">        Daru::View.plotting_library = :nyaplot</code>
         </li>
       
-        <li class="covered" data-hits="3" data-linenumber="174">
-          <span class="hits">3</span>
+        <li class="covered" data-hits="1" data-linenumber="174">
+          <span class="hits">1</span>
           
           <code class="ruby">        &quot;application&quot;</code>
         </li>

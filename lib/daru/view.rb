@@ -1,5 +1,5 @@
-require "daru/view/version"
-require "daru/view/plot"
+require 'daru/view/version'
+require 'daru/view/plot'
 require 'daru/view/adapters/highcharts/display'
 require 'daru/view/adapters/nyaplot/display'
 
@@ -13,7 +13,7 @@ module Daru
       attr_reader :plotting_library
 
       # New plotting library is set. Same time Daru::View::Plot.adapter is set.
-      def plotting_library= lib
+      def plotting_library=(lib)
         case lib
         when :nyaplot, :highcharts
           @plotting_library = lib
@@ -26,8 +26,7 @@ module Daru
         # Since IRuby methods can't work in console.
         begin
           load_lib_in_iruby lib.to_s if defined? IRuby
-        rescue NameError
-          ;
+        rescue NameError # rubocop:disable Lint/HandleExceptions
         end
       end
 
@@ -65,7 +64,7 @@ module Daru
       #
       # use in Rails app : <%=raw dep_js %>
       #
-      def dependent_script(lib= :nyaplot)
+      def dependent_script(lib=:nyaplot)
         case lib
         when :nyaplot
           Nyaplot.init_script
@@ -74,9 +73,7 @@ module Daru
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end
-
       end
-
     end
   end # view end
 end

@@ -1,24 +1,17 @@
 
 require_relative 'nyaplot/iruby_notebook'
 require 'daru'
+require 'nyaplot'
 
 module Daru
   module View
     module Adapter
       module NyaplotAdapter
-        extend self
+        extend self # rubocop:disable Style/ModuleFunction
         def init(data, options)
-          case
-          when data.is_a?(Daru::DataFrame)
-            # define method called plot_obj in daru/plotting/../NyaplotLibrary
-            # to get the plot object.
-            data.plot options
-          when data.is_a?(Daru::Vector)
-            data.plot options
-          # else
-          #   # TODO: add more cases e.g. Array of rows
-          #   raise ArgumentError, "For Nyaplot Library, data must be in Daru::Vector or Daru::DataFrame.\n You can change the plotting library using the code : \n ` Daru::View.plotting_library = :highcharts` or other library."
-          end
+          # TODO : better code
+          data_new = guess_data(data)
+          data_new.plot options
         end
 
         def export_html_file(plot, path)
@@ -41,6 +34,29 @@ module Daru
           Nyaplot.init_iruby
         end
 
+        private
+
+        def multi_dimension_check(arr)
+          arr.all? { |a| a.class==Array }
+        end
+
+        def guess_data(data_set)
+          case
+          when [Daru::DataFrame, Daru::Vector].include?(data_set.class)
+            data_set
+          when data_set.is_a?(Array)
+            if data_set.empty?
+              Daru::Vector.new([])
+            else
+              multi_dimension_check(data_set)? Daru::DataFrame.new(data_set) : Daru::Vector.new(data_set)
+            end
+          else
+            raise ArgumentError, "For Nyaplot Library, data must be in
+            Daru::Vector or Daru::DataFrame.\n You can change the plotting
+            library using the code : \n
+            ` Daru::View.plotting_library = :highcharts` or other library."
+          end
+        end # def end
       end
     end # Adapter end
   end

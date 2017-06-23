@@ -2,11 +2,9 @@
 module Daru
   module View
     class Plot
-
       attr_reader :chart, :data, :options
       attr_accessor :adapter
       class << self
-
         # class method
         #
         # @example
@@ -14,10 +12,11 @@ module Daru
         # Daru::View::Plot.adapter = :new_library
         def adapter=(adapter)
           require "daru/view/adapters/#{adapter}"
+          # rubocop:disable Style/ClassVars
           @@adapter = Daru::View::Adapter.const_get(
-            adapter.to_s.capitalize + 'Adapter')
+            adapter.to_s.capitalize + 'Adapter'
+          )
         end
-
       end
 
       # @example
@@ -43,7 +42,8 @@ module Daru
       def adapter=(adapter)
         require "daru/view/adapters/#{adapter}"
         @adapter = Daru::View::Adapter.const_get(
-            adapter.to_s.capitalize + 'Adapter')
+          adapter.to_s.capitalize + 'Adapter'
+        )
       end
 
       # display in IRuby notebook
@@ -70,7 +70,7 @@ module Daru
       end
 
       # generat html file
-      def export_html_file(path="./plot.html")
+      def export_html_file(path='./plot.html')
         @adapter.export_html_file(@chart, path)
       end
 
@@ -86,13 +86,13 @@ module Daru
         when Daru::View::Adapter::HighchartsAdapter
           @chart = @adapter.add_series(@chart, opts)
         else
-          raise("Method `add-series` is not valid for #{self.adapter}.to_s.capitalize library.")
+          raise("Method `add-series` is not valid for #{@adapter}.to_s.capitalize library.")
         end
       end
 
       private
 
-      def plot_data data, options
+      def plot_data(data, options)
         # class variable @@aapter is used in instance variable @adapter.
         # so in each object `adapter` variable can be accessed.
         @adapter = @@adapter if @adapter.nil?
