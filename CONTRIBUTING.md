@@ -34,11 +34,6 @@ While preparing your pull requests, don't forget to check your code with Rubocop
 
 ## Testing
 
-```
-rspec
-```
-
-or
 
   `bundle exec rspec`
 

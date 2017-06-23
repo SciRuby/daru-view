@@ -95,7 +95,7 @@ module Daru
       def plot_data(data, options)
         # class variable @@aapter is used in instance variable @adapter.
         # so in each object `adapter` variable can be accessed.
-        @adapter = @@adapter if @adapter.nil?
+        @adapter ||= @@adapter
         @adapter.init(data, options)
       end
     end
