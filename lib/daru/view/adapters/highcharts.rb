@@ -37,7 +37,7 @@ module Daru
           # behave same as LazyHighCharts when `data` is an Array and
           # `options` are passed.
           #
-          @chart = LazyHighCharts::HighChart.new() do |f|
+          @chart = LazyHighCharts::HighChart.new do |f|
             # all the options present in `options` and about the
             # series (means name, type, data) used in f.series(..)
             f.options = options.empty? ? LazyHighCharts::HighChart.new.defaults_options : options

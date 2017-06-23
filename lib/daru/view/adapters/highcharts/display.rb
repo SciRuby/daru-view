@@ -1,6 +1,6 @@
 require_relative 'layout_helper_iruby'
 require_relative 'iruby_notebook'
-require 'byebug'
+
 module LazyHighCharts
   def self.init_script(
     dependent_js=['highcharts.js', 'highcharts-3d.js', 'highstock.js']
@@ -35,7 +35,6 @@ module LazyHighCharts
     end
 
     def chart_hash_must_be_present
-      byebug
       @options[:chart] ||= {}
     end
   end # class end
