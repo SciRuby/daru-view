@@ -2,7 +2,7 @@ describe Daru::View::Plot, 'Chart plotting with Nyaplot library' do
   let(:df) do
     Daru::DataFrame.new(
       {
-        a: [1, 3, 5, 2, 5, 0],
+        a: [1, 2, 3, 4, 5, 6],
         b: [1, 5, 2, 5, 1, 0],
         c: [1, 6, 7, 2, 6, 0]
       }, index: 'a'..'f'
@@ -10,8 +10,8 @@ describe Daru::View::Plot, 'Chart plotting with Nyaplot library' do
   end
   let(:dv) { Daru::Vector.new [1, 2, 3] }
   let(:lib) { Daru::View.plotting_library }
-  let(:plot_df) { Daru::View::Plot.new(df) }
-  let(:plot_dv) { Daru::View::Plot.new(dv) }
+  let(:plot_df) { Daru::View::Plot.new(df, type: :line, x: :a, y: :c) }
+  let(:plot_dv) { Daru::View::Plot.new(dv, type: :line) }
   context 'initialize' do
     before { Daru::View.plotting_library = :nyaplot }
     context 'chart using DataFrame' do

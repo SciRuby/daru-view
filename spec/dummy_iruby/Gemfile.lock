@@ -1,9 +1,15 @@
 GIT
   remote: https://github.com/SciRuby/daru.git
-  revision: 573bd593c0b575c0e48edac13e1ccff26d670351
+  revision: fc181a8f904b07dbb7057f142bc17c11e716223b
   specs:
     daru (0.1.5)
       backports
+
+GIT
+  remote: https://github.com/SciRuby/nyaplot.git
+  revision: 662ebc60b0d1e9fbebe7e06530d8450d266ebbdd
+  specs:
+    nyaplot (0.1.6)
 
 PATH
   remote: ../..
@@ -24,6 +30,7 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    ast (2.3.0)
     backports (3.8.0)
     bond (0.5.1)
     builder (3.2.3)
@@ -58,6 +65,10 @@ GEM
     multi_json (1.12.1)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
+    parallel (1.11.2)
+    parser (2.4.0.0)
+      ast (~> 2.2)
+    powerpack (0.1.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -70,6 +81,8 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
+    rainbow (2.2.2)
+      rake
     rake (10.5.0)
     rbczmq (1.7.9)
     rspec (3.6.0)
@@ -85,6 +98,14 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
+    rubocop (0.49.1)
+      parallel (~> 1.10)
+      parser (>= 2.3.3.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-progressbar (1.8.1)
     simplecov (0.14.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -94,6 +115,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
+    unicode-display_width (1.2.1)
 
 PLATFORMS
   ruby
@@ -106,11 +128,13 @@ DEPENDENCIES
   ffi-rzmq
   iruby
   lazy_high_charts
+  nyaplot!
   pry (~> 0.10)
   pry-byebug
   rake (~> 10.0)
   rbczmq
   rspec (~> 3.4)
+  rubocop
   simplecov
 
 BUNDLED WITH

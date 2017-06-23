@@ -1,6 +1,7 @@
 
 require_relative 'nyaplot/iruby_notebook'
 require 'daru'
+require 'nyaplot'
 
 module Daru
   module View
@@ -45,7 +46,7 @@ module Daru
             data_set
           when data_set.is_a?(Array)
             if data_set.empty?
-              Daru::Vector.new
+              Daru::Vector.new([])
             else
               multi_dimension_check(data_set)? Daru::DataFrame.new(data_set) : Daru::Vector.new(data_set)
             end
