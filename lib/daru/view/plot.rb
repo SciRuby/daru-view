@@ -31,11 +31,12 @@ module Daru
       # To use a particular apdater in certain plot object(s), then user
       # must pass the adapter in `options` hash. e.g. `adapter: :highcharts`
       #
-      def initialize(data=[], options={})
+      def initialize(data=[], options={}, &block)
+        # TODO: &block is not used, right now.
         @data = data
         @options = options
         self.adapter = options[:adapter] unless options[:adapter].nil?
-        @chart = plot_data data, options
+        @chart = plot_data(data, options, &block)
       end
 
       # instance method

@@ -10,7 +10,7 @@ module Daru
         extend self # rubocop:disable Style/ModuleFunction
         def init(data, options)
           data_new = guess_data(data)
-          data_new.plot options
+          data_new.plot(options)
         end
 
         def export_html_file(plot, path)

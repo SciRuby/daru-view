@@ -12,3 +12,7 @@ gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
 
 # daru-view
 gemspec  :path => '../../'
+
+# used in tutorials :
+# Nyaplot | Creating Visualizations with DataFrame  | from daru examples
+gem 'distribution'
