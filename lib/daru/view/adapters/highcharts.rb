@@ -31,6 +31,7 @@ module Daru
         def init(data=[], options={})
           data_new = guess_data(data)
           # TODO : for multiple series need some modification
+          # Alternate way is using `add_series` method.
           #
           # There are many options present in Highcharts so it is better to use
           # directly all the options. That means Daru::View::Plot will
