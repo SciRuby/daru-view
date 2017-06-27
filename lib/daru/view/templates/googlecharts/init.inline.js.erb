@@ -1,0 +1,16 @@
+<%
+
+dependent_js.each{ |dep_js|
+  contents = IO.read(File.join(js_dir,dep_js), mode: 'r:UTF-8')
+%>
+   /* BEGIN <%= dep_js %> */
+
+<%= contents %>
+  /* END <%= dep_js %>*/
+<% } %>
+
+var event = document.createEvent("HTMLEvents");
+event.initEvent("load_google_charts", false, false);
+window.dispatchEvent(event);
+console.log("Finish loading google charts js files");
+
