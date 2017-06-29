@@ -14,22 +14,36 @@ module Daru
         # and google_visualr : http://googlevisualr.herokuapp.com/
         #
         # TODO : this docs must be improved
-        def init(data=[], options={})
-          data_new = guess_data(data)
-          @chart = LazyHighCharts::HighChart.new do |f|
-            # all the options present in `options` and about the
-            # series (means name, type, data) used in f.series(..)
-            f.options = options.empty? ? LazyHighCharts::HighChart.new.defaults_options : options
-
-            series_type = options[:type] unless options[:type].nil?
-            series_name = options[:name] unless options[:name].nil?
-            f.series(type: series_type, name: series_name, data: data_new)
-          end
+        def init(data=GoogleVisualr::DataTable.new, options={})
+          @table = add_data_in_table(
+            data) unless data.is_a?(GoogleVisualr::DataTable)
+          series_type = options[:type].nil? ? 'Line' : options[:type]
+          @chart = GoogleVisualr::Interactive.const_get(
+          series_type.to_s.capitalize + 'Chart').new(@table, options)
           @chart
         end
 
+        def init_table(data=[], options={})
+          # if `options` is something like this :
+          # {
+          #   cols: [{id: 'task', label: 'Employee Name', type: 'string'},
+          #          {id: 'startDate', label: 'Start Date', type: 'date'}],
+          #   rows: [{c:[{v: 'Mike'}, {v: new Date(2008, 1, 28), f:'February 28, 2008'}]},
+          #          {c:[{v: 'Bob'}, {v: new Date(2007, 5, 1)}]},
+          #          {c:[{v: 'Alice'}, {v: new Date(2006, 7, 16)}]},
+          #          {c:[{v: 'Frank'}, {v: new Date(2007, 11, 28)}]},
+          #          {c:[{v: 'Floyd'}, {v: new Date(2005, 3, 13)}]},
+          #          {c:[{v: 'Fritz'}, {v: new Date(2011, 6, 1)}]}
+          #         ]
+          # }
+          # then directly DatTable is created using options. Use data=[] or nil
+          @table = GoogleVisualr::DataTable.new(options)
+          add_data_in_table(data)
+          @table
+        end
+
         def init_script
-          LazyHighCharts.init_script
+          GoogleVisualr.init_script
         end
 
         def generate_body(plot)
@@ -47,15 +61,16 @@ module Daru
         end
 
         def generate_html(plot)
-          path = File.expand_path('../../templates/highcharts/static_html.erb', __FILE__)
+          # TODO: modify code
+          path = File.expand_path('../../templates/googlecharts/chart_div.erb', __FILE__)
           template = File.read(path)
           initial_script = init_script
-          chart_div = generate_body(plots)
+          chart_script = generate_body(plots)
           ERB.new(template).result(binding)
         end
 
         def init_iruby
-          LazyHighCharts.init_iruby
+          GoogleVisualr.init_iruby
         end
 
         # Generally, in opts Hash, :name, :type, :data , :center=> [X, Y],
@@ -67,28 +82,72 @@ module Daru
 
         private
 
-        def guess_data(data_set)
+        def add_data_in_table(data_set)
           case
           when data_set.is_a?(Daru::DataFrame)
             # TODO : Currently I didn't find use case for multi index.
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
             index_val = data_set.index.to_a
             df_rows = data_set.access_row_tuples_by_indexs(*index_val)
-            return [data_set.vectors, df_rows]
+            data_set.vectors.each do |vec|
+              @table.new_column(converted_type_to_js(vec, data_set) , vec)
+            end
+            @table.add_rows(df_rows)
           when data_set.is_a?(Daru::Vector)
             vec_name = data_set.name.nil? ? 'Series' : data_set.name
-            return [Array(vec_name), data_set.to_a]
+            @table.new_column(return_js_type(data_set[0]) , vec_name)
+            vec_rows = []
+            data_set.to_a.each { |a| vec_rows << [a] }
+            @table.add_rows(vec_rows)
           when data_set.is_a?(Array)
-            # note : See 1st line colmns name and then data rows
+            if data_set.empty?
+              return
+            end
+            # For google table column is needed.
+            #
+            # note :  1st line must be colmns name and then all others
+            # data rows
             vec_name = data_set[0] # for this 1st line must be Name of col
             data_set.shift # 1st row removed
-            return [vec_name, data_set]
+            data_set.vectors.each_with_index do |vec, indx|
+              @table.new_column(return_js_type(data_set[0][indx]), vec)
+            end
+            @table.add_rows(data_set)
           else
             # TODO: error msg
             raise ArgumentError
           end
         end
-      end # HighchartsAdapter end
+
+        def converted_type_to_js(vec_name, data_set)
+          # Assuming all the data type is same for all the column values.
+          case
+          when data_set.is_a?(Daru::DataFrame)
+            return_js_type(data_set[:vec_name][0])
+          when data_set.is_a?(Daru::Vector)
+            return_js_type(data_set[0])
+          end
+        end
+
+        def return_js_type(data)
+          case
+            when data.nil?
+              return
+            when data.is_a?(String)
+              return 'string'
+            when data.is_a?(Integer) || data.is_a?(Float) || data.is_a?(BigDecimal)
+              return 'number'
+            when data.is_a?(TrueClass) || data.is_a?(FalseClass)
+              return 'boolean'
+            when data.is_a?(DateTime)  || data.is_a?(Time)
+              return 'datetime'
+            when data.is_a?(DateTime)  || data.is_a?(Time)
+              return 'time'
+            when data.is_a?(Date)
+              return 'date'
+          end
+        end
+      end # GooglechartsAdapter end
     end # Adapter end
   end
 end
