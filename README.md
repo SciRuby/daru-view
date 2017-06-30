@@ -236,6 +236,9 @@ Pick a feature from the Roadmap or the issue tracker or think of your own and se
 
 For details see [CONTRIBUTING](CONTRIBUTING.md).
 
+## Acknowledgments
+
+This software has been developed by [Shekhar Prasad Rajak](https://github.com/Shekharrajak) as a product in Google Summer of Code 2017 (GSoC2017). Visit the [blog posts](http://shekharrajak.github.io/gsoc_2017_posts/) or [mailing list of SciRuby](https://groups.google.com/forum/#!forum/sciruby-dev) to see the progress of this project.
 
 ## License
 
