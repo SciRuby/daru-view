@@ -2,6 +2,7 @@ require 'google_visualr'
 require_relative 'googlecharts/iruby_notebook'
 require_relative 'googlecharts/display'
 require 'daru'
+require 'bigdecimal'
 
 module Daru
   module View
@@ -123,13 +124,14 @@ module Daru
           # Assuming all the data type is same for all the column values.
           case
           when data_set.is_a?(Daru::DataFrame)
-            return_js_type(data_set[:vec_name][0])
+            return_js_type(data_set[vec_name][0])
           when data_set.is_a?(Daru::Vector)
             return_js_type(data_set[0])
           end
         end
 
         def return_js_type(data)
+          data = data.is_a?(Hash) ? data[:v] : data
           case
             when data.nil?
               return

@@ -2,7 +2,7 @@
 module Daru
   module View
     class Table
-      attr_reader :data_table, :data, :options
+      attr_reader :table, :data, :options
       attr_accessor :adapter
       class << self
         # class method
@@ -53,7 +53,7 @@ module Daru
 
       # display in IRuby notebook
       def show_in_iruby
-        @adapter.show_in_iruby @chart
+        @adapter.show_in_iruby @table
       end
 
       # dependent js file, to include in head tag using the plot object.
@@ -71,12 +71,12 @@ module Daru
 
       # generate html code, to include in body tag
       def div
-        @adapter.generate_body(@chart)
+        @adapter.generate_body(@table)
       end
 
       # generat html file
       def export_html_file(path='./plot.html')
-        @adapter.export_html_file(@chart, path)
+        @adapter.export_html_file(@table, path)
       end
 
       # load the corresponding JS files in IRuby notebook.
