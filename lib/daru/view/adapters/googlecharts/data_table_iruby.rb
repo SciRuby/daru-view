@@ -55,11 +55,11 @@ module GoogleVisualr
     #
     # Parameters:
     #  *div_id            [Required] The ID of the DIV element that the Google Chart should be rendered in.
-    def load_js(element_id) # rubocop:disable Lint/UnusedMethodArgument
+    def load_js(element_id)
       js = ''
-      js << '\n  google.load(\'visualization\', #{google_table_version}, '
-      js << '\n {packages: [\'#{package_name}\'], callback:'
-      js << '\n #{chart_function_name(element_id)}});'
+      js << "\n  google.load('visualization', #{google_table_version}, "
+      js << "\n {packages: ['#{package_name}'], callback:"
+      js << "\n #{chart_function_name(element_id)}});"
       js
     end
 
@@ -67,14 +67,14 @@ module GoogleVisualr
     #
     # Parameters:
     #  *div_id            [Required] The ID of the DIV element that the Google Chart should be rendered in.
-    def draw_js(element_id) # rubocop:disable Lint/UnusedMethodArgument
+    def draw_js(element_id)
       js = ''
-      js << '\n  function #{chart_function_name(element_id)}() {'
-      js << '\n    #{to_js}'
-      js << '\n    var table = new google.visualization.Table('
-      js << '\n    document.getElementById(\'#{element_id}\'));'
-      js << '\n    table.draw(data_table, #{js_parameters(@options)}); '
-      js << '\n  };'
+      js << "\n  function #{chart_function_name(element_id)}() {"
+      js << "\n    #{to_js}"
+      js << "\n    var table = new google.visualization.Table("
+      js << "\n    document.getElementById('#{element_id}'));"
+      js << "\n    table.draw(data_table, #{js_parameters(@options)}); "
+      js << "\n  };"
       js
     end
   end # class Datatable end
