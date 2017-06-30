@@ -18,15 +18,15 @@ module GoogleVisualr
       script_tag = options.fetch(:script_tag) { true }
       if script_tag
         # if it is data table
-        if self.is_a?(GoogleVisualr::DataTable)
-          self.to_js_full_script(dom)
+        if is_a?(GoogleVisualr::DataTable)
+          to_js_full_script(dom)
         else
-          self.to_js(dom)
+          to_js(dom)
         end
       else
         html = ''
-        html << self.load_js(dom)
-        html << self.draw_js(dom)
+        html << load_js(dom)
+        html << draw_js(dom)
         html
       end
     end

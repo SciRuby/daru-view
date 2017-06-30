@@ -16,11 +16,13 @@ module Daru
         #
         # TODO : this docs must be improved
         def init(data=GoogleVisualr::DataTable.new, options={})
-          @table = add_data_in_table(
-            data) unless data.is_a?(GoogleVisualr::DataTable)
+          unless data.is_a?(GoogleVisualr::DataTable)
+            @table = add_data_in_table(data)
+          end
           series_type = options[:type].nil? ? 'Line' : options[:type]
           @chart = GoogleVisualr::Interactive.const_get(
-          series_type.to_s.capitalize + 'Chart').new(@table, options)
+            series_type.to_s.capitalize + 'Chart'
+          ).new(@table, options)
           @chart
         end
 
@@ -83,41 +85,36 @@ module Daru
 
         private
 
-        def add_data_in_table(data_set)
+        # For google table, column is needed.
+        #
+        # note :  1st line must be colmns name and then all others
+        # data rows
+        #
+        # TODO : Currently I didn't find use case for multi index.
+        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
           case
           when data_set.is_a?(Daru::DataFrame)
-            # TODO : Currently I didn't find use case for multi index.
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
-            index_val = data_set.index.to_a
-            df_rows = data_set.access_row_tuples_by_indexs(*index_val)
+            rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)
             data_set.vectors.each do |vec|
-              @table.new_column(converted_type_to_js(vec, data_set) , vec)
+              @table.new_column(converted_type_to_js(vec, data_set), vec)
             end
-            @table.add_rows(df_rows)
           when data_set.is_a?(Daru::Vector)
             vec_name = data_set.name.nil? ? 'Series' : data_set.name
-            @table.new_column(return_js_type(data_set[0]) , vec_name)
-            vec_rows = []
-            data_set.to_a.each { |a| vec_rows << [a] }
-            @table.add_rows(vec_rows)
+            @table.new_column(return_js_type(data_set[0]), vec_name)
+            rows = []
+            data_set.to_a.each { |a| rows << [a] }
           when data_set.is_a?(Array)
-            if data_set.empty?
-              return
-            end
-            # For google table column is needed.
-            #
-            # note :  1st line must be colmns name and then all others
-            # data rows
-            vec_name = data_set[0] # for this 1st line must be Name of col
+            return if data_set.empty?
             data_set.shift # 1st row removed
             data_set.vectors.each_with_index do |vec, indx|
               @table.new_column(return_js_type(data_set[0][indx]), vec)
             end
-            @table.add_rows(data_set)
+            rows = data_set
           else
-            # TODO: error msg
-            raise ArgumentError
+            raise ArgumentError # TODO: error msg
           end
+          @table.add_rows(rows)
         end
 
         def converted_type_to_js(vec_name, data_set)
@@ -130,23 +127,22 @@ module Daru
           end
         end
 
-        def return_js_type(data)
+        # TODO : fix Metrics/PerceivedComplexity rubocop error
+        def return_js_type(data) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
           data = data.is_a?(Hash) ? data[:v] : data
           case
-            when data.nil?
-              return
-            when data.is_a?(String)
-              return 'string'
-            when data.is_a?(Integer) || data.is_a?(Float) || data.is_a?(BigDecimal)
-              return 'number'
-            when data.is_a?(TrueClass) || data.is_a?(FalseClass)
-              return 'boolean'
-            when data.is_a?(DateTime)  || data.is_a?(Time)
-              return 'datetime'
-            when data.is_a?(DateTime)  || data.is_a?(Time)
-              return 'time'
-            when data.is_a?(Date)
-              return 'date'
+          when data.nil?
+            return
+          when data.is_a?(String)
+            return 'string'
+          when data.is_a?(Integer) || data.is_a?(Float) || data.is_a?(BigDecimal)
+            return 'number'
+          when data.is_a?(TrueClass) || data.is_a?(FalseClass)
+            return 'boolean'
+          when data.is_a?(DateTime)  || data.is_a?(Time)
+            return 'datetime'
+          when data.is_a?(Date)
+            return 'date'
           end
         end
       end # GooglechartsAdapter end
