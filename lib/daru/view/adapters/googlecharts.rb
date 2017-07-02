@@ -22,7 +22,7 @@ module Daru
           else
             @table = data
           end
-          series_type = options[:type].nil? ? 'Line' : options[:type]
+          series_type = options[:type].nil? ? 'Line' : options.delete(:type)
           @chart = GoogleVisualr::Interactive.const_get(
             series_type.to_s.capitalize + 'Chart'
           ).new(@table, options)
