@@ -47,4 +47,8 @@ module GoogleVisualr
   class DataTable
     include Display
   end
+
+  class BaseChart
+    include Display
+  end
 end

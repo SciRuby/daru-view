@@ -2,6 +2,10 @@ require 'securerandom'
 
 module GoogleVisualr
   class DataTable
+    # options will enable us to give some styling for table.
+    # E.g. pagination, row numbers, etc
+    attr_accessor :options
+
     # included to use `js_parameters` method
     include GoogleVisualr::ParamHelpers
 
