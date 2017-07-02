@@ -17,11 +17,12 @@ module Daru
         # TODO : this docs must be improved
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
-          unless data.is_a?(GoogleVisualr::DataTable)
-            @table = add_data_in_table(data)
-          else
-            @table = data
-          end
+          @table =
+            if data.is_a?(GoogleVisualr::DataTable)
+              data
+            else
+              add_data_in_table(data)
+            end
           series_type = options[:type].nil? ? 'Line' : options.delete(:type)
           @chart = GoogleVisualr::Interactive.const_get(
             series_type.to_s.capitalize + 'Chart'
