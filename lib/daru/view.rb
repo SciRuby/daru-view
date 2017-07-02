@@ -2,6 +2,7 @@ require 'daru/view/version'
 require 'daru/view/plot'
 require 'daru/view/adapters/highcharts/display'
 require 'daru/view/adapters/nyaplot/display'
+require 'daru/view/table'
 
 module Daru
   module View
@@ -17,10 +18,14 @@ module Daru
         case lib
         when :nyaplot, :highcharts
           @plotting_library = lib
+          Daru::View::Plot.adapter = lib
+        when :googlecharts
+          @plotting_library = lib
+          Daru::View::Plot.adapter = lib
+          Daru::View::Table.adapter = lib
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end
-        Daru::View::Plot.adapter = lib
 
         # When code is running in console/terminal then IRuby NameError.
         # Since IRuby methods can't work in console.
@@ -50,6 +55,9 @@ module Daru
         if library.match('highcharts')
           library = 'LazyHighCharts'
           Object.const_get(library).init_iruby
+        elsif library.match('googlecharts')
+          library = 'GoogleVisualr'
+          Object.const_get(library).init_iruby
         else
           Object.const_get(library.capitalize).init_iruby
         end
@@ -70,6 +78,8 @@ module Daru
           Nyaplot.init_script
         when :highcharts
           LazyHighCharts.init_script
+        when :googlecharts
+          GoogleVisualr.init_script
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end

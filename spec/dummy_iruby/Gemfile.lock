@@ -47,6 +47,7 @@ GEM
       ffi-rzmq-core (>= 1.0.6)
     ffi-rzmq-core (1.0.6)
       ffi
+    google_visualr (2.5.1)
     hash-deep-merge (0.1.1)
     i18n (0.8.4)
     iruby (0.3)
@@ -128,6 +129,7 @@ DEPENDENCIES
   daru-view!
   distribution
   ffi-rzmq
+  google_visualr
   iruby
   lazy_high_charts
   nyaplot!

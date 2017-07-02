@@ -1,0 +1,151 @@
+require 'google_visualr'
+require_relative 'googlecharts/iruby_notebook'
+require_relative 'googlecharts/display'
+require 'daru'
+require 'bigdecimal'
+
+module Daru
+  module View
+    module Adapter
+      module GooglechartsAdapter
+        extend self # rubocop:disable Style/ModuleFunction
+
+        # Read : https://developers.google.com/chart/ to understand
+        # the google charts option concept.
+        # and google_visualr : http://googlevisualr.herokuapp.com/
+        #
+        # TODO : this docs must be improved
+        def init(data=GoogleVisualr::DataTable.new, options={})
+          unless data.is_a?(GoogleVisualr::DataTable)
+            @table = add_data_in_table(data)
+          end
+          series_type = options[:type].nil? ? 'Line' : options[:type]
+          @chart = GoogleVisualr::Interactive.const_get(
+            series_type.to_s.capitalize + 'Chart'
+          ).new(@table, options)
+          @chart
+        end
+
+        def init_table(data=[], options={})
+          # if `options` is something like this :
+          # {
+          #   cols: [{id: 'task', label: 'Employee Name', type: 'string'},
+          #          {id: 'startDate', label: 'Start Date', type: 'date'}],
+          #   rows: [{c:[{v: 'Mike'}, {v: new Date(2008, 1, 28), f:'February 28, 2008'}]},
+          #          {c:[{v: 'Bob'}, {v: new Date(2007, 5, 1)}]},
+          #          {c:[{v: 'Alice'}, {v: new Date(2006, 7, 16)}]},
+          #          {c:[{v: 'Frank'}, {v: new Date(2007, 11, 28)}]},
+          #          {c:[{v: 'Floyd'}, {v: new Date(2005, 3, 13)}]},
+          #          {c:[{v: 'Fritz'}, {v: new Date(2011, 6, 1)}]}
+          #         ]
+          # }
+          # then directly DatTable is created using options. Use data=[] or nil
+          @table = GoogleVisualr::DataTable.new(options)
+          add_data_in_table(data)
+          @table
+        end
+
+        def init_script
+          GoogleVisualr.init_script
+        end
+
+        def generate_body(plot)
+          plot.to_html
+        end
+
+        def export_html_file(plot, path='./plot.html')
+          path = File.expand_path(path, Dir.pwd)
+          str = generate_html(plot)
+          File.write(path, str)
+        end
+
+        def show_in_iruby(plot)
+          plot.show_in_iruby
+        end
+
+        def generate_html(plot)
+          # TODO: modify code
+          path = File.expand_path('../../templates/googlecharts/chart_div.erb', __FILE__)
+          template = File.read(path)
+          initial_script = init_script
+          chart_script = generate_body(plots)
+          ERB.new(template).result(binding)
+        end
+
+        def init_iruby
+          GoogleVisualr.init_iruby
+        end
+
+        # Generally, in opts Hash, :name, :type, :data , :center=> [X, Y],
+        # :size=> Integer, :showInLegend=> Bool, etc may present.
+        def add_series(plot, opts={})
+          plot.series(opts)
+          plot
+        end
+
+        private
+
+        # For google table, column is needed.
+        #
+        # note :  1st line must be colmns name and then all others
+        # data rows
+        #
+        # TODO : Currently I didn't find use case for multi index.
+        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+          case
+          when data_set.is_a?(Daru::DataFrame)
+            return ArgumentError unless data_set.index.is_a?(Daru::Index)
+            rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)
+            data_set.vectors.each do |vec|
+              @table.new_column(converted_type_to_js(vec, data_set), vec)
+            end
+          when data_set.is_a?(Daru::Vector)
+            vec_name = data_set.name.nil? ? 'Series' : data_set.name
+            @table.new_column(return_js_type(data_set[0]), vec_name)
+            rows = []
+            data_set.to_a.each { |a| rows << [a] }
+          when data_set.is_a?(Array)
+            return if data_set.empty?
+            data_set.shift # 1st row removed
+            data_set.vectors.each_with_index do |vec, indx|
+              @table.new_column(return_js_type(data_set[0][indx]), vec)
+            end
+            rows = data_set
+          else
+            raise ArgumentError # TODO: error msg
+          end
+          @table.add_rows(rows)
+        end
+
+        def converted_type_to_js(vec_name, data_set)
+          # Assuming all the data type is same for all the column values.
+          case
+          when data_set.is_a?(Daru::DataFrame)
+            return_js_type(data_set[vec_name][0])
+          when data_set.is_a?(Daru::Vector)
+            return_js_type(data_set[0])
+          end
+        end
+
+        # TODO : fix Metrics/PerceivedComplexity rubocop error
+        def return_js_type(data) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+          data = data.is_a?(Hash) ? data[:v] : data
+          case
+          when data.nil?
+            return
+          when data.is_a?(String)
+            return 'string'
+          when data.is_a?(Integer) || data.is_a?(Float) || data.is_a?(BigDecimal)
+            return 'number'
+          when data.is_a?(TrueClass) || data.is_a?(FalseClass)
+            return 'boolean'
+          when data.is_a?(DateTime)  || data.is_a?(Time)
+            return 'datetime'
+          when data.is_a?(Date)
+            return 'date'
+          end
+        end
+      end # GooglechartsAdapter end
+    end # Adapter end
+  end
+end
