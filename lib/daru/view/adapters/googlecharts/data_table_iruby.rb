@@ -1,4 +1,5 @@
 require 'securerandom'
+require 'google_visualr'
 
 module GoogleVisualr
   class DataTable

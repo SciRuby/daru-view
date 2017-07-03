@@ -2,6 +2,7 @@ require 'daru/view/version'
 require 'daru/view/plot'
 require 'daru/view/adapters/highcharts/display'
 require 'daru/view/adapters/nyaplot/display'
+require 'daru/view/adapters/googlecharts/display'
 require 'daru/view/table'
 
 module Daru

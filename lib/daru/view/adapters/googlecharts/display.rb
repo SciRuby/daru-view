@@ -8,7 +8,7 @@ module GoogleVisualr
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
-    js << LazyHighCharts.generate_init_code(dependent_js)
+    js << GoogleVisualr.generate_init_code(dependent_js)
     js << "\n</script>"
     js
   end

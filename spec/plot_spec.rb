@@ -24,7 +24,7 @@ describe Daru::View::Plot, 'Chart plotting with Nyaplot library' do
       it { expect(plot_dv.chart).to be_a Nyaplot::Plot }
     end
 
-    context 'fails when other than DataFrame and Vector as data' do
+    context 'fails when other than DataFrame and Vector is as data' do
       # expect{Daru::View::Plot.new()}
       # .to raise_error(ArgumentError,
       # /Nyaplot Library, data must be in Daru::Vector or Daru::DataFrame/)
@@ -52,6 +52,32 @@ describe Daru::View::Plot, 'Chart plotting with Highcharts library' do
       end
 
       it 'Highcharts chart using Vector' do
+        # todo
+      end
+    end
+  end # initialize context end
+end
+
+describe Daru::View::Plot, 'Chart plotting with Googlecharts library' do
+  context 'initialize with Googlecharts library' do
+    context 'Googlecharts library' do
+      before { Daru::View.plotting_library = :googlecharts }
+      let(:lib) { Daru::View.plotting_library }
+      let(:plot_array) { Daru::View::Plot.new([1, 2, 3]) }
+      it 'check plotting library' do
+        expect(lib).to eq(:googlecharts)
+      end
+
+      it 'Googlecharts chart using Array' do
+        expect(plot_array).to be_a Daru::View::Plot
+        expect(plot_array.chart).to be_a
+      end
+
+      it 'Googlecharts chart using DataFrame' do
+        # todo
+      end
+
+      it 'Googlecharts chart using Vector' do
         # todo
       end
     end
