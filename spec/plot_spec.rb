@@ -63,14 +63,15 @@ describe Daru::View::Plot, 'Chart plotting with Googlecharts library' do
     context 'Googlecharts library' do
       before { Daru::View.plotting_library = :googlecharts }
       let(:lib) { Daru::View.plotting_library }
-      let(:plot_array) { Daru::View::Plot.new([1, 2, 3]) }
+      let(:plot_array) { Daru::View::Plot.new(
+        [['col1', 'col2', 'col3'],[1, 2, 3]]) }
       it 'check plotting library' do
         expect(lib).to eq(:googlecharts)
       end
 
       it 'Googlecharts chart using Array' do
         expect(plot_array).to be_a Daru::View::Plot
-        expect(plot_array.chart).to be_a
+        expect(plot_array.chart).to be_a GoogleVisualr::Interactive::LineChart
       end
 
       it 'Googlecharts chart using DataFrame' do

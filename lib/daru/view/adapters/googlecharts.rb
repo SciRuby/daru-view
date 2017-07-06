@@ -110,10 +110,10 @@ module Daru
             data_set.to_a.each { |a| rows << [a] }
           when data_set.is_a?(Array)
             return GoogleVisualr::DataTable.new if data_set.empty?
-            data_set.shift # 1st row removed
-            data_set.vectors.each_with_index do |vec, indx|
-              @table.new_column(return_js_type(data_set[0][indx]), vec)
+            data_set[0].each_with_index do |col, indx|
+              @table.new_column(return_js_type(data_set[1][indx]), col)
             end
+            data_set.shift # 1st row removed
             rows = data_set
           else
             raise ArgumentError # TODO: error msg
