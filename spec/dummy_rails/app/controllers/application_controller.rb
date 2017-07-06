@@ -163,12 +163,55 @@ class ApplicationController < ActionController::Base
 
   end
 
+  def googlecharts
+    # line chart
+    opts = {
+      title: 'Atmosphere Temperature by Altitude',
+      subtitle: 'According to the Standard Atmosphere Model',
+      vAxis: {
+          title: 'Altitude'
+      },
+      hAxis:{
+          title: 'Temperature',
+      },
+      adapter: :googlecharts
+    }
+
+    data = Daru::DataFrame.rows([[0, 15], [10, -50], [20, -56.5], [30, -46.5], [40, -22.1], [50, -2.5], [60, -27.7], [70, -55.7], [80, -76.5]])
+    @line_basic = Daru::View::Plot.new(data, opts)
+
+    # 3d column chart
+    opts = {
+      type: :column,
+      title: 'Column 3d demo',
+      adapter: :googlecharts,
+      is3D: true,
+      height: 700,
+      width: 800
+    }
+
+    year = Daru::Vector.new([2005, 2006, 2007, 2008, 2009], name: 'Year')
+    score = Daru::Vector.new([3.6, 4.1, 3.8, 3.9, 4.6], name: 'Score')
+    data = Daru::DataFrame.new(year: year, score: score)
+    @col_3d = Daru::View::Plot.new(data, opts)
+
+    year = Daru::Vector.new([2004, 2005, 2006, 2007], name: 'Year')
+    sales = Daru::Vector.new([1000, 1170, 660, 1030], name: 'Sales')
+    exp = Daru::Vector.new([400, 460, 1120, 540], name: 'Expense')
+    data = Daru::DataFrame.new({Year: year, Sales: sales, Expense: exp}, order: [:Year, :Sales, :Expense])
+    opts = {type: :column, is3D: true, width: 400, height: 240, title: 'Company Performance'}
+    @col_year_sales_exp = Daru::View::Plot.new(data, opts)
+  end
+
    private
     def resolve_layout
      case action_name
        when "highcharts"
         Daru::View.plotting_library = :highcharts
         "highcharts_layout"
+       when "googlecharts"
+        Daru::View.plotting_library = :googlecharts
+        "googlecharts_layout"
        else
         Daru::View.plotting_library = :nyaplot
         "application"

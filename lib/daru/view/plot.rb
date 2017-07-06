@@ -35,7 +35,7 @@ module Daru
         # TODO: &block is not used, right now.
         @data = data
         @options = options
-        self.adapter = options[:adapter] unless options[:adapter].nil?
+        self.adapter = options.delete(:adapter) unless options[:adapter].nil?
         @chart = plot_data(data, options, &block)
       end
 

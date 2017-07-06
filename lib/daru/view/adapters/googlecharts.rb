@@ -15,11 +15,15 @@ module Daru
         # and google_visualr : http://googlevisualr.herokuapp.com/
         #
         # TODO : this docs must be improved
-        def init(data=GoogleVisualr::DataTable.new, options={})
-          unless data.is_a?(GoogleVisualr::DataTable)
-            @table = add_data_in_table(data)
-          end
-          series_type = options[:type].nil? ? 'Line' : options[:type]
+        def init(data=[], options={})
+          @table = GoogleVisualr::DataTable.new
+          @table =
+            if data.is_a?(GoogleVisualr::DataTable)
+              data
+            else
+              add_data_in_table(data)
+            end
+          series_type = options[:type].nil? ? 'Line' : options.delete(:type)
           @chart = GoogleVisualr::Interactive.const_get(
             series_type.to_s.capitalize + 'Chart'
           ).new(@table, options)
@@ -96,7 +100,7 @@ module Daru
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
             rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)
-            data_set.vectors.each do |vec|
+            data_set.vectors.to_a.each do |vec|
               @table.new_column(converted_type_to_js(vec, data_set), vec)
             end
           when data_set.is_a?(Daru::Vector)
@@ -105,16 +109,17 @@ module Daru
             rows = []
             data_set.to_a.each { |a| rows << [a] }
           when data_set.is_a?(Array)
-            return if data_set.empty?
-            data_set.shift # 1st row removed
-            data_set.vectors.each_with_index do |vec, indx|
-              @table.new_column(return_js_type(data_set[0][indx]), vec)
+            return GoogleVisualr::DataTable.new if data_set.empty?
+            data_set[0].each_with_index do |col, indx|
+              @table.new_column(return_js_type(data_set[1][indx]), col)
             end
+            data_set.shift # 1st row removed
             rows = data_set
           else
             raise ArgumentError # TODO: error msg
           end
           @table.add_rows(rows)
+          @table
         end
 
         def converted_type_to_js(vec_name, data_set)

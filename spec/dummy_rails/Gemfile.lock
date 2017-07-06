@@ -89,6 +89,7 @@ GEM
     ffi (1.9.18)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
+    google_visualr (2.5.1)
     hash-deep-merge (0.1.1)
     i18n (0.8.4)
     jbuilder (2.6.4)
@@ -247,6 +248,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   daru!
   daru-view!
+  google_visualr
   jbuilder (~> 2.5)
   lazy_high_charts
   listen (>= 3.0.5, < 3.2)
