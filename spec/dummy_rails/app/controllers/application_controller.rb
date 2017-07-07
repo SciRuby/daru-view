@@ -199,8 +199,26 @@ class ApplicationController < ActionController::Base
     sales = Daru::Vector.new([1000, 1170, 660, 1030], name: 'Sales')
     exp = Daru::Vector.new([400, 460, 1120, 540], name: 'Expense')
     data = Daru::DataFrame.new({Year: year, Sales: sales, Expense: exp}, order: [:Year, :Sales, :Expense])
-    opts = {type: :column, is3D: true, width: 400, height: 240, title: 'Company Performance'}
+    opts = {type: :column, is3D: true, width: 400, height: 240, title: 'Company Performance', adapter: :googlecharts}
     @col_year_sales_exp = Daru::View::Plot.new(data, opts)
+
+    country_population = [
+        ['China', 'China: 1,363,800,000'],
+        ['India', 'India: 1,242,620,000'],
+        ['US', 'US: 317,842,000'],
+        ['Indonesia', 'Indonesia: 247,424,598'],
+        ['Brazil', 'Brazil: 201,032,714'],
+        ['Pakistan', 'Pakistan: 186,134,000'],
+        ['Nigeria', 'Nigeria: 173,615,000'],
+        ['Bangladesh', 'Bangladesh: 152,518,015'],
+        ['Russia', 'Russia: 146,019,512'],
+        ['Japan', 'Japan: 127,120,000']
+      ]
+    df_cp = Daru::DataFrame.rows(country_population)
+    df_cp.vectors = Daru::Index.new(['Country', 'Population'])
+    @cp_table = Daru::View::Table.new(df_cp, pageSize: 5, adapter: :googlecharts)
+    @map = Daru::View::Plot.new(
+    @cp_table.table, type: :map, adapter: :googlecharts, height: 500, width: 800)
   end
 
    private

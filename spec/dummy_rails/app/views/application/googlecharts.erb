@@ -11,7 +11,10 @@
   <b>Chart : </b>
   <br>
   <%=raw @line_basic.div %>
+  <!--
+          or
   <%=raw @line_basic.chart.to_html %>
+  -->
 </p>
 
 
@@ -29,22 +32,6 @@
 </p>
 <br>
 
-<h3> 3d pie Graph </h3>
-<p>
-  <b>Data : </b>
-  <%=raw @col_3d.data %>
-  <br>
-  <b>Options: (setting new chart type in `options`. Status : not working!</b>
-  <% @col_3d.options[:type] = :pie %>
-  <%=raw @col_3d.options %>
-  <br>
-  <b>Chart : </b>
-  <br>
-  <%=raw @col_3d.div %>
-</p>
-<br>
-
-
 
 <h3> 3d colmn Graph </h3>
 <p>
@@ -57,6 +44,20 @@ charts is not coming in 3d, since google_visualr loading only corechart package 
   <b>Chart : </b>
   <br>
   <%=raw @col_year_sales_exp.div %>
+</p>
+<br>
+
+<h3> Map (Fixme: Not able to see google map) </h3>
+<p>
+ <br>
+  <b>Data : </b>
+  <%=raw @cp_table.div %>
+  <br>
+  <%=raw @map.options %>
+  <br>
+  <b>Chart : </b>
+  <br>
+  <%=raw @map.div %>
 </p>
 <br>
 

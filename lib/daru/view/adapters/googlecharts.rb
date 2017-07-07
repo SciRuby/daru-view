@@ -25,9 +25,11 @@ module Daru
             else
               add_data_in_table(data)
             end
-          series_type = options[:type].nil? ? 'Line' : options.delete(:type)
+          chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
+          chart_type = chart_type.to_s.capitalize
+          chart_type = (chart_type == 'Map')? chart_type : chart_type + 'Chart'
           @chart = GoogleVisualr::Interactive.const_get(
-            series_type.to_s.capitalize + 'Chart'
+            chart_type
           ).new(@table, options)
           @chart
         end
