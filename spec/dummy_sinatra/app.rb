@@ -16,6 +16,11 @@ get '/highcharts' do
   erb :highcharts, :layout => :highcharts_layout
 end
 
+get '/googlecharts' do
+  googlecharts_example
+  erb :googlecharts, :layout => :googlecharts_layout
+end
+
 def highchart_example
     # bar chart
     opts = {
@@ -109,6 +114,24 @@ def nyaplot_example
       c: [1, 6, 7, 2, 6, 0]
       }, index: 'a'..'f')
     @df_line = Daru::View::Plot.new df, type: :line, x: :a, y: :b, adapter: :nyaplot
+end
+
+def googlecharts_example
+  country_population = [
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+    ]
+  df_cp = Daru::DataFrame.rows(country_population)
+  df_cp.vectors = Daru::Index.new(['Country', 'Population'])
+  @table = Daru::View::Table.new(df_cp, pageSize: 5, adapter: :googlecharts, height: 400, width: 300)
+  @piechart = Daru::View::Plot.new(
+    @table.table, type: :pie, is3D: true, adapter: :googlecharts, height: 500, width: 800)
+  @geochart = Daru::View::Plot.new(
+    @table.table, type: :geo, adapter: :googlecharts, height: 500, width: 800)
 end
 
 def make_random_series(step)
