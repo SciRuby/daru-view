@@ -130,6 +130,7 @@ DEPENDENCIES
   google_visualr
   lazy_high_charts
   nanoc
+  nokogiri
   nyaplot!
   pry (~> 0.10)
   pry-byebug

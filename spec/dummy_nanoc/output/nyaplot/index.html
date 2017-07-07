@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Nayplot examples</title>
+    <link rel="stylesheet" href="/stylesheet.css">
+
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="Nanoc 4.7.13">
+    <!-- TODO : remove the link and use downloaded js -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
+<script>if(window['d3'] === undefined ||
+   window['Nyaplot'] === undefined){
+    var path = {"d3":"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min","downloadable":"http://cdn.rawgit.com/domitry/d3-downloadable/master/d3-downloadable"};
+
+
+
+    var shim = {"d3":{"exports":"d3"},"downloadable":{"exports":"downloadable"}};
+
+    require.config({paths: path, shim:shim});
+
+
+require(['d3'], function(d3){window['d3']=d3;console.log('finished loading d3');require(['downloadable'], function(downloadable){window['downloadable']=downloadable;console.log('finished loading downloadable');
+
+	var script = d3.select("head")
+	    .append("script")
+	    .attr("src", "http://cdn.rawgit.com/domitry/Nyaplotjs/master/release/nyaplot.js")
+	    .attr("async", true);
+
+	script[0][0].onload = script[0][0].onreadystatechange = function(){
+
+
+	    var event = document.createEvent("HTMLEvents");
+	    event.initEvent("load_nyaplot",false,false);
+	    window.dispatchEvent(event);
+	    console.log('Finished loading Nyaplotjs');
+
+	};
+
+
+});});
+}
+</script>
+
+  </head>
+  <body>
+    <div id="main">
+      
+<h1>Nayplot examples</h1>
+
+<div id='vis-daf61141-e30c-4d8c-a76a-a752ad397eb8'></div>
+<script>
+(function(){
+    var render = function(){
+        var model = {"panes":[{"diagrams":[{"type":"bar","options":{"x":"data0","y":"data1"},"data":"0eaf94f1-de43-4cdb-a9c2-057c8bdf1e7e"}],"options":{"width":700,"xrange":["a","b","c"],"yrange":[0,3]}}],"data":{"0eaf94f1-de43-4cdb-a9c2-057c8bdf1e7e":[{"data0":"a","data1":3},{"data0":"b","data1":2},{"data0":"c","data1":1}]},"extension":[]}
+        var id_name = '#vis-daf61141-e30c-4d8c-a76a-a752ad397eb8';
+        Nyaplot.core.parse(model, id_name);
+
+        require(['downloadable'], function(downloadable){
+          var svg = d3.select(id_name).select("svg");
+	  if(!svg.empty())
+	    svg.call(downloadable().filename('fig'));
+	});
+    };
+    if(window['Nyaplot']==undefined){
+        window.addEventListener('load_nyaplot', render, false);
+	return;
+    } else {
+       render();
+    }
+})();
+</script>
+
+<div id='vis-cb016830-22d9-4a5a-a46c-7d29ba84659a'></div>
+<script>
+(function(){
+    var render = function(){
+        var model = {"panes":[{"diagrams":[{"type":"scatter","options":{"x":"a","y":"b"},"data":"850b73a2-981a-47b0-b718-a3cda2365444"}],"options":{"zoom":true,"width":700,"xrange":[1,5],"yrange":[11,15]}}],"data":{"850b73a2-981a-47b0-b718-a3cda2365444":[{"a":1,"b":11,"c":11},{"a":2,"b":12,"c":22},{"a":3,"b":13,"c":33},{"a":4,"b":14,"c":44},{"a":5,"b":15,"c":55}]},"extension":[]}
+        var id_name = '#vis-cb016830-22d9-4a5a-a46c-7d29ba84659a';
+        Nyaplot.core.parse(model, id_name);
+
+        require(['downloadable'], function(downloadable){
+          var svg = d3.select(id_name).select("svg");
+	  if(!svg.empty())
+	    svg.call(downloadable().filename('fig'));
+	});
+    };
+    if(window['Nyaplot']==undefined){
+        window.addEventListener('load_nyaplot', render, false);
+	return;
+    } else {
+       render();
+    }
+})();
+</script>
+
+<div id='vis-939c7bb4-006e-4b80-91e0-608242514695'></div>
+<script>
+(function(){
+    var render = function(){
+        var model = {"panes":[{"diagrams":[{"type":"line","options":{"x":"a","y":"b"},"data":"39ce3522-a45e-4fca-8b55-3effd397dc34"}],"options":{"zoom":true,"width":700,"xrange":[0,7],"yrange":[0,5]}}],"data":{"39ce3522-a45e-4fca-8b55-3effd397dc34":[{"a":1,"b":1,"c":1},{"a":3,"b":5,"c":6},{"a":5,"b":2,"c":7},{"a":7,"b":5,"c":2},{"a":5,"b":1,"c":6},{"a":0,"b":0,"c":0}]},"extension":[]}
+        var id_name = '#vis-939c7bb4-006e-4b80-91e0-608242514695';
+        Nyaplot.core.parse(model, id_name);
+
+        require(['downloadable'], function(downloadable){
+          var svg = d3.select(id_name).select("svg");
+	  if(!svg.empty())
+	    svg.call(downloadable().filename('fig'));
+	});
+    };
+    if(window['Nyaplot']==undefined){
+        window.addEventListener('load_nyaplot', render, false);
+	return;
+    } else {
+       render();
+    }
+})();
+</script>
+
+
+    </div>
+    <div id="sidebar">
+      <h2>Documentation</h2>
+      <ul>
+        <li><a href="http://nanoc.ws/doc/">Documentation</a></li>
+        <li><a href="http://nanoc.ws/doc/tutorial/">Tutorial</a></li>
+      </ul>
+      <h2>Community</h2>
+      <ul>
+        <li><a href="http://groups.google.com/group/nanoc/">Discussion group</a></li>
+        <li><a href="https://gitter.im/nanoc/nanoc">Gitter channel</a></li>
+        <li><a href="http://nanoc.ws/contributing/">Contributing</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

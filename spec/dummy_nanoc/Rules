@@ -1,19 +1,62 @@
 #!/usr/bin/env ruby
 
-compile '/**/*.html' do
+# compile '/**/*.html' do
+#   layout '/default.*'
+# end
+
+# # This is an example rule that matches Markdown (.md) files, and filters them
+# # using the :kramdown filter. It is commented out by default, because kramdown
+# # is not bundled with Nanoc or Ruby.
+# #
+# #compile '/**/*.md' do
+# #  filter :kramdown
+# #  layout '/default.*'
+# #end
+
+# route '/**/*.{html,md,rb}' do
+#   if item.identifier =~ '/index.*'
+#     '/index.html'
+#   else
+#     item.identifier.without_ext + '/index.html'
+#   end
+# end
+
+# compile '/**/*' do
+#   write item.identifier.to_s
+# end
+
+layout '/**/*', :erb
+
+# Below is added by Shekhar. on 7 July 2017
+# default rep, although you can pass
+# :rep => :default explicitly too
+compile '/nyaplot/*.{html}' do
+  filter :erb
+  layout '/nyaplot_layout.*'
+end
+
+route '/nyaplot/*.{html}' do
+  # Just an example; you probably need something else
+  '/' + item.identifier
+end
+
+compile '/highcharts/*.{html}' do
+  filter :erb
+  layout '/highcharts_layout.*'
+end
+
+route '/highcharts/*.{html}' do
+  # Just an example; you probably need something else
+  '/' + item.identifier
+end
+
+
+# to compile outer index.html
+compile '/index.html' do
   layout '/default.*'
 end
 
-# This is an example rule that matches Markdown (.md) files, and filters them
-# using the :kramdown filter. It is commented out by default, because kramdown
-# is not bundled with Nanoc or Ruby.
-#
-#compile '/**/*.md' do
-#  filter :kramdown
-#  layout '/default.*'
-#end
-
-route '/**/*.{html,md}' do
+route '/*.{html}' do
   if item.identifier =~ '/index.*'
     '/index.html'
   else
@@ -21,9 +64,18 @@ route '/**/*.{html,md}' do
   end
 end
 
+# stylesheet.css compile
 compile '/**/*' do
   write item.identifier.to_s
 end
 
-layout '/**/*', :erb
+# compile '/stuff/*/', :rep => :special do
+#   filter :erb
+#   layout 'special' # this is different
+# end
 
+# route '/stuff/*/', :rep => :special do
+#   # /stuff/foo/ -> /special/stuff/foo/
+#   # Again, just an example
+#   '/special' + item.identifier
+# end

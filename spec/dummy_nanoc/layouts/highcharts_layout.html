@@ -2,20 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>A Brand New Nanoc Site - <%= @item[:title] %></title>
+    <title>Highcharts examples</title>
     <link rel="stylesheet" href="/stylesheet.css">
 
     <!-- you don't need to keep this, but it's cool for stats! -->
     <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
-    <%= nayplot_dependent_js %>
+    <%= highcharts_dependent_js %>
   </head>
   <body>
     <div id="main">
       <%= yield %>
 
     </div>
-
-        <div id="sidebar">
+    <div id="sidebar">
       <h2>Documentation</h2>
       <ul>
         <li><a href="https://shekharrajak.github.io/daru-view/">Documentation</a></li>
