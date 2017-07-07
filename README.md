@@ -211,6 +211,21 @@ bundle exec ruby app.rb
 Now go to the http://localhost:4567/nyaplot to see the Nyaplot examples or http://localhost:4567/highcharts to see the Highcharts examples.
 
 
+#### Nanoc application
+
+Most of the things similar to Rails application (syntax of the view part of the application).
+
+- User can try examples, that is added in spec/dummy_nanoc. To setup the rails app, run following commands :
+
+```
+bundle install
+bundle exec nanoc
+bundle exec nanoc view
+
+```
+Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts to see the Highcharts examples.
+
+
 ## Update to latest js library. Additional command line
 
   To update to the current highcharts.js directly from http://code.highcharts.com/",  you can always run
