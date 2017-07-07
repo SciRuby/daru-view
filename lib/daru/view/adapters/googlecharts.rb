@@ -25,9 +25,7 @@ module Daru
             else
               add_data_in_table(data)
             end
-          chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
-          chart_type = chart_type.to_s.capitalize
-          chart_type = (chart_type == 'Map')? chart_type : chart_type + 'Chart'
+          chart_type = extract_chart_type(options)
           @chart = GoogleVisualr::Interactive.const_get(
             chart_type
           ).new(@table, options)
@@ -92,6 +90,12 @@ module Daru
         end
 
         private
+
+        def extract_chart_type(options)
+          chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
+          chart_type = chart_type.to_s.capitalize
+          chart_type == 'Map' ? chart_type : chart_type + 'Chart'
+        end
 
         # For google table, column is needed.
         #
