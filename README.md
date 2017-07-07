@@ -236,6 +236,11 @@ Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http:
 
   Similarly for other libraries.
 
+  To update the all libraries Javascript file, run this command :
+
+    rake update_all
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
