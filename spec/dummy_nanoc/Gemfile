@@ -1,9 +1,11 @@
-source "https://rubygems.org"
+source "http://rubygems.org"
+
+gem 'nanoc'
+# to run nanoc view command
+gem 'adsf'
 
 # daru is not added in gemspec
 gem "daru", git: 'https://github.com/SciRuby/daru.git'
 gem 'nyaplot', git: 'https://github.com/sciruby/nyaplot.git'
 
 gemspec :path => '../../'
-
-gem "sinatra"
