@@ -1,0 +1,29 @@
+---
+title: Google charts
+---
+
+<h1>Google Charts examples</h1>
+
+<div style="margin-top: 100px; margin-bottom: 100px">
+  <h3>Line example</h3>
+<p>
+<% @data, @div = googlecharts_example_line %>
+<b>Data : (Data is loaded from the Daru DataFrame . Below table is google DataTable)</b>
+<%= @data %>
+
+</p>
+<p><%= @div %></p>
+</div>
+
+
+
+<div style="margin-top: 100px; margin-bottom: 100px">
+  <h3>Line example</h3>
+<p>
+<% @data, @div = googlecharts_example_geo %>
+<b>Data : (Data is loaded from the Daru DataFrame . Below table is google DataTable)</b>
+<%= @data %>
+
+</p>
+<p><%= @div %></p>
+</div>

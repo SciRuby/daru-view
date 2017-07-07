@@ -18,14 +18,16 @@ module Daru
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table =
-            if data.is_a?(GoogleVisualr::DataTable)
+            if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
+              data.table
+            elsif data.is_a?(GoogleVisualr::DataTable)
               data
             else
               add_data_in_table(data)
             end
-          series_type = options[:type].nil? ? 'Line' : options.delete(:type)
+          chart_type = extract_chart_type(options)
           @chart = GoogleVisualr::Interactive.const_get(
-            series_type.to_s.capitalize + 'Chart'
+            chart_type
           ).new(@table, options)
           @chart
         end
@@ -88,6 +90,12 @@ module Daru
         end
 
         private
+
+        def extract_chart_type(options)
+          chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
+          chart_type = chart_type.to_s.capitalize
+          chart_type == 'Map' ? chart_type : chart_type + 'Chart'
+        end
 
         # For google table, column is needed.
         #

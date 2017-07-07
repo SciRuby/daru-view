@@ -1,0 +1,42 @@
+---
+title: Highcharts
+---
+
+<h1>Highcharts examples</h1>
+
+<div style="margin-top: 100px; margin-bottom: 100px">
+  <h3>Line example</h3>
+<p>
+<% @data, @div = highcharts_example_line %>
+<b>Data : </b>
+<%= @data%>
+
+</p>
+<p><%= @div %></p>
+</div>
+
+
+
+<div style="margin-top: 100px; margin-bottom: 100px">
+  <h3>Line example Drag and zoom</h3>
+<p>
+<% @data, @div = highcharts_example_drag %>
+<b>Data : </b>
+<%= @data%>
+
+</p>
+<p><%= @div %></p>
+</div>
+
+
+
+<div style="margin-top: 100px; margin-bottom: 100px">
+  <h3>Dynamic chart example </h3>
+<p>
+<% @data, @div = highcharts_example_dynamic %>
+<b>Data : </b>
+<%= @data%>
+
+</p>
+<p><%= @div %></p>
+</div>

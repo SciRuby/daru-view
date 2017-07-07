@@ -39,7 +39,7 @@ module Daru
       def initialize(data=[], options={})
         @data = data
         @options = options
-        self.adapter = options[:adapter] unless options[:adapter].nil?
+        self.adapter = options.delete(:adapter) unless options[:adapter].nil?
         @table = table_data(data, options)
       end
 
