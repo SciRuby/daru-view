@@ -50,6 +50,15 @@ route '/highcharts/*.{html}' do
   '/' + item.identifier
 end
 
+compile '/googlecharts/*.{html}' do
+  filter :erb
+  layout '/googlecharts_layout.*'
+end
+
+route '/googlecharts/*.{html}' do
+  # Just an example; you probably need something else
+  '/' + item.identifier
+end
 
 # to compile outer index.html
 compile '/index.html' do

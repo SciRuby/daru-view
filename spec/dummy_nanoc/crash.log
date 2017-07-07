@@ -1,51 +1,47 @@
-Crashlog created at 2017-07-07 13:50:31 +0530
+Crashlog created at 2017-07-07 16:09:56 +0530
 
 ===== MESSAGE:
 
-SyntaxError: lib/default.rb:136: syntax error, unexpected ':', expecting =>
-              selected : 1
-                        ^
-lib/default.rb:164: syntax error, unexpected ',', expecting keyword_end
+ArgumentError: cell value '200' is not a String
+
+===== ITEM BEING COMPILED:
+
+Item identifier: /googlecharts/index.html
+Item rep name:   :default
 
 ===== STACK TRACE:
 
-  0. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/entities/code_snippet.rb:38:in `eval'
-  1. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/entities/code_snippet.rb:38:in `load'
-  2. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/repos/site_loader.rb:26:in `each'
-  3. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/repos/site_loader.rb:26:in `site_from_config'
-  4. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/repos/site_loader.rb:14:in `new_from_cwd'
-  5. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/command_runner.rb:26:in `site'
-  6. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/command_runner.rb:53:in `load_site'
-  7. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/commands/compile.rb:30:in `run'
-  8. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/command_runner.rb:14:in `block in call'
-  9. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/error_handler.rb:66:in `handle_while'
-  10. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/error_handler.rb:24:in `handle_while'
-  11. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/command_runner.rb:13:in `call'
-  12. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/cri-2.9.1/lib/cri/command_dsl.rb:248:in `block in runner'
-  13. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/cri-2.9.1/lib/cri/command.rb:319:in `run_this'
-  14. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/cri-2.9.1/lib/cri/command.rb:264:in `run'
-  15. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/cri-2.9.1/lib/cri/command.rb:282:in `run'
-  16. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli.rb:55:in `block in run'
-  17. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/error_handler.rb:66:in `handle_while'
-  18. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli/error_handler.rb:24:in `handle_while'
-  19. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/cli.rb:53:in `run'
-  20. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/bin/nanoc:11:in `<top (required)>'
-  21. /Users/shekharrajak/.rbenv/versions/2.3.1/bin/nanoc:23:in `load'
-  22. /Users/shekharrajak/.rbenv/versions/2.3.1/bin/nanoc:23:in `<top (required)>'
-  23. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/cli/exec.rb:74:in `load'
-  24. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/cli/exec.rb:74:in `kernel_load'
-  25. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/cli/exec.rb:27:in `run'
-  26. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/cli.rb:360:in `exec'
-  27. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run'
-  28. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/vendor/thor/lib/thor/invocation.rb:126:in `invoke_command'
-  29. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/vendor/thor/lib/thor.rb:369:in `dispatch'
-  30. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/cli.rb:20:in `dispatch'
-  31. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/vendor/thor/lib/thor/base.rb:444:in `start'
-  32. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/cli.rb:10:in `start'
-  33. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/exe/bundle:35:in `block in <top (required)>'
-  34. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/lib/bundler/friendly_errors.rb:121:in `with_friendly_errors'
-  35. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/bundler-1.15.1/exe/bundle:27:in `<top (required)>'
-  36. /Users/shekharrajak/.rbenv/versions/2.3.1/bin/bundle:23:in `load'
+  0. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:173:in `set_cell'
+  1. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:132:in `block in add_row'
+  2. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:131:in `each'
+  3. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:131:in `each_with_index'
+  4. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:131:in `add_row'
+  5. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:145:in `block in add_rows'
+  6. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:144:in `each'
+  7. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/google_visualr-2.5.1/lib/google_visualr/data_table.rb:144:in `add_rows'
+  8. /Users/shekharrajak/Documents/gsoc17/daru-view/lib/daru/view/adapters/googlecharts.rb:123:in `add_data_in_table'
+  9. /Users/shekharrajak/Documents/gsoc17/daru-view/lib/daru/view/adapters/googlecharts.rb:50:in `init_table'
+  10. /Users/shekharrajak/Documents/gsoc17/daru-view/lib/daru/view/table.rb:95:in `table_data'
+  11. /Users/shekharrajak/Documents/gsoc17/daru-view/lib/daru/view/table.rb:43:in `initialize'
+  12. lib/default.rb:297:in `new'
+  13. lib/default.rb:297:in `googlecharts_example_geo'
+  14. item /googlecharts/index.html (rep default):20:in `get_binding'
+  15. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/2.3.0/erb.rb:864:in `eval'
+  16. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/2.3.0/erb.rb:864:in `result'
+  17. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/filters/erb.rb:36:in `run'
+  18. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/filter.rb:152:in `setup_and_run'
+  19. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/executor.rb:28:in `filter'
+  20. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/recalculate.rb:30:in `block in run'
+  21. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/entities/action_sequence.rb:50:in `block in each'
+  22. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/entities/action_sequence.rb:50:in `each'
+  23. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/entities/action_sequence.rb:50:in `each'
+  24. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/recalculate.rb:27:in `run'
+  25. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/abstract.rb:13:in `call'
+  26. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/abstract.rb:15:in `block in call'
+  27. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/cache.rb:23:in `run'
+  28. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/abstract.rb:13:in `call'
+  29. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/abstract.rb:15:in `block in call'
+  30. /Users/shekharrajak/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/nanoc-4.7.13/lib/nanoc/base/services/compiler/phases/resume.rb:14:in `block in run'
 
 ===== VERSION INFORMATION:
 

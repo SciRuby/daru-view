@@ -18,7 +18,9 @@ module Daru
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table =
-            if data.is_a?(GoogleVisualr::DataTable)
+            if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
+              data.table
+            elsif data.is_a?(GoogleVisualr::DataTable)
               data
             else
               add_data_in_table(data)

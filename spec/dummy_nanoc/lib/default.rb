@@ -253,3 +253,48 @@ def highcharts_example_dynamic
   dyn_update.chart.series_data = series_dt
   [dyn_update.chart.series_data, dyn_update.div]
 end
+
+def googlecharts_dependent_js
+  Daru::View.dependent_script(:googlecharts)
+end
+
+def googlecharts_example_line
+  time_popularity = [
+        [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
+        [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
+        [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
+        [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
+        [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
+        [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
+        [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
+        [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
+        [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
+        [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
+        [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
+        [66, 70], [67, 72], [68, 75], [69, 80]
+      ]
+  df_tp = Daru::DataFrame.rows(time_popularity)
+  # Time in X axis and Population in Y axis
+  df_tp.vectors = Daru::Index.new(['Time', 'Population'])
+  table = Daru::View::Table.new(df_tp, pageSize: 10, adapter: :googlecharts)
+  line = Daru::View::Plot.new(
+    table.table, type: :line, adapter: :googlecharts, height: 500, width: 800)
+  [table.div, line.div]
+end
+
+def googlecharts_example_geo
+  country_population = [
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+    ]
+  df_cp = Daru::DataFrame.rows(country_population)
+  df_cp.vectors = Daru::Index.new(['Country', 'Population'])
+  table = Daru::View::Table.new(df_cp, pageSize: 5, adapter: :googlecharts, height: 200, width: 200)
+  geochart = Daru::View::Plot.new(
+    table.table, type: :geo, adapter: :googlecharts, height: 500, width: 800)
+  [table.div, geochart.div]
+end

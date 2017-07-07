@@ -19,5 +19,6 @@ goto:
 
    localhost:3000/nyaplot
    localhost:3000/highcharts
+   localhost:3000/googlecharts
 
 
