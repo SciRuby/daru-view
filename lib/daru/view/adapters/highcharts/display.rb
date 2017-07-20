@@ -38,6 +38,15 @@ module LazyHighCharts
       IRuby.html high_chart_iruby(placeholder, self)
     end
 
+    # This method is not needed if `to_html` generates the same code. Here
+    # `to_html` generates the code with `onload`, so there is need of
+    # `high_chart_iruby` which doesn't use `onload` in chart script.
+    def to_html_iruby(placeholder=random_canvas_id)
+      # TODO : placeholder pass, in plot#div
+      chart_hash_must_be_present
+      high_chart_iruby(placeholder, self)
+    end
+
     def chart_hash_must_be_present
       @options[:chart] ||= {}
     end
