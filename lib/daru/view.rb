@@ -18,11 +18,16 @@ module Daru
       def plotting_library=(lib)
         case lib
         when :nyaplot, :highcharts
+          # plot charts
           @plotting_library = lib
           Daru::View::Plot.adapter = lib
         when :googlecharts
+          # plot chart and for table drawing
           @plotting_library = lib
           Daru::View::Plot.adapter = lib
+          Daru::View::Table.adapter = lib
+        when :datatables
+          # only for table drawing
           Daru::View::Table.adapter = lib
         else
           raise ArgumentError, "Unsupported library #{lib}"
