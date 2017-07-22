@@ -4,7 +4,7 @@ require 'daru'
 module Daru
   module View
     module Adapter
-      module GooglechartsAdapter
+      module DatatablesAdapter
         extend self # rubocop:disable Style/ModuleFunction
 
         # Read : https://datatables.net/ to understand
@@ -14,7 +14,7 @@ module Daru
         def init_table(data=[], options={})
           # TODO : create data array from the df and vector data
           data_in_array = to_data_array(data)
-          options[:data] = data_in_array unless data.empty?
+          options[:data] = data_in_array unless data_in_array.empty?
           @table = DataTables::DataTable.new(options)
           @table
         end
@@ -27,16 +27,18 @@ module Daru
           table.to_html
         end
 
-        def export_html_file(plot, path='./plot.html')
+        def export_html_file(table, path='./table.html')
           # TODO
+          return
         end
 
         def show_in_iruby(table)
           table.show_in_iruby
         end
 
-        def generate_html(plot)
+        def generate_html(table)
           # TODO
+          return
         end
 
         def init_iruby
@@ -47,7 +49,7 @@ module Daru
 
         # DataTables accept the data as Array of array.
         #
-        # TODO : Currently I didn't find use case for multi index.
+        # TODO : I didn't find use case for multi index.
         def to_data_array(data_set)
           case
           when data_set.is_a?(Daru::DataFrame)
@@ -63,7 +65,7 @@ module Daru
             raise ArgumentError # TODO: error msg
           end
         end
-      end # GooglechartsAdapter end
+      end # DatatablesAdapter end
     end # Adapter end
   end
 end
