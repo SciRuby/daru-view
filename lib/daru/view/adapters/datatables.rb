@@ -1,5 +1,6 @@
 require 'data_tables'
 require 'daru'
+require 'securerandom'
 
 module Daru
   module View
@@ -13,7 +14,15 @@ module Daru
         # TODO : this docs must be improved
         def init_table(data=[], options={})
           # TODO : create data array from the df and vector data
-          # data_in_array = to_data_array(data)
+          if data.is_a?(Array)
+            data_name = 'series_data'+ SecureRandom.uuid
+            data =
+                  if data.all? { |e| e.class==Array }
+                    Daru::DataFrame.rows(data, name: data_name)
+                  else
+                    Daru::Vector.new(data, name: data_name)
+                  end
+          end
           # options[:data] = data_in_array unless data_in_array.empty?
           @table = DataTables::DataTable.new(options)
           @data = data

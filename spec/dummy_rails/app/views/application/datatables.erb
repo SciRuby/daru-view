@@ -1,12 +1,13 @@
 
 <h3> Daru DataFrame: </h3>
-<p style='width: 50px'>
+<p style="color:blue;width: 100px;">
   <b>Data : </b>
   <%=raw @dt_df2.data.to_html %>
   <br>
   <b>Table : </b>
   <br>
-  <%=raw @dt_df2_html %>
+  <div style="width: 500px;"><%=raw @dt_df2_html %></div>
+
 </p>
 
 
@@ -20,7 +21,7 @@
   <br>
   <b>Table : </b>
   <br>
-  <%=raw @dt_df1_html %>
+  <div style="width: 500px;"><%=raw @dt_df1_html %></div>
 </p>
 
 <br>
@@ -32,11 +33,48 @@
   <br>
   <b>Table : </b>
   <br>
-  <%=raw @dt_dv_html %>
+  <div style="width: 500px;"><%=raw @dt_dv_html %></div>
+</p>
+<br>
+
+
+<h1> Using array : </h1>
+<br>
+<h3> 2D array: </h3>
+<p style='width: 50px'>
+  <b>Data : </b>
+  <%=raw @dt_df2_arr.data %>
+  <br>
+  <b>Table : </b>
+  <br>
+  <div style="width: 500px;"><%=raw @dt_df2_arr_html %></div>
 </p>
 
 
 <br>
 
+
+<h3> 2D array : </h3>
+<p>
+  <b>Data : </b>
+  <%=raw @dt_df1_arr.data %>
+  <br>
+  <b>Table : </b>
+  <br>
+  <div style="width: 500px;"><%=raw @dt_df1_arr_html %></div>
+</p>
+
+<br>
+
+<h3> 1D array: </h3>
+<p>
+  <b>Data : </b>
+  <%=raw @dt_dv_arr.data %>
+  <br>
+  <b>Table : </b>
+  <br>
+  <div style="width: 500px;"><%=raw @dt_dv_arr_html %></div>
+</p>
+<br>
 
 
