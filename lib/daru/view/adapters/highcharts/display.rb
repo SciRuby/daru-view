@@ -3,8 +3,12 @@ require_relative 'iruby_notebook'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=['highcharts.js', 'highcharts-3d.js', 'highstock.js']
+    dependent_js=['highstock.js', 'highcharts-3d.js', 'modules/data.js']
   )
+    # Highstock is based on Highcharts, meaning it has all the core
+    # functionality of Highcharts, plus some additional features. So
+    # highstock.js contains highcharts.js .If highstock.js is removed then
+    # add highchart.js to make chart script work.
     js =  ''
     js << "\n<script type='text/javascript'>"
     js << LazyHighCharts.generate_init_code(dependent_js)
@@ -32,6 +36,15 @@ module LazyHighCharts
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
       IRuby.html high_chart_iruby(placeholder, self)
+    end
+
+    # This method is not needed if `to_html` generates the same code. Here
+    # `to_html` generates the code with `onload`, so there is need of
+    # `high_chart_iruby` which doesn't use `onload` in chart script.
+    def to_html_iruby(placeholder=random_canvas_id)
+      # TODO : placeholder pass, in plot#div
+      chart_hash_must_be_present
+      high_chart_iruby(placeholder, self)
     end
 
     def chart_hash_must_be_present

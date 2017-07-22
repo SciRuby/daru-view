@@ -100,6 +100,9 @@ module Daru
             data_set.to_a
           when data_set.is_a?(Array)
             data_set
+          when data_set.is_a?(String)
+            # it can be `id` of html table
+            data_set
           else
             # TODO: error msg
             raise ArgumentError

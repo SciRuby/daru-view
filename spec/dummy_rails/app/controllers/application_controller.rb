@@ -161,6 +161,41 @@ class ApplicationController < ActionController::Base
     @col_3d = Daru::View::Plot.new(series_dt[0][:data], opts)
     @col_3d.chart.series_data = series_dt
 
+
+    # html table generated from the daru dataframe and vector
+    @df_col = Daru::DataFrame.new({b: [11,12,13,14,15], a: [1,2,3,4,5],
+      c: [11,22,33,44,55]},
+      order: [:a, :b, :c],
+      index: [:one, :two, :three, :four, :five])
+    html_code = "<table id='table_id1'>" + @df_col.to_html_thead + @df_col.to_html_tbody + "</table>"
+    opts = {
+      data: {
+              table: 'table_id1'
+          },
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: 'Data extracted from a HTML table in the page'
+          },
+          yAxis: {
+              allowDecimals: false,
+              title: {
+                  text: 'Units'
+              }
+          },
+          tooltip: {
+              formatter: "function () {
+                  return '<b>' + this.series.name + '</b><br/>' +
+                      this.point.y + ' ' + this.point.name.toLowerCase();
+              }".js_code
+          },
+          adapter: :highcharts
+      }
+    col_from_table = Daru::View::Plot.new([],options=opts)
+    # col_from_table.chart.options = opts
+    @out_col_from_table = html_code + col_from_table.div
+
   end
 
   def googlecharts
