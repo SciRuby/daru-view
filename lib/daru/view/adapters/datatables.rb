@@ -1,4 +1,4 @@
-require 'datatables'
+require 'data_tables'
 require 'daru'
 
 module Daru
