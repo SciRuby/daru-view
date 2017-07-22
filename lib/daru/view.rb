@@ -87,6 +87,9 @@ module Daru
         elsif library.match('googlecharts')
           library = 'GoogleVisualr'
           Object.const_get(library).init_iruby
+        elsif library.match('datatables')
+          library = 'DataTables'
+          Object.const_get(library).init_iruby
         else
           Object.const_get(library.capitalize).init_iruby
         end
@@ -109,6 +112,8 @@ module Daru
           LazyHighCharts.init_script
         when :googlecharts
           GoogleVisualr.init_script
+        when :datatables
+          DataTables.init_script
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end

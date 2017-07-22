@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   get '/nyaplot', to: 'application#nyaplot'
   get '/highcharts', to: 'application#highcharts'
   get '/googlecharts', to: 'application#googlecharts'
+  get '/datatables', to: 'application#datatables'
 end

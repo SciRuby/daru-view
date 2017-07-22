@@ -11,6 +11,12 @@ GIT
   specs:
     nyaplot (0.1.6)
 
+GIT
+  remote: https://github.com/Shekharrajak/data_tables.git
+  revision: 5765938137c522a8b4537a1ca1a4010a2dbd21f4
+  specs:
+    data_tables (0.1.0)
+
 PATH
   remote: ../..
   specs:
@@ -127,6 +133,7 @@ DEPENDENCIES
   bundler (~> 1.14)
   daru!
   daru-view!
+  data_tables!
   distribution
   ffi-rzmq
   google_visualr

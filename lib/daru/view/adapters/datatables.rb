@@ -13,9 +13,10 @@ module Daru
         # TODO : this docs must be improved
         def init_table(data=[], options={})
           # TODO : create data array from the df and vector data
-          data_in_array = to_data_array(data)
-          options[:data] = data_in_array unless data_in_array.empty?
+          # data_in_array = to_data_array(data)
+          # options[:data] = data_in_array unless data_in_array.empty?
           @table = DataTables::DataTable.new(options)
+          @data = data
           @table
         end
 
@@ -24,7 +25,16 @@ module Daru
         end
 
         def generate_body(table)
-          table.to_html
+          table_opts = {
+            class: "display",
+            cellspacing: "0",
+            width: "100%",
+            table_html: @data.to_html_thead + @data.to_html_tbody
+          }
+          html_options ={
+            table_options: table_opts
+          }
+          table.to_html(id=@data.name, html_options)
         end
 
         def export_html_file(table, path='./table.html')
