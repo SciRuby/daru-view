@@ -6,9 +6,9 @@ require 'daru/view/adapters/googlecharts/display'
 require 'daru/view/table'
 
 # needed in load_lib_in_iruby method
-require "daru/view/adapters/highcharts/iruby_notebook"
-require "daru/view/adapters/nyaplot/iruby_notebook"
-require "daru/view/adapters/googlecharts/iruby_notebook"
+require 'daru/view/adapters/highcharts/iruby_notebook'
+require 'daru/view/adapters/nyaplot/iruby_notebook'
+require 'daru/view/adapters/googlecharts/iruby_notebook'
 
 module Daru
   module View
@@ -65,6 +65,7 @@ module Daru
         rescue NameError # rubocop:disable Lint/HandleExceptions
         end
       end
+
       # Load the dependent JS files in IRuby notebook. Those JS will help in
       # plotting the charts in IRuby cell.
       #

@@ -17,11 +17,11 @@ module Daru
           if data.is_a?(Array)
             data_name = 'series_data'+ SecureRandom.uuid
             data =
-                  if data.all? { |e| e.class==Array }
-                    Daru::DataFrame.rows(data, name: data_name)
-                  else
-                    Daru::Vector.new(data, name: data_name)
-                  end
+              if data.all? { |e| e.class==Array }
+                Daru::DataFrame.rows(data, name: data_name)
+              else
+                Daru::Vector.new(data, name: data_name)
+              end
           end
           # options[:data] = data_in_array unless data_in_array.empty?
           @table = DataTables::DataTable.new(options)
@@ -35,20 +35,19 @@ module Daru
 
         def generate_body(table)
           table_opts = {
-            class: "display",
-            cellspacing: "0",
-            width: "100%",
+            class: 'display',
+            cellspacing: '0',
+            width: '100%',
             table_html: @data.to_html_thead + @data.to_html_tbody
           }
           html_options ={
             table_options: table_opts
           }
-          table.to_html(id=@data.name, html_options)
+          table.to_html(@data.name, html_options)
         end
 
         def export_html_file(table, path='./table.html')
           # TODO
-          return
         end
 
         def show_in_iruby(table)
@@ -57,7 +56,6 @@ module Daru
 
         def generate_html(table)
           # TODO
-          return
         end
 
         def init_iruby
