@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/SciRuby/daru.git
-  revision: 9f304c1b7fe41f610bc1269a01deb693ba313134
+  revision: 07089847df1a41a43a14c1e8b130ba246b058b47
   specs:
     daru (0.1.5)
       backports
@@ -10,6 +10,12 @@ GIT
   revision: 662ebc60b0d1e9fbebe7e06530d8450d266ebbdd
   specs:
     nyaplot (0.1.6)
+
+GIT
+  remote: https://github.com/shekharrajak/data_tables.git
+  revision: 5765938137c522a8b4537a1ca1a4010a2dbd21f4
+  specs:
+    data_tables (0.1.0)
 
 PATH
   remote: ../..
@@ -111,7 +117,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mini_portile2 (2.2.0)
-    minitest (5.10.2)
+    minitest (5.10.3)
     multi_json (1.12.1)
     nio4r (2.1.0)
     nokogiri (1.8.0)
@@ -250,6 +256,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   daru!
   daru-view!
+  data_tables!
   google_visualr
   jbuilder (~> 2.5)
   lazy_high_charts

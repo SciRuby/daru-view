@@ -9,6 +9,7 @@ end
 gem "daru", git: 'https://github.com/SciRuby/daru.git'
 # gem 'daru', path: '/Users/shekharrajak/Documents/gsoc17/daru'
 gem 'nyaplot', git: 'https://github.com/sciruby/nyaplot.git'
+gem 'data_tables', git: 'https://github.com/shekharrajak/data_tables.git'
 
 gemspec  :path => '../../'
 

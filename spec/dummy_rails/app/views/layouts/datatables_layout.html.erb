@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DataTables</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <!-- dependent script -->
+    <%=raw Daru::View.dependent_script(:datatables) %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

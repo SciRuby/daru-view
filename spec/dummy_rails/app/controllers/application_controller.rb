@@ -256,6 +256,65 @@ class ApplicationController < ActionController::Base
     @cp_table.table, type: :map, adapter: :googlecharts, height: 500, width: 800)
   end
 
+  def datatables
+    # need to give name, otherwise generated thead html code will not work.
+    # Because no name means no thead  in vector.
+    dv = Daru::Vector.new [:a, :a, :a, :b, :b, :c], name: 'series1'
+    # default adapter is nyaplot only
+    @dt_dv = Daru::View::Table.new(dv, pageLength: 3, adapter: :datatables)
+    @dt_dv_html = @dt_dv.div
+
+    df1 = Daru::DataFrame.new({b: [11,12,13,14,15], a: [1,2,3,4,5],
+      c: [11,22,33,44,55]},
+      order: [:a, :b, :c],
+      index: [:one, :two, :three, :four, :five])
+    @dt_df1 = Daru::View::Table.new(df1, pageLength: 3, adapter: :datatables)
+    @dt_df1_html = @dt_df1.div
+
+    df2 = Daru::DataFrame.new({
+      a: [1, 3, 5, 7, 5, 0],
+      b: [1, 5, 2, 5, 1, 0],
+      c: [1, 6, 7, 2, 6, 0]
+      }, index: 'a'..'f')
+    @dt_df2 = Daru::View::Table.new(df2, pageLength: 3, adapter: :datatables)
+    @dt_df2_html = @dt_df2.div
+    # user can change the table options using following code :
+    #
+    # table_opts = {
+    #   class: "display",
+    #   cellspacing: "0",
+    #   width: "50%",
+    #   table_html: 'new table thead and tbody html code'
+    # }
+    # options = {
+    #     table_options: table_opts
+    # }
+    #
+    # @dt_df2.table.to_html(id='id1', options)
+
+    dv_arr = [:a, :a, :a, :b, :b, :c]
+    @dt_dv_arr = Daru::View::Table.new(dv_arr, pageLength: 3, adapter: :datatables)
+    @dt_dv_arr_html = @dt_dv_arr.div
+
+    df1_arr = [
+      [11,12,13,14,15],
+      [1,2,3,4,5],
+      [11,22,33,44,55]
+    ]
+    @dt_df1_arr = Daru::View::Table.new(df1_arr, pageLength: 3, adapter: :datatables)
+    @dt_df1_arr_html = @dt_df1_arr.div
+
+    df2_arr = [
+      [1, 3, 5, 7, 5, 0],
+      [1, 5, 2, 5, 1, 0],
+      [1, 6, 7, 2, 6, 0]
+    ]
+    @dt_df2_arr = Daru::View::Table.new(df2_arr, pageLength: 3, adapter: :datatables)
+    @dt_df2_arr_html = @dt_df2_arr.div
+
+  end
+
+
    private
     def resolve_layout
      case action_name
@@ -265,6 +324,8 @@ class ApplicationController < ActionController::Base
        when "googlecharts"
         Daru::View.plotting_library = :googlecharts
         "googlecharts_layout"
+       when "datatables"
+        "datatables_layout"
        else
         Daru::View.plotting_library = :nyaplot
         "application"
