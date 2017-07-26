@@ -6,7 +6,9 @@ It is a plugin gem to Data Analysis in RUby(Daru) for visualisation of data
 
 ## Documentation :
 
-[http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/)
+[http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/) 
+
+[daru-view/wiki](https://github.com/Shekharrajak/daru-view/wiki)
 
 ## Examples :
 
