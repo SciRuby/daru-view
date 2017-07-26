@@ -9,8 +9,8 @@ module LazyHighCharts
 
   # Enable to show plots on IRuby notebook
   def self.init_iruby(
-    dependent_js=['highcharts.js', 'modules/exporting.js','highcharts-3d.js', 'modules/data.js'
-      ]
+    dependent_js=['highcharts.js', 'modules/exporting.js',
+                  'highcharts-3d.js', 'modules/data.js']
   )
     # TODO: include highstock.js for highstock and modules/*.js files for
     # exporting and getting data from various source like csv files etc.
@@ -21,6 +21,8 @@ module LazyHighCharts
     # , 'modules/exporting.js' : for the exporting button
     # data.js for getting data as csv or html table.
     # 'highcharts-more.js' : for arearange and some other chart type
+    # Note: Don't reorder the dependent_js elements. It must be loaded in
+    # the same sequence. Otherwise some of the JS overlap and doesn't work.
     js = generate_init_code(dependent_js)
     IRuby.display(IRuby.javascript(js))
   end
