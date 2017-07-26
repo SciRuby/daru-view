@@ -3,7 +3,8 @@ require_relative 'iruby_notebook'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=['highstock.js', 'highcharts-3d.js', 'modules/data.js']
+    dependent_js=['highstock.js', 'highcharts-3d.js', 'modules/data.js',
+      'modules/exporting.js']
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
