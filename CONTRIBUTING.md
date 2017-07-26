@@ -19,7 +19,6 @@ While preparing your pull requests, don't forget to check your code with Rubocop
 
   `bundle exec rubocop`
 
-[Optional] Install all Ruby versions which Daru currently supports with `rake spec setup`.
 
 ## Basic Development Flow
 

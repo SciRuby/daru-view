@@ -9,7 +9,9 @@ module Daru
         #
         # @example
         #
-        # Daru::View::Plot.adapter = :new_library
+        # Daru::View::Plot.adapter = :googlecharts
+        #
+        # Plotting libraries are nyaplot, highcharts, googlecharts
         def adapter=(adapter)
           require "daru/view/adapters/#{adapter}"
           # rubocop:disable Style/ClassVars
@@ -22,7 +24,7 @@ module Daru
       # @example
       #
       # df = Daru::DataFrame.new({a:['A', 'B', 'C', 'D', 'E'], b:[10,20,30,40,50]})
-      # Daru::View::Plot.new df, type: :bar, x: :a, y: :b
+      # Daru::View::Plot.new df, type: :bar, x: :a, y: :b, adapter: :nyaplot
       #
       # Set the new adapter(plotting library) ,for example highcharts:
       #
