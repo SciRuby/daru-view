@@ -226,6 +226,22 @@ bundle exec nanoc view
 Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts to see the Highcharts examples.
 
 
+#### Live demo links
+
+Nanoc web application complie and generates the html code of the nanoc web application. So you can see the running Nanoc app here :
+
+
+[index.html](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/)
+
+[nyaplot](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/nyaplot)
+
+[highcharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/highcharts)
+
+[googlecharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/googlecharts)
+
+For now, other applications (Rails/Sinatra) you need to run it locally.
+
+
 ## Update to latest js library. Additional command line
 
   To update to the current highcharts.js directly from http://code.highcharts.com/",  you can always run
