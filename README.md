@@ -230,6 +230,7 @@ Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http:
 
 Nanoc web application complie and generates the html code of the nanoc web application. So you can see the running Nanoc app here :
 
+Note : There is some problem in nyaplot (in live link. It works fine locally). Some css is not working so some styling ain't working properly. You can see it properly in local setup.
 
 [index.html](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/)
 
