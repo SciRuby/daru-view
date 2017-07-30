@@ -96,7 +96,8 @@ module Daru
           chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
           chart_type = chart_type.to_s.capitalize
           chart_type = 'SteppedArea' if chart_type == 'Steppedarea'
-          direct_name = %w[Map Histogram]
+          chart_type = 'TreeMap' if chart_type == 'Treemap'
+          direct_name = %w[Map Histogram, TreeMap]
           direct_name.include?(chart_type) ? chart_type : chart_type + 'Chart'
         end
 
@@ -121,8 +122,17 @@ module Daru
             data_set.to_a.each { |a| rows << [a] }
           when data_set.is_a?(Array)
             return GoogleVisualr::DataTable.new if data_set.empty?
+
             data_set[0].each_with_index do |col, indx|
-              @table.new_column(return_js_type(data_set[1][indx]), col)
+              # TODO: below while loop must be improved. Similar thing for
+              # above 2 cases.
+              row_index = 1
+              type = return_js_type(data_set[row_index][indx])
+              while type.nil?
+                row_index += 1
+                type = return_js_type(data_set[row_index][indx])
+              end
+              @table.new_column(type, col)
             end
             data_set.shift # 1st row removed
             rows = data_set
