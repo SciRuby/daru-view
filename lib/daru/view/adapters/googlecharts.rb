@@ -124,6 +124,9 @@ module Daru
             end
             data_set.shift # 1st row removed
             rows = data_set
+          when data_set.is_a?(Hash)
+            @table = GoogleVisualr::DataTable.new(data_set)
+            return
           else
             raise ArgumentError # TODO: error msg
           end
