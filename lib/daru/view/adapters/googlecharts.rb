@@ -94,7 +94,7 @@ module Daru
         def extract_chart_type(options)
           chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
           chart_type = chart_type.to_s.capitalize
-          direct_name = ['Map', 'Histogram']
+          direct_name = %w[Map Histogram]
           direct_name.include?(chart_type) ? chart_type : chart_type + 'Chart'
         end
 
@@ -104,7 +104,7 @@ module Daru
         # data rows
         #
         # TODO : Currently I didn't find use case for multi index.
-        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity, Metrics/LineLength
           case
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
