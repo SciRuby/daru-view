@@ -92,8 +92,10 @@ module Daru
         private
 
         def extract_chart_type(options)
+          # TODO: Imprvoe this method.
           chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
           chart_type = chart_type.to_s.capitalize
+          chart_type = 'SteppedArea' if chart_type == 'Steppedarea'
           direct_name = %w[Map Histogram]
           direct_name.include?(chart_type) ? chart_type : chart_type + 'Chart'
         end
