@@ -97,7 +97,7 @@ module Daru
           chart_type = chart_type.to_s.capitalize
           chart_type = 'SteppedArea' if chart_type == 'Steppedarea'
           chart_type = 'TreeMap' if chart_type == 'Treemap'
-          direct_name = %w[Map Histogram, TreeMap Timeline]
+          direct_name = %w[Map Histogram, TreeMap Timeline Gauge]
           direct_name.include?(chart_type) ? chart_type : chart_type + 'Chart'
         end
 
