@@ -3,12 +3,16 @@ require_relative 'iruby_notebook'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=['highstock.js', 'highcharts-3d.js', 'modules/data.js']
+    dependent_js=['highstock.js', 'modules/exporting.js',
+                  'highcharts-3d.js', 'modules/data.js']
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
     # highstock.js contains highcharts.js .If highstock.js is removed then
     # add highchart.js to make chart script work.
+    #
+    # Note: Don't reorder the dependent_js elements. It must be loaded in
+    # the same sequence. Otherwise some of the JS overlap and doesn't work.
     js =  ''
     js << "\n<script type='text/javascript'>"
     js << LazyHighCharts.generate_init_code(dependent_js)
