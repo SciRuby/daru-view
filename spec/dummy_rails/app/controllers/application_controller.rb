@@ -319,6 +319,8 @@ class ApplicationController < ActionController::Base
     def resolve_layout
      case action_name
        when "highcharts"
+        # setting the library is not needed, if you are parsing the
+        # `adapter` option in plot or table.
         Daru::View.plotting_library = :highcharts
         "highcharts_layout"
        when "googlecharts"
