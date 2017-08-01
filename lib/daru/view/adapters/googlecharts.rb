@@ -92,9 +92,13 @@ module Daru
         private
 
         def extract_chart_type(options)
+          # TODO: Imprvoe this method.
           chart_type = options[:type].nil? ? 'Line' : options.delete(:type)
           chart_type = chart_type.to_s.capitalize
-          chart_type == 'Map' ? chart_type : chart_type + 'Chart'
+          chart_type = 'SteppedArea' if chart_type == 'Steppedarea'
+          chart_type = 'TreeMap' if chart_type == 'Treemap'
+          direct_name = %w[Map Histogram TreeMap Timeline Gauge]
+          direct_name.include?(chart_type) ? chart_type : chart_type + 'Chart'
         end
 
         # For google table, column is needed.
@@ -103,7 +107,7 @@ module Daru
         # data rows
         #
         # TODO : Currently I didn't find use case for multi index.
-        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity, Metrics/LineLength
           case
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
@@ -118,11 +122,23 @@ module Daru
             data_set.to_a.each { |a| rows << [a] }
           when data_set.is_a?(Array)
             return GoogleVisualr::DataTable.new if data_set.empty?
+
             data_set[0].each_with_index do |col, indx|
-              @table.new_column(return_js_type(data_set[1][indx]), col)
+              # TODO: below while loop must be improved. Similar thing for
+              # above 2 cases.
+              row_index = 1
+              type = return_js_type(data_set[row_index][indx])
+              while type.nil?
+                row_index += 1
+                type = return_js_type(data_set[row_index][indx])
+              end
+              @table.new_column(type, col)
             end
             data_set.shift # 1st row removed
             rows = data_set
+          when data_set.is_a?(Hash)
+            @table = GoogleVisualr::DataTable.new(data_set)
+            return
           else
             raise ArgumentError # TODO: error msg
           end

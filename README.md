@@ -6,7 +6,9 @@ It is a plugin gem to Data Analysis in RUby(Daru) for visualisation of data
 
 ## Documentation :
 
-[http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/)
+[http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/) 
+
+[daru-view/wiki](https://github.com/Shekharrajak/daru-view/wiki)
 
 ## Examples :
 
@@ -224,6 +226,23 @@ bundle exec nanoc view
 
 ```
 Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts to see the Highcharts examples.
+
+
+#### Live demo links
+
+Nanoc web application complie and generates the html code of the nanoc web application. So you can see the running Nanoc app here :
+
+Note : There is some problem in nyaplot (in live link. It works fine locally). Some css is not working so some styling ain't working properly. You can see it properly in local setup.
+
+[index.html](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/)
+
+[nyaplot](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/nyaplot)
+
+[highcharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/highcharts)
+
+[googlecharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/googlecharts)
+
+For now, other applications (Rails/Sinatra) you need to run it locally.
 
 
 ## Update to latest js library. Additional command line
