@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Plugin gem to Data Analysis in RUby(Daru) for visualisation of data'
   spec.description   = Daru::View::DESCRIPTION
-  spec.homepage      = 'http://github.com/shekharrajak/daru-view'
+  spec.homepage      = 'http://shekharrajak.github.io/daru-view'
   spec.license       = 'MIT'
   spec.require_paths = ['lib']
   spec.files         = `git ls-files -z`.split("\x0")
@@ -37,8 +37,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry', '~> 0.10'
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'lazy_high_charts'
-  spec.add_development_dependency 'google_visualr'
   spec.add_development_dependency 'rubocop'
+
+  spec.add_runtime_dependency 'google_visualr'
 
   # lazy_high_charts dependency
   spec.add_development_dependency 'actionview'
