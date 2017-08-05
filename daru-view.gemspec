@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'google_visualr'
   spec.add_runtime_dependency 'lazy_high_charts'
-  spec.add_runtime_dependency 'daru'
+  spec.add_runtime_dependency 'daru' # use from the Gemfile
   spec.add_runtime_dependency 'nyaplot'
   spec.add_runtime_dependency 'data_tables'
 

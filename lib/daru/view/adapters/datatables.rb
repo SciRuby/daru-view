@@ -13,7 +13,9 @@ module Daru
         #
         # TODO : this docs must be improved
         def init_table(data=[], options={})
-          # TODO : create data array from the df and vector data
+          # TODO : create data array from the df and vector data. So that
+          # we can directly use the array.(No need to create df or vector and
+          # generate the html table using to_html)
           if data.is_a?(Array)
             data_name = 'series_data'+ SecureRandom.uuid
             data =
