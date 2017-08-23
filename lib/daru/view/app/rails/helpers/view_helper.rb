@@ -1,3 +1,6 @@
+require 'daru/view/plot'
+require 'daru/view/table'
+
 module Daru
   module View
     module Rails
