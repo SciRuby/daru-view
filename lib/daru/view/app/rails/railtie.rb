@@ -4,8 +4,7 @@ module Daru
   module View
     module Rails
       class Railtie < ::Rails::Railtie
-
-        initializer "daru/view" do
+        initializer 'daru/view' do
           ActiveSupport.on_load(:action_controller) do
             include Daru::View::Rails::ViewHelper
           end
