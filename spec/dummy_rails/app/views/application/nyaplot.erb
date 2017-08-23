@@ -2,14 +2,14 @@
 <h3> Bar Graph</h3>
 <p>
   <b>Data : </b>
-  <%=raw @bar_graph.data %>
+  <%=raw @dv.data %>
   <br>
   <b>Options</b>
   <%=raw @bar_graph.options %>
   <br>
   <b>Chart : </b>
   <br>
-  <%=raw @bar_graph.div %>
+  <%= daru_chart(@dv, type: :bar, adapter: :nyaplot) %>
 </p>
 
 

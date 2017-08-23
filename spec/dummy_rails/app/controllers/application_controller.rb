@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   layout :resolve_layout
 
   def nyaplot
-    dv = Daru::Vector.new [:a, :a, :a, :b, :b, :c], type: :category
+    @dv = Daru::Vector.new [:a, :a, :a, :b, :b, :c], type: :category
     # default adapter is nyaplot only
-    @bar_graph = Daru::View::Plot.new(dv, type: :bar, adapter: :nyaplot)
+    @bar_graph = Daru::View::Plot.new(@dv, type: :bar, adapter: :nyaplot)
 
     df = Daru::DataFrame.new({b: [11,12,13,14,15], a: [1,2,3,4,5],
       c: [11,22,33,44,55]},
