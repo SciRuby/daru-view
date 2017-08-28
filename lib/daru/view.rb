@@ -13,6 +13,9 @@ require 'daru/view/adapters/googlecharts/iruby_notebook'
 # Rails Helper
 require 'daru/view/app/rails/railtie.rb' if defined?(Rails)
 
+# monkeys
+require 'daru/view/monkeys'
+
 module Daru
   module View
     # default Nyaplot library is used.
