@@ -6,7 +6,7 @@ module Daru
     # df.plot_view(adapter: :googlecharts)
     #
     # Note: `options` can take options same as Daru::View::Plot(df, options)
-    def plot_view options={}
+    def plot_view(options={})
       Daru::View::Plot.new(self, options)
     end
   end
