@@ -38,7 +38,16 @@ While preparing your pull requests, don't forget to check your code with Rubocop
 
 **NOTE**: Please make sure that you place test for your file at the same level and with same itermediatary directories. For example if code file lies in `lib/xyz/abc.rb` then its corresponding test should lie in `spec/xyz/abc_spec.rb`. This is to ensure correct working of Guard.
 
+
 ## How daru-view is created
 
 GSoc 2017 Blog posts : [http://shekharrajak.github.io/gsoc_2017_posts/](http://shekharrajak.github.io/gsoc_2017_posts/)
 
+
+## How one can add their own library for plotting
+
+If you want to add a new library (adapter) to use it as the plotting library in `daru-view`,
+then you just need to define all the methods, that are present for [`Plot` object](https://github.com/Shekharrajak/daru-view/blob/master/lib/daru/view/plot.rb). Few main methods are `div` 
+(to get the HTML, JS code for the chart), `init_script` (to return the all the dependent css, js files for the library which is needed to run the HTML code of the chart), `export_html_file`(to export the HTML file of the chart), `init_iruby`(this method will load the dependent JS files in IRuby notebook).
+
+You can define these methods in [`daru/view/adapter`](https://github.com/Shekharrajak/daru-view/tree/master/lib/daru/view/adapters) (for reference see the other adapter).
