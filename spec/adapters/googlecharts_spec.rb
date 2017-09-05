@@ -10,10 +10,25 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
 
     @options = {width: 800, height: 720}
 
-    @plot = Daru::View::Plot.new(@data, @options)
+    @plot = Daru::View::Plot.new(@data_df, @options)
   end
 
-  describe "initialization" do
-    # TODO
+  describe "initialization Charts" do
+    it "Default chart GoogleVisualr::Interactive::LineChart " do
+      expect(Daru::View::Plot.new.chart).to be_a GoogleVisualr::Interactive::LineChart
+    end
+    it "Bar chart GoogleVisualr::Interactive::BarChart " do
+      expect(Daru::View::Plot.new([], type: :bar).chart).to be_a GoogleVisualr::Interactive::BarChart
+    end
+    it "Column chart GoogleVisualr::Interactive::ColumnChart " do
+      expect(Daru::View::Plot.new([], type: :column).chart).to be_a GoogleVisualr::Interactive::ColumnChart
+    end
+    # TODO: all other kinds of charts
+  end
+
+  describe "initialization Tables" do
+    it "Table class must be GoogleVisualr::DataTable " do
+      expect(Daru::View::Table.new.table).to be_a GoogleVisualr::DataTable
+    end
   end
 end
