@@ -41,7 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'lazy_high_charts'
   spec.add_runtime_dependency 'daru' # use from the Gemfile
   spec.add_runtime_dependency 'nyaplot'
-  spec.add_runtime_dependency 'data_tables'
+  spec.add_runtime_dependency 'daru-data_tables'
 
   # lazy_high_charts dependency
   spec.add_runtime_dependency 'actionview'
