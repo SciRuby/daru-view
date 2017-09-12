@@ -1,19 +1,32 @@
 source "http://rubygems.org"
 
 # iruby dependencies
+
+# For rbczmq gem we need to install autogen otherwise you may
+# get this error: "autogen.sh: error: could not find libtool.  
+# libtool is required to run autogen.sh. ZeroMQ autogen failed!"
+
+# Mac user must do `brew install autogen`, 
+# if autogen is not installed
+# Debian user must do `sudo apt install libtool-bin`, 
+# if libtool is not present
 gem 'rbczmq'
 gem 'ffi-rzmq'
+
+# To run `iruby notebook` we need Python, ipython notebook,
+# and jupyter.
+# Please install according to the OS. 
+# Follow this : https://github.com/SciRuby/iruby
 gem 'iruby'
 
 # fetch from the github master branch
-gem 'daru', :git => 'https://github.com/SciRuby/daru.git'
-
+gem "daru", git: 'https://github.com/SciRuby/daru.git'
 gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
 
-gem 'data_tables', git: 'https://github.com/Shekharrajak/data_tables.git'
-
+gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
 # daru-view
-gemspec  :path => '../../'
+gemspec :path => '../../'
 
 # used in tutorials :
 # Nyaplot | Creating Visualizations with DataFrame  | from daru examples

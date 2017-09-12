@@ -1,4 +1,4 @@
-require 'data_tables'
+require 'daru/data_tables'
 require 'daru'
 require 'securerandom'
 
@@ -26,13 +26,13 @@ module Daru
               end
           end
           # options[:data] = data_in_array unless data_in_array.empty?
-          @table = DataTables::DataTable.new(options)
+          @table = Daru::DataTables::DataTable.new(options)
           @data = data
           @table
         end
 
         def init_script
-          DataTables.init_script
+          Daru::DataTables.init_script
         end
 
         def generate_body(table)
@@ -61,7 +61,7 @@ module Daru
         end
 
         def init_iruby
-          DataTables.init_iruby
+          Daru::DataTables.init_iruby
         end
 
         private
