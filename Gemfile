@@ -13,4 +13,4 @@ gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.g
 # FixMe: if below line is not added, then we get uninitialized rails error, when we
 # do bundle console. I don't know the reason. (it must be added with
 # data_tables, above line)
-gem 'rails'
+# gem 'rails'
