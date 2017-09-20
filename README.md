@@ -47,9 +47,12 @@ gem 'ffi-rzmq'
 gem 'iruby'
 
 # fetch from the github master branch
+gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
+
 gem "daru", git: 'https://github.com/SciRuby/daru.git'
 gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
-gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
+gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
 ```
 
 - Now do `bundle install` and run `iruby notebook`
@@ -60,9 +63,13 @@ gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
 
 - Add this line in your Gemfile :
 ```ruby
+
 gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
+
 gem "daru", git: 'https://github.com/SciRuby/daru.git'
 gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
+gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
 ```
 
 _Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added as development_dependency. Since daru-view required the latest github version of the Daru and Nyaplot gem and we can't fetch gem from the github in the gemspec.
@@ -172,14 +179,15 @@ data_df.to_category :c
 
 ```
 
-- User can try examples, that is added in spec/dummy_rails. To setup the rails app, run following commands :
+- User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
 
 ```
 bundle install
 bundle exec rails s
 
 ```
-Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts to see the Highcharts examples.
+Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts and similarly for googlecharts, datatables
+to see the Highcharts examples.
 
 
 #### Sinatra application
@@ -191,7 +199,7 @@ The line `<%= Daru::View.dependent_script(:highcharts) %>` for sinatra app , mus
 
 
 ```ruby
-# In side the `app.rb` user must do data analysis process using daru features and define the Daru::View::Plot class instance variables to pass into the webpages in the `view` files. You will understand this better, if you will try to run sinatra app present in the `spec/dummy_sinatra`
+# In side the `app.rb` user must do data analysis process using daru features and define the Daru::View::Plot class instance variables to pass into the webpages in the `view` files. You will understand this better, if you will try to run sinatra app present in the `[Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view)`
 
 # Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
 
@@ -204,7 +212,7 @@ The line `<%= Daru::View.dependent_script(:highcharts) %>` for sinatra app , mus
 
 ```
 
-- User can try examples, that is added in spec/dummy_sinatra. To setup the rails app, run following commands :
+- User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
 
 ```
 bundle install
@@ -218,7 +226,7 @@ Now go to the http://localhost:4567/nyaplot to see the Nyaplot examples or http:
 
 Most of the things similar to Rails application (syntax of the view part of the application).
 
-- User can try examples, that is added in spec/dummy_nanoc. To setup the rails app, run following commands :
+- User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
 
 ```
 bundle install
@@ -226,7 +234,8 @@ bundle exec nanoc
 bundle exec nanoc view
 
 ```
-Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts to see the Highcharts examples.
+Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts and similarly for googlecharts, datatables
+to see the Highcharts examples.
 
 
 #### Live demo links
