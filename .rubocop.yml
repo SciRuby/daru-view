@@ -111,3 +111,12 @@ Security/MarshalLoad:
 
 Performance/RedundantMatch:
   Enabled: false
+
+# Must be removed in future
+
+Lint/DuplicateMethods:
+  Enabled: false
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
