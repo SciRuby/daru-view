@@ -1,5 +1,3 @@
-# coding: utf-8
-
 module LazyHighCharts
   module LayoutHelper
     def high_chart_iruby(placeholder, object, &block)

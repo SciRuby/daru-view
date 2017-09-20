@@ -16,12 +16,12 @@ MSG
 Gem::Specification.new do |spec|
   spec.name          = 'daru-view'
   spec.version       = Daru::View::VERSION
-  spec.authors       = ['shekharrajak']
-  spec.email         = ['shekharstudy@ymail.com']
+  spec.authors       = ['Shekhar Prasad Rajak']
+  spec.email         = ['shekharrajak@live.com']
 
   spec.summary       = 'Plugin gem to Data Analysis in RUby(Daru) for visualisation of data'
   spec.description   = Daru::View::DESCRIPTION
-  spec.homepage      = 'http://shekharrajak.github.io/daru-view'
+  spec.homepage      = 'https://github.com/Shekharrajak/daru-view'
   spec.license       = 'MIT'
   spec.require_paths = ['lib']
   spec.files         = `git ls-files -z`.split("\x0")
@@ -33,28 +33,20 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency 'pry'
 
-  # pry-byebug depends on byebug. It need r header files for ruby.
-  # For Debian, and other distributions using Debian style packaging the ruby development headers are installed by:
-
-  # sudo apt-get install ruby-dev
-  # For Ubuntu the ruby development headers are installed by:
-
-  # sudo apt-get install ruby-all-dev
-  # If you are using a earlier version of ruby (such as 2.2), then you will need to run:
-
-  # sudo apt-get install ruby2.2-dev
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'rubocop'
 
+  # fetching latest gem from the Gemfile
   spec.add_runtime_dependency 'google_visualr'
   spec.add_runtime_dependency 'lazy_high_charts'
-  spec.add_runtime_dependency 'daru' # use from the Gemfile
+  spec.add_runtime_dependency 'daru'
   spec.add_runtime_dependency 'nyaplot'
   spec.add_runtime_dependency 'daru-data_tables'
 
   # lazy_high_charts dependency
   spec.add_runtime_dependency 'actionview'
 
-  # spec.add_development_dependency "iruby"
+  # build gem and release it on rubygems
+  spec.add_development_dependency 'rubygems-tasks'
 end
 

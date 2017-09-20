@@ -284,3 +284,4 @@ This software has been developed by [Shekhar Prasad Rajak](https://github.com/Sh
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+Copyright (c) 2017 Shekhar Prasad Rajak(@shekharrajak)
