@@ -45,5 +45,8 @@ Gem::Specification.new do |spec|
 
   # lazy_high_charts dependency
   spec.add_runtime_dependency 'actionview'
+
+  # build gem and release it on rubygems
+  spec.add_development_dependency 'rubygems-tasks'
 end
 
