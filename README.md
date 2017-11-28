@@ -10,6 +10,8 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 
 [daru-view/wiki](https://github.com/Shekharrajak/daru-view/wiki)
 
+[ScirRuby/blog](http://sciruby.com/blog/2017/09/01/gsoc-2017-data-visualization-using-daru-view/)
+
 ## Examples :
 
 - [IRuby notebook examples](http://nbviewer.jupyter.org/github/shekharrajak/daru-view/tree/master/spec/dummy_iruby/)
