@@ -82,5 +82,6 @@ module GoogleVisualr
       js << "\n  };"
       js
     end
-  end # class Datatable end
+    # class Datatable end
+  end
 end

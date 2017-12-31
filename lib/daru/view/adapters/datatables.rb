@@ -84,7 +84,9 @@ module Daru
             raise ArgumentError # TODO: error msg
           end
         end
-      end # DatatablesAdapter end
-    end # Adapter end
+        # DatatablesAdapter end
+      end
+      # Adapter end
+    end
   end
 end

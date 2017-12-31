@@ -54,5 +54,6 @@ module LazyHighCharts
     def chart_hash_must_be_present
       @options[:chart] ||= {}
     end
-  end # class end
+    # class end
+  end
 end
