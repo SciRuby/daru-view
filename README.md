@@ -16,7 +16,7 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 
 - [IRuby notebook examples](http://nbviewer.jupyter.org/github/shekharrajak/daru-view/tree/master/spec/dummy_iruby/)
 
-- [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view)
+- [Demo web applications (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view)
 
 ## Installation
 
