@@ -174,9 +174,7 @@ module Daru
             return 'date'
           end
         end
-        # GooglechartsAdapter end
       end
-      # Adapter end
     end
   end
 end
