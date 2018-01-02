@@ -17,7 +17,7 @@ AllCops:
     - 'daru-view.gemspec'
     - '**/*.rake'
   DisplayCopNames: true
-  TargetRubyVersion: 2.0
+  TargetRubyVersion: 2.1
 
 # Preferred codebase style ---------------------------------------------
 Layout/ExtraSpacing:
