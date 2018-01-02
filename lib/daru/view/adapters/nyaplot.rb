@@ -55,10 +55,8 @@ module Daru
             library using the code : \n
             ` Daru::View.plotting_library = :highcharts` or other library."
           end
-          # def guess_data end
         end
       end
-      # Adapter end
     end
   end
 end

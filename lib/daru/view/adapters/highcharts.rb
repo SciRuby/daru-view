@@ -108,9 +108,7 @@ module Daru
             raise ArgumentError
           end
         end
-        # HighchartsAdapter end
       end
-      # Adapter end
     end
   end
 end

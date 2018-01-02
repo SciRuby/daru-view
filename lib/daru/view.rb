@@ -123,6 +123,5 @@ module Daru
         end
       end
     end
-    # view end
   end
 end
