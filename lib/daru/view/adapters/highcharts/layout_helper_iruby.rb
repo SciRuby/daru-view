@@ -22,7 +22,28 @@ module LazyHighCharts
       encapsulate_js_iruby core_js
     end
 
-    # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
+    def if_request_is_referrer(core_js)
+      <<-EOJS
+      #{js_start_iruby}
+        var f = function(){
+          document.removeEventListener('page:load', f, true);
+          #{core_js}
+        };
+        document.addEventListener('page:load', f, true);
+      #{js_end_iruby}
+      EOJS
+    end
+
+    def if_request_turbolinks_5_tureferrer(core_js)
+      <<-EOJS
+      #{js_start_iruby}
+        document.addEventListener("turbolinks:load", function() {
+          #{core_js}
+        });
+      #{js_end_iruby}
+      EOJS
+    end
+
     def encapsulate_js_iruby(core_js)
       js_output =
         if request_is_xhr?
@@ -30,23 +51,9 @@ module LazyHighCharts
         # Turbolinks.version < 5
         elsif defined?(Turbolinks)
           if request_is_referrer?
-            <<-EOJS
-            #{js_start_iruby}
-              var f = function(){
-                document.removeEventListener('page:load', f, true);
-                #{core_js}
-              };
-              document.addEventListener('page:load', f, true);
-            #{js_end_iruby}
-            EOJS
+            if_request_is_referrer(core_js)
           elsif request_turbolinks_5_tureferrer?
-            <<-EOJS
-            #{js_start_iruby}
-              document.addEventListener("turbolinks:load", function() {
-                #{core_js}
-              });
-            #{js_end_iruby}
-            EOJS
+            if_request_turbolinks_5_tureferrer(core_js)
           end
         else
           <<-EOJS
