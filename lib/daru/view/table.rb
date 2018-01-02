@@ -20,6 +20,7 @@ module Daru
           @@adapter = Daru::View::Adapter.const_get(
             adapter.to_s.capitalize + 'Adapter'
           )
+          # rubocop:enable Style/ClassVars
         end
       end
 

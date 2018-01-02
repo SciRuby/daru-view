@@ -8,9 +8,7 @@ module Daru
         extend ActiveSupport::Concern
 
         included do
-          if respond_to?(:helper_method)
-            helper_method 'daru_chart', 'daru_table'
-          end
+          helper_method('daru_chart', 'daru_table') if respond_to?(:helper_method)
         end
 
         def daru_chart(data=[], options={})

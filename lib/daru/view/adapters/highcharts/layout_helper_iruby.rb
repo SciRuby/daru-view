@@ -56,6 +56,7 @@ module LazyHighCharts
 
       defined?(raw) ? raw(js_output) : js_output
     end
+    # rubocop:enable Metrics/PerceivedComplexity, Metrics/MethodLength
 
     def js_start_iruby
       <<-EOJS
