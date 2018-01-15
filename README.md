@@ -34,6 +34,16 @@ Or install it yourself as:
 
     $ gem install daru-view
 
+Or you can directly install from github repo link: 
+
+
+```
+
+$ gem install specific_install
+$ gem specific_install https://github.com/SciRuby/daru-view
+
+```
+
 ## Usage
 
 ### Use in IRuby notebook
