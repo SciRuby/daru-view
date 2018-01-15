@@ -36,7 +36,6 @@ Or install it yourself as:
 
 Or you can directly install from github repo link: 
 
-
 ```
 
 $ gem install specific_install
