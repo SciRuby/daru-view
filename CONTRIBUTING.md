@@ -85,12 +85,14 @@ While preparing your pull requests, don't forget to check your code with Rubocop
 [Optional] You can run rspec for all Ruby versions at once with `rake spec run all`. But remember to first have all Ruby versions installed with `ruby spec setup`.
 
 
-## Testing
+## Testing and Coverage Report
 
 
   `bundle exec rspec`
 
 **NOTE**: Please make sure that you place test for your file at the same level and with same itermediatary directories. For example if code file lies in `lib/xyz/abc.rb` then its corresponding test should lie in `spec/xyz/abc_spec.rb`. This is to ensure correct working of Guard.
+
+You can see the coverage report at `daru-view/coverage/index.html` . By clicking on any of the file link, we can see the lines to be tested. Refer [SimpleCov page](https://github.com/colszowka/simplecov), for more information.
 
 
 ## How daru-view is created
