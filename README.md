@@ -8,13 +8,13 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 
 [http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/)
 
-[daru-view/wiki](https://github.com/Shekharrajak/daru-view/wiki)
+[daru-view/wiki](https://github.com/SciRuby/daru-view/wiki)
 
 [ScirRuby/blog](http://sciruby.com/blog/2017/09/01/gsoc-2017-data-visualization-using-daru-view/)
 
 ## Examples :
 
-- [IRuby notebook examples](http://nbviewer.jupyter.org/github/shekharrajak/daru-view/tree/master/spec/dummy_iruby/)
+- [IRuby notebook examples](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
 
 - [Demo web applications (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view)
 
@@ -23,7 +23,7 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'daru-view', git: 'https://github.com/Shekharrajak/daru-view.git'
+gem 'daru-view', git: 'https://github.com/SciRuby/daru-view'
 ```
 
 And then execute:
@@ -57,7 +57,7 @@ gem 'ffi-rzmq'
 gem 'iruby'
 
 # fetch from the github master branch
-gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
+gem 'daru-view', :git => 'https://github.com/SciRuby/daru-view'
 
 gem "daru", git: 'https://github.com/SciRuby/daru.git'
 gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
@@ -67,14 +67,14 @@ gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.g
 
 - Now do `bundle install` and run `iruby notebook`
 
-- You may like to try some examples that is added in specs : [spec/dummy_iruby/](http://nbviewer.jupyter.org/github/shekharrajak/daru-view/tree/master/spec/dummy_iruby/)
+- You may like to try some examples that is added in specs : [spec/dummy_iruby/](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
 
 ### Use in web application
 
 - Add this line in your Gemfile :
 ```ruby
 
-gem 'daru-view', :git => 'https://github.com/shekharrajak/daru-view.git'
+gem 'daru-view', :git => 'https://github.com/sciruby/daru-view.git'
 
 gem "daru", git: 'https://github.com/SciRuby/daru.git'
 gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
@@ -254,13 +254,13 @@ Nanoc web application complie and generates the html code of the nanoc web appli
 
 Note : There is some problem in nyaplot (in live link. It works fine locally). Some css is not working so some styling ain't working properly. You can see it properly in local setup.
 
-[index.html](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/)
+[index.html](https://sciruby.github.io/daru-view/spec/dummy_nanoc/output/)
 
-[nyaplot](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/nyaplot)
+[nyaplot](https://sciruby.github.io/daru-view/spec/dummy_nanoc/output/nyaplot)
 
-[highcharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/highcharts)
+[highcharts](https://sciruby.github.io/daru-view/spec/dummy_nanoc/output/highcharts)
 
-[googlecharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/googlecharts)
+[googlecharts](https://sciruby.github.io/daru-view/spec/dummy_nanoc/output/googlecharts)
 
 For now, other applications (Rails/Sinatra) you need to run it locally.
 
@@ -289,7 +289,7 @@ Generally I prefer to use `bundle console` for testing few codes and experimenti
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/shekharrajak/daru-view. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/sciruby/daru-view. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 Pick a feature from the Roadmap or the issue tracker or think of your own and send me a Pull Request!
 
