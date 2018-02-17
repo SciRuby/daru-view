@@ -103,39 +103,20 @@ module Daru
 
         # For google table, column is needed.
         #
-        # note :  1st line must be colmns name and then all others
+        # note :  1st line must be columns name and then all others
         # data rows
         #
         # TODO : Currently I didn't find use case for multi index.
-        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity, Metrics/LineLength
+        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength
           case
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
-            rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)
-            data_set.vectors.to_a.each do |vec|
-              @table.new_column(converted_type_to_js(vec, data_set), vec)
-            end
+            rows = add_dataframe_data(data_set)
           when data_set.is_a?(Daru::Vector)
-            vec_name = data_set.name.nil? ? 'Series' : data_set.name
-            @table.new_column(return_js_type(data_set[0]), vec_name)
-            rows = []
-            data_set.to_a.each { |a| rows << [a] }
+            rows = add_vector_data(data_set)
           when data_set.is_a?(Array)
             return GoogleVisualr::DataTable.new if data_set.empty?
-
-            data_set[0].each_with_index do |col, indx|
-              # TODO: below while loop must be improved. Similar thing for
-              # above 2 cases.
-              row_index = 1
-              type = return_js_type(data_set[row_index][indx])
-              while type.nil?
-                row_index += 1
-                type = return_js_type(data_set[row_index][indx])
-              end
-              @table.new_column(type, col)
-            end
-            data_set.shift # 1st row removed
-            rows = data_set
+            rows = add_array_data(data_set)
           when data_set.is_a?(Hash)
             @table = GoogleVisualr::DataTable.new(data_set)
             return
@@ -144,6 +125,38 @@ module Daru
           end
           @table.add_rows(rows)
           @table
+        end
+
+        def add_dataframe_data(data_set)
+          rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)
+          data_set.vectors.to_a.each do |vec|
+            @table.new_column(converted_type_to_js(vec, data_set), vec)
+          end
+          rows
+        end
+
+        def add_array_data(data_set)
+          data_set[0].each_with_index do |col, indx|
+            # TODO: below while loop must be improved. Similar thing for
+            # above 2 cases.
+            row_index = 1
+            type = return_js_type(data_set[row_index][indx])
+            while type.nil?
+              row_index += 1
+              type = return_js_type(data_set[row_index][indx])
+            end
+            @table.new_column(type, col)
+          end
+          data_set.shift # 1st row removed
+          data_set
+        end
+
+        def add_vector_data(data_set)
+          vec_name = data_set.name.nil? ? 'Series' : data_set.name
+          @table.new_column(return_js_type(data_set[0]), vec_name)
+          rows = []
+          data_set.to_a.each { |a| rows << [a] }
+          rows
         end
 
         def converted_type_to_js(vec_name, data_set)
