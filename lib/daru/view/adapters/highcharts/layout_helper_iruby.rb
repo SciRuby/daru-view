@@ -22,41 +22,53 @@ module LazyHighCharts
       encapsulate_js_iruby core_js
     end
 
-    # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
+    # rubocop:disable Metrics/PerceivedComplexity
     def encapsulate_js_iruby(core_js)
       js_output =
         if request_is_xhr?
           "#{js_start_iruby} #{core_js} #{js_end_iruby}"
         # Turbolinks.version < 5
         elsif defined?(Turbolinks) && request_is_referrer?
-          <<-EOJS
-          #{js_start_iruby}
-            var f = function(){
-              document.removeEventListener('page:load', f, true);
-              #{core_js}
-            };
-            document.addEventListener('page:load', f, true);
-          #{js_end_iruby}
-          EOJS
+          to_s(eventlistener_page_load)
         elsif defined?(Turbolinks) && request_turbolinks_5_tureferrer?
-          <<-EOJS
-          #{js_start_iruby}
-            document.addEventListener("turbolinks:load", function() {
-              #{core_js}
-            });
-          #{js_end_iruby}
-          EOJS
+          to_s(eventlistener_turbolinks_load)
         else
-          <<-EOJS
-          #{js_start_iruby}
-            #{core_js}
-          #{js_end_iruby}
-          EOJS
+          to_s(call_core_js)
         end
 
       defined?(raw) ? raw(js_output) : js_output
     end
-    # rubocop:enable Metrics/PerceivedComplexity, Metrics/MethodLength
+    # rubocop:enable Metrics/PerceivedComplexity
+
+    def eventlistener_page_load
+      <<-EOJS
+      #{js_start_iruby}
+        var f = function(){
+          document.removeEventListener('page:load', f, true);
+          #{core_js}
+        };
+        document.addEventListener('page:load', f, true);
+      #{js_end_iruby}
+      EOJS
+    end
+
+    def eventlistener_turbolinks_load
+      <<-EOJS
+      #{js_start_iruby}
+        document.addEventListener("turbolinks:load", function() {
+          #{core_js}
+        });
+      #{js_end_iruby}
+      EOJS
+    end
+
+    def call_core_js
+      <<-EOJS
+      #{js_start_iruby}
+        #{core_js}
+      #{js_end_iruby}
+      EOJS
+    end
 
     def js_start_iruby
       <<-EOJS
