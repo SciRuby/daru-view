@@ -52,10 +52,12 @@ module Daru
         when :googlecharts
           # plot chart and table drawing
           @plotting_library = lib
+          @table_library = lib
           Daru::View::Plot.adapter = lib
           Daru::View::Table.adapter = lib
         when :datatables
           # only for table drawing
+          @table_library = lib
           Daru::View::Table.adapter = lib
         else
           raise ArgumentError, "Unsupported library #{lib}"

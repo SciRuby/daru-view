@@ -13,7 +13,11 @@ describe Daru::View::Plot, 'Chart plotting with Nyaplot library' do
   let(:plot_df) { Daru::View::Plot.new(df, type: :line, x: :a, y: :c) }
   let(:plot_dv) { Daru::View::Plot.new(dv, type: :line) }
   context 'initialize' do
-    before { Daru::View.plotting_library = :nyaplot }
+    # before { Daru::View.plotting_library = :nyaplot }
+    context 'Default plotting_library is nyaplot' do
+      it { expect(Daru::View.plotting_library).to eq(:nyaplot)}
+    end
+
     context 'chart using DataFrame' do
       it { expect(plot_df).to be_a Daru::View::Plot }
       it { expect(plot_df.chart.class).to eq Nyaplot::Plot }
