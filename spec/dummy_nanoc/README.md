@@ -30,11 +30,11 @@ Live demo link :
 
 Note : There is some problem in nyaplot (in live link. It works fine locally). Some css is not working so some styling doesn't working properly. You can see it properly in local setup.
 
-[index.html](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/)
+[index.html](https://Sciruby.github.io/daru-view/spec/dummy_nanoc/output/)
 
 
-[nyaplot](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/nyaplot)
+[nyaplot](https://Sciruby.github.io/daru-view/spec/dummy_nanoc/output/nyaplot)
 
-[highcharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/highcharts)
+[highcharts](https://Sciruby.github.io/daru-view/spec/dummy_nanoc/output/highcharts)
 
-[googlecharts](https://shekharrajak.github.io/daru-view/spec/dummy_nanoc/output/googlecharts)
+[googlecharts](https://Sciruby.github.io/daru-view/spec/dummy_nanoc/output/googlecharts)
