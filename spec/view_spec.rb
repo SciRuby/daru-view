@@ -33,6 +33,11 @@ describe Daru::View, "Daru::View class basic methods" do
       it { expect(Daru::View.table_library).to eq(:datatables) }
     end
 
+    context 'Set table library to xyz, which is unsupported' do
+      it "should raise ArgumentError" do
+        expect{Daru::View.table_library = :xyz_library}.to raise_error(ArgumentError)
+      end
+    end
   end
 
 end
