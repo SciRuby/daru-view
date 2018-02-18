@@ -25,15 +25,14 @@ module Daru
       # New plotting library is set. Same time Daru::View::Plot.adapter is set.
       def plotting_library=(lib)
         case lib
-        when :nyaplot, :highcharts
+        when :nyaplot, :highcharts, :googlecharts
           # plot charts
           @plotting_library = lib
           Daru::View::Plot.adapter = lib
-        when :googlecharts
-          # plot chart and table drawing
-          @plotting_library = lib
-          Daru::View::Plot.adapter = lib
-          Daru::View::Table.adapter = lib
+          if lib == :googlecharts
+            # plot table drawing
+            Daru::View::Table.adapter = lib
+          end
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end
@@ -42,7 +41,8 @@ module Daru
         # Since IRuby methods can't work in console.
         begin
           load_lib_in_iruby lib.to_s if defined? IRuby
-        rescue NameError # rubocop:disable Lint/HandleExceptions
+        rescue NameError
+          return
         end
       end
 
@@ -65,7 +65,8 @@ module Daru
         # Since IRuby methods can't work in console.
         begin
           load_lib_in_iruby lib.to_s if defined? IRuby
-        rescue NameError # rubocop:disable Lint/HandleExceptions
+        rescue NameError
+          return
         end
       end
 
