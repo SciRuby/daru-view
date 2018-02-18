@@ -51,18 +51,14 @@ module Daru
         case lib
         when :googlecharts
           # plot chart and table drawing
-          @plotting_library = lib
-          @table_library = lib
-          Daru::View::Plot.adapter = lib
-          Daru::View::Table.adapter = lib
+          @plotting_library = @table_library = lib
+          Daru::View::Plot.adapter = Daru::View::Table.adapter = lib
         when :datatables
           # only for table drawing
-          @table_library = lib
-          Daru::View::Table.adapter = lib
+          @table_library = Daru::View::Table.adapter = lib
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end
-
         # When code is running in console/terminal then IRuby NameError.
         # Since IRuby methods can't work in console.
         begin

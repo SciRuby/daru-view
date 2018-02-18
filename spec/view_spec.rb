@@ -17,7 +17,9 @@ describe Daru::View, "Daru::View class basic methods" do
 
     context 'Set plotting library to xyz, which is unsupported' do
       it "should raise ArgumentError" do
-        expect{Daru::View.plotting_library = :xyz_library}.to raise_error(ArgumentError)
+        expect{
+          Daru::View.plotting_library = :xyz_library
+        }.to raise_error(ArgumentError)
       end
     end
   end
@@ -35,7 +37,9 @@ describe Daru::View, "Daru::View class basic methods" do
 
     context 'Set table library to xyz, which is unsupported' do
       it "should raise ArgumentError" do
-        expect{Daru::View.table_library = :xyz_library}.to raise_error(ArgumentError)
+        expect{
+          Daru::View.table_library = :xyz_library
+        }.to raise_error(ArgumentError)
       end
     end
   end
