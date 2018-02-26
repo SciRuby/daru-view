@@ -30,5 +30,9 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     it "Table class must be GoogleVisualr::DataTable " do
       expect(Daru::View::Table.new.table).to be_a GoogleVisualr::DataTable
     end
+    it "Table class must be GoogleVisualr::DataTable when data objects are" \
+       " of class Daru::Vector" do
+      expect(Daru::View::Table.new(@data_vec1, @options).table).to be_a GoogleVisualr::DataTable
+    end
   end
 end
