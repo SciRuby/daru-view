@@ -31,7 +31,7 @@ module Daru
       #
       # Daru::View.plotting_library = :highcharts
       #
-      # To use a particular apdater in certain plot object(s), then user
+      # To use a particular adapter in certain plot object(s), then user
       # must pass the adapter in `options` hash. e.g. `adapter: :highcharts`
       #
       def initialize(data=[], options={}, &block)
