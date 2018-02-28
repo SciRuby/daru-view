@@ -21,7 +21,7 @@ describe Daru::View::Table, 'table using daru-data_tables' do
     end
 
     it "Table class must be Daru::DataTables::DataTable when data objects" \
-       " are not of class Array of Arrays" do
+       " are of class Array" do
       expect(Daru::View::Table.new(@string_array, @options).table).to be_a Daru::DataTables::DataTable
       expect(Daru::View::Table.new(@string_array, @options).data).to eq @string_array
       expect(Daru::View::Table.new(@string_array, @options).options).to eq @options
