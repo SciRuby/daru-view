@@ -13,6 +13,8 @@ describe Daru::View::Table, 'table using daru-data_tables' do
     @options = {width: 800, height: 720}
 
     @plot = Daru::View::Table.new(@data_df, @options)
+    @table_string_array = Daru::View::Table.new(@string_array, @options)
+    @table_array = Daru::View::Table.new(@data_array, @options)
   end
 
   describe "initialization Tables" do
@@ -22,16 +24,16 @@ describe Daru::View::Table, 'table using daru-data_tables' do
 
     it "Table class must be Daru::DataTables::DataTable when data objects" \
        " are of class Array" do
-      expect(Daru::View::Table.new(@string_array, @options).table).to be_a Daru::DataTables::DataTable
-      expect(Daru::View::Table.new(@string_array, @options).data).to eq @string_array
-      expect(Daru::View::Table.new(@string_array, @options).options).to eq @options
+      expect(@table_string_array.table).to be_a Daru::DataTables::DataTable
+      expect(@table_string_array.data).to eq @string_array
+      expect(@table_string_array.options).to eq @options
     end
 
     it "Table class must be Daru::DataTables::DataTable when data objects" \
        " are of class Array of Arrays" do
-      expect(Daru::View::Table.new(@data_array, @options).table).to be_a Daru::DataTables::DataTable
-      expect(Daru::View::Table.new(@data_array, @options).data).to eq @data_array
-      expect(Daru::View::Table.new(@data_array, @options).options).to eq @options
+      expect(@table_array.table).to be_a Daru::DataTables::DataTable
+      expect(@table_array.data).to eq @data_array
+      expect(@table_array.options).to eq @options
     end
   end
 end
