@@ -8,9 +8,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     @data_vec2 = Daru::Vector.new([15 ,30, 40])
     @data_df = Daru::DataFrame.new(arr1: @data_vec1, arr2: @data_vec2)
     @options = {width: 800, height: 720}
-
     @plot = Daru::View::Plot.new(@data_df, @options)
-
     @data_hash = {
       cols: [
               {id: 'Name', label: 'Name', type: 'string'},
@@ -24,7 +22,6 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
               {c:[{v: 'Bob'}, {v: 7000,  f: '$7,000'}, {v: true}]},
             ]
     }
-
     @data_array2 = [
       ['Galaxy', 'Distance', 'Brightness'],
       ['Canis Major Dwarf', 8000, 230.3],
@@ -33,12 +30,16 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       ['Lg. Magellanic Cloud', 50000, 120.9],
       ['Bootes I', 60000, 1223.1]
     ]
+    @table_array = Daru::View::Table.new(@data_array2, @options)
+    @table_dv = Daru::View::Table.new(@data_vec1, @options)
+    @table_df = Daru::View::Table.new(@data_df, @options)
+    @table_hash = Daru::View::Table.new(@data_hash, @options)
   end
 
   describe "initialization Charts" do
     it "Default chart GoogleVisualr::Interactive::LineChart " do
-      expect(Daru::View::Plot.new.chart
-        ).to be_a GoogleVisualr::Interactive::LineChart
+      expect(Daru::View::Plot.new.chart)
+      .to be_a GoogleVisualr::Interactive::LineChart
     end
     it "Bar chart GoogleVisualr::Interactive::BarChart " do
       expect(Daru::View::Plot.new(
@@ -61,57 +62,27 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
     it "Table class must be GoogleVisualr::DataTable when data objects are" \
        " of class Daru::Vector" do
-      expect(Daru::View::Table.new(
-        @data_vec1,
-        @options).table
-      ).to be_a GoogleVisualr::DataTable
-      expect(Daru::View::Table.new(
-        @data_vec1,
-        @options).options
-      ).to eq @options
-      expect(Daru::View::Table.new(
-        @data_vec1,
-        @options).data
-      ).to eq @data_vec1
+      expect(@table_dv.table).to be_a GoogleVisualr::DataTable
+      expect(@table_dv.options).to eq @options
+      expect(@table_dv.data).to eq @data_vec1
     end
     it "Table class must be GoogleVisualr::DataTable when data objects are" \
        " of class Daru::DataFrame" do
-      expect(Daru::View::Table.new(
-        @data_df,
-        @options).table
-      ).to be_a GoogleVisualr::DataTable
-      expect(Daru::View::Table.new(@data_df, @options).options).to eq @options
-      expect(Daru::View::Table.new(@data_df, @options).data).to eq @data_df
+      expect(@table_df.table).to be_a GoogleVisualr::DataTable
+      expect(@table_df.options).to eq @options
+      expect(@table_df.data).to eq @data_df
     end
     it "Table class must be GoogleVisualr::DataTable when data objects are" \
        " of class Array" do
-      expect(Daru::View::Table.new(
-        @data_array2,
-        @options).table
-      ).to be_a GoogleVisualr::DataTable
-      expect(Daru::View::Table.new(
-        @data_array2,
-        @options).options
-      ).to eq @options
-      expect(Daru::View::Table.new(
-        @data_array2,
-        @options).data
-      ).to eq @data_array2
+      expect(@table_array.table).to be_a GoogleVisualr::DataTable
+      expect(@table_array.options).to eq @options
+      expect(@table_array.data).to eq @data_array2
     end
     it "Table class must be GoogleVisualr::DataTable when data objects are" \
        " of class Hash" do
-      expect(Daru::View::Table.new(
-        @data_hash,
-        @options).table
-      ).to be_a GoogleVisualr::DataTable
-      expect(Daru::View::Table.new(
-        @data_hash,
-        @options).options
-      ).to eq @options
-      expect(Daru::View::Table.new(
-        @data_hash,
-        @options).data
-      ).to eq @data_hash
+      expect(@table_hash.table).to be_a GoogleVisualr::DataTable
+      expect(@table_hash.options).to eq @options
+      expect(@table_hash.data).to eq @data_hash
     end
     it "Raise error when data objects are none of the above" do
       expect{Daru::View::Table.new("daru")}.to raise_error(ArgumentError) 
