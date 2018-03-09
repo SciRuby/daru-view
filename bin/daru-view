@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'rake'
+
+path = `gem which daru/view`.split('/')[0...-1].join('/')
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: daru-view [options]"
+  # Update google charts javascript dependent files, from latest Builds on google developers website
+  opts.on('-g', '--update-googlecharts', 'Update googlecharts.js libraries') do
+    sh "curl -# http://www.google.com/jsapi -L --compressed -o #{path}/view/adapters/js/googlecharts_js/google_visualr.js"
+    sh "curl -# http://www.gstatic.com/charts/loader.js -L --compressed -o #{path}/view/adapters/js/googlecharts_js/loader.js"
+  end
+
+  # Update highcharts.js from latest Builds on Highcharts codebase: http://code.highcharts.com/
+  opts.on('-H', '--update-highcharts', 'Update highcharts.js libraries') do
+    sh "mkdir -p #{path}/view/adapters/js/highcharts_js/modules/"
+    sh "mkdir -p #{path}/view/adapters/js/highcharts_js/adapters/"
+
+    sh "curl -# http://code.highcharts.com/highcharts.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/highcharts.js"
+    sh "curl -# http://code.highcharts.com/highcharts-more.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/highcharts-more.js"
+    sh "curl -# http://code.highcharts.com/highcharts-3d.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/highcharts-3d.js"
+
+    # Modules
+    sh "curl -# http://code.highcharts.com/modules/accessibility.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/accessibility.js"
+    sh "curl -# http://code.highcharts.com/modules/annotations.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/annotations.js"
+    sh "curl -# http://code.highcharts.com/modules/boost.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/boost.js"
+    sh "curl -# http://code.highcharts.com/modules/broken-axis.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/broken-axis.js"
+    sh "curl -# http://code.highcharts.com/modules/canvas-tools.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/canvas-tools.js"
+    sh "curl -# http://code.highcharts.com/modules/data.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/data.js"
+    sh "curl -# http://code.highcharts.com/modules/exporting.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/exporting.js"
+    sh "curl -# http://code.highcharts.com/modules/drilldown.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/drilldown.js"
+    sh "curl -# http://code.highcharts.com/modules/funnel.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/funnel.js"
+    sh "curl -# http://code.highcharts.com/modules/heatmap.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/heatmap.js"
+    sh "curl -# http://code.highcharts.com/modules/no-data-to-display.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/no-data-to-display.js"
+    sh "curl -# http://code.highcharts.com/modules/offline-exporting.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/offline-exporting.js"
+    sh "curl -# http://code.highcharts.com/modules/solid-gauge.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/solid-gauge.js"
+    sh "curl -# http://code.highcharts.com/modules/treemap.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/modules/treemap.js"
+
+    sh "curl -# http://code.highcharts.com/adapters/mootools-adapter.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/adapters/mootools-adapter.js"
+    sh "curl -# http://code.highcharts.com/adapters/prototype-adapter.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/adapters/prototype-adapter.js"
+    sh "mkdir -p #{path}/view/adapters/js/highcharts_js/stock/modules/"
+    sh "mkdir -p #{path}/view/adapters/js/highcharts_js/stock/adapters/"
+
+    sh "curl -# http://code.highcharts.com/stock/highstock.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/highstock.js"
+    sh "curl -# http://code.highcharts.com/stock/highcharts-more.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/stock/highcharts-more.js"
+    sh "curl -# http://code.highcharts.com/stock/modules/exporting.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/stock/modules/exporting.js"
+    sh "curl -# http://code.highcharts.com/stock/modules/funnel.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/stock/modules/funnel.js"
+    sh "curl -# http://code.highcharts.com/stock/adapters/mootools-adapter.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/stock/adapters/mootools-adapter.js"
+    sh "curl -# http://code.highcharts.com/stock/adapters/prototype-adapter.js -L --compressed -o #{path}/view/adapters/js/highcharts_js/stock/adapters/prototype-adapter.js"
+  end
+
+  opts.on('-h', '--help', 'Displays Help') do
+    puts opts
+    exit
+  end
+end
+
+parser.parse!
