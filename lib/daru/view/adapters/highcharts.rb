@@ -58,7 +58,7 @@ module Daru
           plot.to_html
         end
 
-        def export_html_file(plot, path='./plot.html')
+        def export_html_file(plot, path='./plot.html', _id=nil)
           path = File.expand_path(path, Dir.pwd)
           str = generate_html(plot)
           File.write(path, str)

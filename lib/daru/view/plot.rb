@@ -74,8 +74,8 @@ module Daru
       end
 
       # generat html file
-      def export_html_file(path='./plot.html')
-        @adapter.export_html_file(@chart, path)
+      def export_html_file(path='./plot.html', id=nil)
+        @adapter.export_html_file(@chart, path, id)
       end
 
       # load the corresponding JS files in IRuby notebook.

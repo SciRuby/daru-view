@@ -13,7 +13,7 @@ module Daru
           data_new.plot(options)
         end
 
-        def export_html_file(plot, path)
+        def export_html_file(plot, path, _id=nil)
           plot.export_html path
         end
 
