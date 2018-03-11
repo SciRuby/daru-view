@@ -32,7 +32,7 @@ module GoogleVisualr
     end
 
     def to_html(id=nil, options={})
-      path = File.expand_path('../../../templates/googlecharts/chart_div.erb', __FILE__)
+      path = File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
       template = File.read(path)
       id ||= SecureRandom.uuid
       chart_script = show_script(id, script_tag: false)

@@ -71,7 +71,7 @@ module Daru
 
         def generate_html(plot)
           # TODO: modify code
-          path = File.expand_path('../../templates/googlecharts/chart_div.erb', __FILE__)
+          path = File.expand_path('../templates/googlecharts/chart_div.erb', __dir__)
           template = File.read(path)
           initial_script = init_script
           chart_script = generate_body(plots)
