@@ -9,6 +9,8 @@ parser = OptionParser.new do |opts|
   opts.banner = "Usage: daru-view [options]"
   # Update google charts javascript dependent files, from latest Builds on google developers website
   opts.on('-g', '--update-googlecharts', 'Update googlecharts.js libraries') do
+    sh "mkdir -p #{path}/view/adapters/js/googlecharts_js/"
+
     sh "curl -# http://www.google.com/jsapi -L --compressed -o #{path}/view/adapters/js/googlecharts_js/google_visualr.js"
     sh "curl -# http://www.gstatic.com/charts/loader.js -L --compressed -o #{path}/view/adapters/js/googlecharts_js/loader.js"
   end
