@@ -48,7 +48,7 @@ module Daru
           table.to_html(@data.name, html_options)
         end
 
-        def export_html_file(table, path='./table.html', _id=nil)
+        def export_html_file(table, path='./table.html')
           # TODO
         end
 

@@ -55,13 +55,13 @@ module Daru
           GoogleVisualr.init_script
         end
 
-        def generate_body(plot, id=nil)
-          plot.to_html(id)
+        def generate_body(plot)
+          plot.to_html
         end
 
-        def export_html_file(plot, path='./plot.html', id=nil)
+        def export_html_file(plot, path='./plot.html')
           path = File.expand_path(path, Dir.pwd)
-          str = generate_html(plot, id)
+          str = generate_html(plot)
           File.write(path, str)
         end
 
@@ -69,10 +69,10 @@ module Daru
           plot.show_in_iruby
         end
 
-        def generate_html(plot, id=nil)
-          path = File.expand_path('../../templates/googlecharts/static_html.erb', __FILE__)
+        def generate_html(plot)
+          path = File.expand_path('../templates/googlecharts/static_html.erb', __dir__)
           template = File.read(path)
-          chart_script = generate_body(plot, id)
+          chart_script = generate_body(plot)
           initial_script = init_script
           ERB.new(template).result(binding)
         end
