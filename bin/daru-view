@@ -3,10 +3,12 @@
 require 'optparse'
 require 'rake'
 
-path = `gem which daru/view`.split('/')[0...-1].join('/')
+path = File.expand_path('../lib/daru',__dir__)
 
 parser = OptionParser.new do |opts|
   opts.banner = "Usage: daru-view [options]"
+  # TODO add arguments to update only modules/adapters/a particular file
+
   # Update google charts javascript dependent files, from latest Builds on google developers website
   opts.on('-g', '--update-googlecharts', 'Update googlecharts.js libraries') do
     sh "mkdir -p #{path}/view/adapters/js/googlecharts_js/"
