@@ -8,16 +8,21 @@ describe GoogleVisualr::Display do
       ['2013'],
     ]
   end
-  let(:area_chart_table) {Daru::View::Table.new(data)}
+  let(:data_table) {Daru::View::Table.new(data)}
   let(:area_chart_options) {{
       type: :area
     }}
+  let(:column_chart_options) {{
+      type: :column
+    }}
   let(:area_chart_chart) {Daru::View::Plot.
-    new(area_chart_table.table, area_chart_options)}
+    new(data_table.table, area_chart_options)}
+  let(:column_chart_chart) {Daru::View::Plot.
+  new(data_table.table, column_chart_options)}
 
   describe "#to_html" do
-    it "generates valid JS of the google chart" do
-  	  js = area_chart_chart.chart.to_html("id")
+    it "generates valid JS of the Area Chart" do
+  	  js, id = area_chart_chart.chart.to_html("id")
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
@@ -27,13 +32,65 @@ describe GoogleVisualr::Display do
       expect(js).to match(/google.visualization.AreaChart/i)
       expect(js).to match(/chart.draw\(data_table, \{\}/i)
     end
-    it "generates valid JS of the google data_table" do
-      js = area_chart_table.table.to_html("id")
+    it "generates valid JS of the Column Chart" do
+      js, id = column_chart_chart.chart.to_html("id")
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
       expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(js).to match(/google.visualization.ColumnChart/i)
+      expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates valid JS of the google data_table" do
+      js, id = data_table.table.to_html("id")
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+    end
+  end
+
+  describe "#show_script" do
+    it "generates valid script of the google chart without script tag" do
+      chart_script = area_chart_chart.chart.show_script("id", script_tag: false)
+      expect(chart_script).to match(/google.visualization.DataTable\(\);/i)
+      expect(chart_script).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(chart_script).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(chart_script).to match(/google.visualization.AreaChart/i)
+      expect(chart_script).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates valid script of the google chart with script tag" do
+      chart_script = area_chart_chart.chart.show_script("id")
+      expect(chart_script).to match(/<script type='text\/javascript'>/i)
+      expect(chart_script).to match(/google.visualization.DataTable\(\);/i)
+      expect(chart_script).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(chart_script).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(chart_script).to match(/google.visualization.AreaChart/i)
+      expect(chart_script).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates valid script of the data_table without script tag" do
+      table_script = data_table.table.show_script("id", script_tag: false)
+      expect(table_script).to match(/google.visualization.DataTable\(\);/i)
+      expect(table_script).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(table_script).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+    end
+    it "generates valid script of the data_table with script tag" do
+      table_script = data_table.table.show_script("id")
+      expect(table_script).to match(/<script type='text\/javascript'>/i)
+      expect(table_script).to match(/google.visualization.DataTable\(\);/i)
+      expect(table_script).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(table_script).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end
   end

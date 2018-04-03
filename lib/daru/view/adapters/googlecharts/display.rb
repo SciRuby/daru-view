@@ -36,11 +36,11 @@ module GoogleVisualr
       template = File.read(path)
       id ||= SecureRandom.uuid
       chart_script = show_script(id, script_tag: false)
-      ERB.new(template).result(binding)
+      [ERB.new(template).result(binding), id]
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
-      IRuby.html(to_html(dom))
+      IRuby.html(to_html(dom)[0])
     end
   end
 
