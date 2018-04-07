@@ -17,15 +17,9 @@ module Daru
         # TODO : this docs must be improved
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
-          @table =
-            if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
-              data.table
-            elsif data.is_a?(GoogleVisualr::DataTable)
-              data
-            else
-              add_data_in_table(data)
-            end
-          @chart_type = extract_chart_type(options)
+          @table = get_table(data)
+          chart_type = extract_chart_type(options)
+          @data = data
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
           ).new(@table, options)
@@ -51,12 +45,24 @@ module Daru
           @table
         end
 
+        def get_table(data)
+          if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
+            data.table
+          elsif data.is_a?(GoogleVisualr::DataTable)
+            data
+          elsif data.is_a?(String)
+            GoogleVisualr::DataTable.new
+          else
+            add_data_in_table(data)
+          end
+        end
+
         def init_script
           GoogleVisualr.init_script
         end
 
         def generate_body(plot)
-          plot.to_html
+          plot.to_html(@data)
         end
 
         def export_html_file(plot, path='./plot.html')
@@ -66,7 +72,7 @@ module Daru
         end
 
         def show_in_iruby(plot)
-          plot.show_in_iruby
+          plot.show_in_iruby(@data)
         end
 
         def generate_html(plot)

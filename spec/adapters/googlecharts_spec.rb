@@ -30,6 +30,14 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       ['Lg. Magellanic Cloud', 50000, 120.9],
       ['Bootes I', 60000, 1223.1]
     ]
+    @query_string = 'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'
+    @data_spreadsheet = 'https://docs.google.com/spreadsheets/d/1XWJLkAwch'\
+              '5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers=1&tq='
+    @data_spreadsheet << @query_string
+    @plot_spreadsheet = Daru::View::Plot.new(
+                          @data_spreadsheet,
+                          {type: :column, width: 800}
+                        )
     @table_array = Daru::View::Table.new(@data_array2, @options)
     @table_dv = Daru::View::Table.new(@data_vec1, @options)
     @table_df = Daru::View::Table.new(@data_df, @options)
@@ -69,6 +77,12 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
         [],
         type: :column).chart
       ).to be_a GoogleVisualr::Interactive::ColumnChart
+    end
+    it "Import data from spreadsheet" do
+      expect(@plot_spreadsheet.chart)
+      .to be_a GoogleVisualr::Interactive::ColumnChart
+      expect(@plot_spreadsheet.data).to eq @data_spreadsheet
+      expect(@plot_spreadsheet.options).to eq 'width'=> 800
     end
     # TODO: all other kinds of charts
   end
