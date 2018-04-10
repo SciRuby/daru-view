@@ -56,7 +56,7 @@ module Daru
         end
 
         def generate_body(plot)
-          plot.to_html[0]
+          plot.to_html
         end
 
         def export_html_file(plot, path='./plot.html')
@@ -73,8 +73,8 @@ module Daru
           path = File.expand_path('../templates/googlecharts/static_html.erb', __dir__)
           template = File.read(path)
           chart_script = generate_body(plot)
-          id = plot.to_html[1]
           initial_script = init_script
+          id = plot.id_chart
           ERB.new(template).result(binding)
         end
 

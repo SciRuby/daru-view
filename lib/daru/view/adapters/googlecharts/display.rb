@@ -14,6 +14,7 @@ module GoogleVisualr
   end
 
   module Display
+    attr_accessor :id_chart
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
       if script_tag
@@ -35,12 +36,13 @@ module GoogleVisualr
       path = File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
       template = File.read(path)
       id ||= SecureRandom.uuid
+      @id_chart = id
       chart_script = show_script(id, script_tag: false)
-      [ERB.new(template).result(binding), id]
+      ERB.new(template).result(binding)
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
-      IRuby.html(to_html(dom)[0])
+      IRuby.html(to_html(dom))
     end
   end
 
