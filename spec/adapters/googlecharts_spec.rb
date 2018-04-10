@@ -140,14 +140,6 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
   end
 
-  describe "generate_id" do
-    it "generates a valid id" do
-      expect(area_chart_chart.adapter.generate_id(
-        area_chart_chart.chart, "id")
-      ).to eq "id"
-    end
-  end
-
   describe "#generate_html" do
     it "generates valid html of the Area Chart" do
       js = area_chart_chart.adapter.generate_html(area_chart_chart.chart)
