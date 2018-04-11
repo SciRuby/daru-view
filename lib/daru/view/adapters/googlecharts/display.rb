@@ -14,6 +14,9 @@ module GoogleVisualr
   end
 
   module Display
+    # Holds a value only when to_html method is invoked
+    # @return [String] The ID of the DIV element that the Google Chart or
+    #   Google DataTable should be rendered in
     attr_accessor :html_id
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
