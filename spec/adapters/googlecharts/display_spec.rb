@@ -23,6 +23,7 @@ describe GoogleVisualr::Display do
   describe "#to_html" do
     it "generates valid JS of the Area Chart" do
   	  js = area_chart_chart.chart.to_html("id")
+      expect(js).to match(/<div id='id'>/i)
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
@@ -34,6 +35,7 @@ describe GoogleVisualr::Display do
     end
     it "generates valid JS of the Column Chart" do
       js = column_chart_chart.chart.to_html("id")
+      expect(js).to match(/<div id='id'>/i)
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
@@ -45,6 +47,7 @@ describe GoogleVisualr::Display do
     end
     it "generates valid JS of the google data_table" do
       js = data_table.table.to_html("id")
+      expect(js).to match(/<div id='id'>/i)
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(

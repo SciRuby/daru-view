@@ -74,7 +74,7 @@ module Daru
           template = File.read(path)
           chart_script = generate_body(plot)
           initial_script = init_script
-          id = plot.id_chart
+          id = plot.html_id
           ERB.new(template).result(binding)
         end
 

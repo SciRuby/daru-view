@@ -14,7 +14,7 @@ module GoogleVisualr
   end
 
   module Display
-    attr_accessor :id_chart
+    attr_accessor :html_id
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
       if script_tag
@@ -36,7 +36,7 @@ module GoogleVisualr
       path = File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
       template = File.read(path)
       id ||= SecureRandom.uuid
-      @id_chart = id
+      @html_id = id
       chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end
