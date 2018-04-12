@@ -18,7 +18,7 @@ module Daru
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data)
-          chart_type = extract_chart_type(options)
+          @chart_type = extract_chart_type(options)
           @data = data
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
@@ -40,6 +40,7 @@ module Daru
           #         ]
           # }
           # then directly DatTable is created using options. Use data=[] or nil
+          @data = data
           @table = GoogleVisualr::DataTable.new(options)
           add_data_in_table(data)
           @table

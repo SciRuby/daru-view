@@ -22,7 +22,7 @@ describe GoogleVisualr::Display do
 
   describe "#to_html" do
     it "generates valid JS of the Area Chart" do
-  	  js = area_chart_chart.chart.to_html("id")
+  	  js = area_chart_chart.chart.to_html(area_chart_chart.data, "id")
       expect(js).to match(/<div id='id'>/i)
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
@@ -34,7 +34,7 @@ describe GoogleVisualr::Display do
       expect(js).to match(/chart.draw\(data_table, \{\}/i)
     end
     it "generates valid JS of the Column Chart" do
-      js = column_chart_chart.chart.to_html("id")
+      js = column_chart_chart.chart.to_html(column_chart_chart.data, "id")
       expect(js).to match(/<div id='id'>/i)
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
@@ -46,7 +46,7 @@ describe GoogleVisualr::Display do
       expect(js).to match(/chart.draw\(data_table, \{\}/i)
     end
     it "generates valid JS of the google data_table" do
-      js = data_table.table.to_html("id")
+      js = data_table.table.to_html(data_table.data, "id")
       expect(js).to match(/<div id='id'>/i)
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
@@ -59,7 +59,7 @@ describe GoogleVisualr::Display do
 
   describe "#show_script" do
     it "generates valid script of the google chart without script tag" do
-      chart_script = area_chart_chart.chart.show_script("id", script_tag: false)
+      chart_script = area_chart_chart.chart.show_script(area_chart_chart.data, "id", script_tag: false)
       expect(chart_script).to match(/google.visualization.DataTable\(\);/i)
       expect(chart_script).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
@@ -69,7 +69,7 @@ describe GoogleVisualr::Display do
       expect(chart_script).to match(/chart.draw\(data_table, \{\}/i)
     end
     it "generates valid script of the google chart with script tag" do
-      chart_script = area_chart_chart.chart.show_script("id")
+      chart_script = area_chart_chart.chart.show_script(area_chart_chart.data, "id")
       expect(chart_script).to match(/<script type='text\/javascript'>/i)
       expect(chart_script).to match(/google.visualization.DataTable\(\);/i)
       expect(chart_script).to match(
@@ -80,7 +80,7 @@ describe GoogleVisualr::Display do
       expect(chart_script).to match(/chart.draw\(data_table, \{\}/i)
     end
     it "generates valid script of the data_table without script tag" do
-      table_script = data_table.table.show_script("id", script_tag: false)
+      table_script = data_table.table.show_script(data_table.data, "id", script_tag: false)
       expect(table_script).to match(/google.visualization.DataTable\(\);/i)
       expect(table_script).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
@@ -88,7 +88,7 @@ describe GoogleVisualr::Display do
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end
     it "generates valid script of the data_table with script tag" do
-      table_script = data_table.table.show_script("id")
+      table_script = data_table.table.show_script(data_table.data, "id")
       expect(table_script).to match(/<script type='text\/javascript'>/i)
       expect(table_script).to match(/google.visualization.DataTable\(\);/i)
       expect(table_script).to match(

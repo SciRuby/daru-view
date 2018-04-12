@@ -24,7 +24,7 @@ module GoogleVisualr
         # if it is data table
         if is_a?(GoogleVisualr::DataTable)
           to_js_full_script(dom)
-        # Importing data from spreadsheet  
+        # Importing data from spreadsheet
         elsif data.is_a?(String)
           to_js_spreadsheet(data, dom)
         else
