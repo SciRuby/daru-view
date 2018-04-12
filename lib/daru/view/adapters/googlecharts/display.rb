@@ -14,6 +14,10 @@ module GoogleVisualr
   end
 
   module Display
+    # Holds a value only when to_html method is invoked
+    # @return [String] The ID of the DIV element that the Google Chart or
+    #   Google DataTable should be rendered in
+    attr_accessor :html_id
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
       if script_tag
@@ -32,9 +36,10 @@ module GoogleVisualr
     end
 
     def to_html(id=nil, options={})
-      path = File.expand_path('../../../templates/googlecharts/chart_div.erb', __FILE__)
+      path = File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
       template = File.read(path)
       id ||= SecureRandom.uuid
+      @html_id = id
       chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end

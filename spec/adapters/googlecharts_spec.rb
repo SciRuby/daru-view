@@ -35,6 +35,23 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     @table_df = Daru::View::Table.new(@data_df, @options)
     @table_hash = Daru::View::Table.new(@data_hash, @options)
   end
+  let(:data) do
+    [
+      ['Year'],
+      ['2013'],
+    ]
+  end
+  let(:data_table) {Daru::View::Table.new(data)}
+  let(:area_chart_options) {{
+      type: :area
+    }}
+  let(:column_chart_options) {{
+      type: :column
+    }}
+  let(:area_chart_chart) {Daru::View::Plot.
+    new(data_table.table, area_chart_options)}
+  let(:column_chart_chart) {Daru::View::Plot.
+  new(data_table.table, column_chart_options)}
 
   describe "initialization Charts" do
     it "Default chart GoogleVisualr::Interactive::LineChart " do
@@ -86,6 +103,139 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
     it "Raise error when data objects are none of the above" do
       expect{Daru::View::Table.new("daru")}.to raise_error(ArgumentError) 
+    end
+  end
+
+  describe "#generate_body" do
+    it "generates valid JS of the Area Chart" do
+      js = area_chart_chart.adapter.generate_body(area_chart_chart.chart)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(js).to match(/google.visualization.AreaChart/i)
+      expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates valid JS of the Column Chart" do
+      js = column_chart_chart.adapter.generate_body(column_chart_chart.chart)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(js).to match(/google.visualization.ColumnChart/i)
+      expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates valid JS of the google data_table" do
+      js = data_table.adapter.generate_body(data_table.table)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+    end
+  end
+
+  describe "#generate_html" do
+    it "generates valid html of the Area Chart" do
+      js = area_chart_chart.adapter.generate_html(area_chart_chart.chart)
+      expect(js).to match(/html/i)
+      expect(js).to match(/Chart_/i)
+      expect(js).to match(/_Area/i)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(js).to match(/google.visualization.AreaChart/i)
+      expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates valid html of the Column Chart" do
+      js = column_chart_chart.adapter.generate_html(column_chart_chart.chart)
+      expect(js).to match(/html/i)
+      expect(js).to match(/Chart_/i)
+      expect(js).to match(/_Column/i)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(js).to match(/google.visualization.ColumnChart/i)
+      expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates valid html of the google data_table" do
+      js = data_table.adapter.generate_html(data_table.table)
+      expect(js).to match(/html/i)
+      expect(js).to match(/Chart_/i)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+    end
+  end
+
+  describe "#init_script" do
+    it "generates valid initial script" do
+      js = area_chart_chart.adapter.init_script
+      expect(js).to match(/<script type='text\/javascript'>/i)
+      expect(js).to match(
+        /var event = document.createEvent\(\"HTMLEvents\"\)/i)
+      expect(js).to match(
+        /event.initEvent\(\"load_google_charts\", false, false\)/i)
+      expect(js).to match(/window.dispatchEvent\(event\)/i)
+      expect(js).to match(
+        /console.log\(\"Finish loading google charts js files\"\)/i)
+    end
+  end
+
+  describe "#export_html_file" do
+    it "writes valid html code of the Area Chart to the file" do
+      area_chart_chart.export_html_file('./plot.html')
+      path = File.expand_path('../../plot.html', __dir__)
+      content = File.read(path)
+      expect(content).to match(/html/i)
+      expect(content).to match(/<script>/i)
+      expect(content).to match(/google.visualization.DataTable\(\);/i)
+      expect(content).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(content).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(content).to match(/google.visualization.AreaChart/i)
+      expect(content).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "writes valid html code of the Column Chart to the file" do
+      column_chart_chart.export_html_file('./plot.html')
+      path = File.expand_path('../../plot.html', __dir__)
+      content = File.read(path)
+      expect(content).to match(/html/i)
+      expect(content).to match(/<script>/i)
+      expect(content).to match(/google.visualization.DataTable\(\);/i)
+      expect(content).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(content).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(content).to match(/google.visualization.ColumnChart/i)
+      expect(content).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "writes valid html code of the google data_table to the file" do
+      data_table.export_html_file('./plot.html')
+      path = File.expand_path('../../plot.html', __dir__)
+      content = File.read(path)
+      expect(content).to match(/html/i)
+      expect(content).to match(/<script>/i)
+      expect(content).to match(/google.visualization.DataTable\(\);/i)
+      expect(content).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(content).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end
   end
 end

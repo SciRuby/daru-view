@@ -25,9 +25,9 @@ module Daru
             else
               add_data_in_table(data)
             end
-          chart_type = extract_chart_type(options)
+          @chart_type = extract_chart_type(options)
           @chart = GoogleVisualr::Interactive.const_get(
-            chart_type
+            @chart_type
           ).new(@table, options)
           @chart
         end
@@ -70,11 +70,11 @@ module Daru
         end
 
         def generate_html(plot)
-          # TODO: modify code
-          path = File.expand_path('../../templates/googlecharts/chart_div.erb', __FILE__)
+          path = File.expand_path('../templates/googlecharts/static_html.erb', __dir__)
           template = File.read(path)
+          chart_script = generate_body(plot)
           initial_script = init_script
-          chart_script = generate_body(plots)
+          id = plot.html_id
           ERB.new(template).result(binding)
         end
 
