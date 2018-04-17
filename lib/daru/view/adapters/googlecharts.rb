@@ -19,10 +19,10 @@ module Daru
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data)
           @chart_type = extract_chart_type(options)
-          @data = data
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
           ).new(@table, options)
+          @chart.data = data
           @chart
         end
 
@@ -40,8 +40,8 @@ module Daru
           #         ]
           # }
           # then directly DatTable is created using options. Use data=[] or nil
-          @data = data
           @table = GoogleVisualr::DataTable.new(options)
+          @table.data = data
           add_data_in_table(data)
           @table
         end
@@ -63,7 +63,7 @@ module Daru
         end
 
         def generate_body(plot)
-          plot.to_html(@data)
+          plot.to_html
         end
 
         def export_html_file(plot, path='./plot.html')
@@ -73,7 +73,7 @@ module Daru
         end
 
         def show_in_iruby(plot)
-          plot.show_in_iruby(@data)
+          plot.show_in_iruby
         end
 
         def generate_html(plot)
