@@ -3,6 +3,7 @@ require_relative 'googlecharts/iruby_notebook'
 require_relative 'googlecharts/display'
 require 'daru'
 require 'bigdecimal'
+require 'uri'
 
 module Daru
   module View
@@ -52,7 +53,12 @@ module Daru
           elsif data.is_a?(GoogleVisualr::DataTable)
             data
           elsif data.is_a?(String)
-            GoogleVisualr::DataTable.new
+            begin
+              URI.parse(data)
+              return GoogleVisualr::DataTable.new
+            rescue URI::InvalidURIError
+              return
+            end
           else
             add_data_in_table(data)
           end
@@ -104,7 +110,7 @@ module Daru
           chart_type = chart_type.to_s.capitalize
           chart_type = 'SteppedArea' if chart_type == 'Steppedarea'
           chart_type = 'TreeMap' if chart_type == 'Treemap'
-          direct_name = %w[Map Histogram TreeMap Timeline Gauge]
+          direct_name = %w[Map Histogram TreeMap Timeline Gauge Table]
           direct_name.include?(chart_type) ? chart_type : chart_type + 'Chart'
         end
 
@@ -114,8 +120,16 @@ module Daru
         # data rows
         #
         # TODO : Currently I didn't find use case for multi index.
-        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength
+        # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+        def add_data_in_table(data_set)
           case
+          when data_set.is_a?(String)
+            begin
+              URI.parse(data_set)
+              return
+            rescue URI::InvalidURIError
+              return
+            end
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
             rows = add_dataframe_data(data_set)
@@ -133,6 +147,7 @@ module Daru
           @table.add_rows(rows)
           @table
         end
+        # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
         def add_dataframe_data(data_set)
           rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)

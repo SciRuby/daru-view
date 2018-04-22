@@ -49,6 +49,10 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       ['2013'],
     ]
   end
+  let(:query_string) {'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'}
+  let(:data_spreadsheet) {'https://docs.google.com/spreadsheets/d/1XWJLkAwch'\
+              '5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers='\
+              '1&tq=' << query_string}
   let(:data_table) {Daru::View::Table.new(data)}
   let(:area_chart_options) {{
       type: :area
@@ -60,6 +64,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     new(data_table.table, area_chart_options)}
   let(:column_chart_chart) {Daru::View::Plot.
   new(data_table.table, column_chart_options)}
+
 
   describe "initialization Charts" do
     it "Default chart GoogleVisualr::Interactive::LineChart " do
@@ -115,8 +120,13 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(@table_hash.options).to eq @options
       expect(@table_hash.data).to eq @data_hash
     end
+    it "Table class must be GoogleVisualr::DataTable when data objects are" \
+       " of class String" do
+      expect(Daru::View::Table.new(data_spreadsheet).table)
+      .to be_a GoogleVisualr::DataTable
+    end
     it "Raise error when data objects are none of the above" do
-      expect{Daru::View::Table.new("daru")}.to raise_error(ArgumentError) 
+      expect{Daru::View::Table.new(1234)}.to raise_error(ArgumentError)
     end
   end
 
