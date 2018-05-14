@@ -3,7 +3,7 @@ require_relative 'iruby_notebook'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=['highstock.js', 'modules/exporting.js',
+    dependent_js=['highstock.js', 'highcharts-more.js', 'modules/exporting.js',
                   'highcharts-3d.js', 'modules/data.js']
   )
     # Highstock is based on Highcharts, meaning it has all the core
@@ -33,13 +33,32 @@ module LazyHighCharts
     #
     def to_html(placeholder=random_canvas_id)
       chart_hash_must_be_present
-      high_chart(placeholder, self)
+      # Provided by user and can take two values ('stock' or 'map').
+      # Helps to denote either of the three classes.
+      chart_class = options.delete(:chart_class) unless options[:chart_class].nil?
+      # When user wants to plot a HighMap
+      if chart_class == 'map'
+        high_map(placeholder, self)
+      # When user wants to plot a HighStock
+      elsif chart_class == 'stock'
+        high_stock(placeholder, self)
+      # No need to pass any value for HighChart
+      else
+        high_chart(placeholder, self)
+      end
     end
 
     def show_in_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
-      IRuby.html high_chart_iruby(placeholder, self)
+      chart_class = options.delete(:chart_class) unless options[:chart_class].nil?
+      if chart_class == 'map'
+        IRuby.html high_map_iruby(placeholder, self)
+      elsif chart_class == 'stock'
+        IRuby.html high_stock_iruby(placeholder, self)
+      else
+        IRuby.html high_chart_iruby(placeholder, self)
+      end
     end
 
     # This method is not needed if `to_html` generates the same code. Here
@@ -48,7 +67,14 @@ module LazyHighCharts
     def to_html_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
-      high_chart_iruby(placeholder, self)
+      chart_class = options.delete(:chart_class) unless options[:chart_class].nil?
+      if chart_class == 'map'
+        IRuby.html high_map_iruby(placeholder, self)
+      elsif chart_class == 'stock'
+        IRuby.html high_stock_iruby(placeholder, self)
+      else
+        IRuby.html high_chart_iruby(placeholder, self)
+      end
     end
 
     def chart_hash_must_be_present
