@@ -35,7 +35,8 @@ module LazyHighCharts
       chart_hash_must_be_present
       # Provided by user and can take two values ('stock' or 'map').
       # Helps to denote either of the three classes.
-      chart_class = options.delete(:chart_class) unless options[:chart_class].nil?
+      chart_class = options.delete(:chart_class).to_s.downcase unless
+      options[:chart_class].nil?
       # When user wants to plot a HighMap
       if chart_class == 'map'
         high_map(placeholder, self)
@@ -51,7 +52,8 @@ module LazyHighCharts
     def show_in_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
-      chart_class = options.delete(:chart_class) unless options[:chart_class].nil?
+      chart_class = options.delete(:chart_class).to_s.downcase unless
+      options[:chart_class].nil?
       if chart_class == 'map'
         IRuby.html high_map_iruby(placeholder, self)
       elsif chart_class == 'stock'
@@ -67,7 +69,8 @@ module LazyHighCharts
     def to_html_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
-      chart_class = options.delete(:chart_class) unless options[:chart_class].nil?
+      chart_class = options.delete(:chart_class).to_s.downcase unless
+      options[:chart_class].nil?
       if chart_class == 'map'
         IRuby.html high_map_iruby(placeholder, self)
       elsif chart_class == 'stock'

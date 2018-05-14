@@ -13,7 +13,7 @@ describe LazyHighCharts::HighChart do
 
   describe "#to_html" do
     it "should plot Highstock when chart_class is set to stock" do
-      @hc.chart.options[:chart_class] = "stock";
+      @hc.chart.options[:chart_class] = "STock";
       expect(@hc.chart.to_html(
       	@placeholder)
       ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
