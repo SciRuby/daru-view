@@ -1,27 +1,21 @@
 module LazyHighCharts
   module LayoutHelper
-    def high_chart_iruby(placeholder, object, &block)
+    def high_chart_iruby(chart_class, placeholder, object, &block)
       object.html_options[:id] = placeholder
       object.options[:chart][:renderTo] = placeholder
-      high_graph_iruby(
-        placeholder, object, &block
-      ).concat(content_tag('div', '', object.html_options))
-    end
-
-    def high_stock_iruby(placeholder, object, &block)
-      object.html_options[:id] = placeholder
-      object.options[:chart][:renderTo] = placeholder
-      high_graph_stock_iruby(
-        placeholder, object, &block
-      ).concat(content_tag('div', '', object.html_options))
-    end
-
-    def high_graph_iruby(placeholder, object, &block)
-      build_html_output_iruby('Chart', placeholder, object, &block)
-    end
-
-    def high_graph_stock_iruby(placeholder, object, &block)
-      build_html_output_iruby('StockChart', placeholder, object, &block)
+      if chart_class == 'map'
+        build_html_output_iruby(
+          'Map', placeholder, object, &block
+        ).concat(content_tag('div', '', object.html_options))
+      elsif chart_class == 'stock'
+        build_html_output_iruby(
+          'StockChart', placeholder, object, &block
+        ).concat(content_tag('div', '', object.html_options))
+      else
+        build_html_output_iruby(
+          'Chart', placeholder, object, &block
+        ).concat(content_tag('div', '', object.html_options))
+      end
     end
 
     private

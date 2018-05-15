@@ -35,8 +35,7 @@ module LazyHighCharts
       chart_hash_must_be_present
       # Provided by user and can take two values ('stock' or 'map').
       # Helps to denote either of the three classes.
-      chart_class = options.delete(:chart_class).to_s.downcase unless
-      options[:chart_class].nil?
+      chart_class = extract_chart_class
       # When user wants to plot a HighMap
       if chart_class == 'map'
         high_map(placeholder, self)
@@ -51,16 +50,7 @@ module LazyHighCharts
 
     def show_in_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
-      chart_hash_must_be_present
-      chart_class = options.delete(:chart_class).to_s.downcase unless
-      options[:chart_class].nil?
-      if chart_class == 'map'
-        IRuby.html high_map_iruby(placeholder, self)
-      elsif chart_class == 'stock'
-        IRuby.html high_stock_iruby(placeholder, self)
-      else
-        IRuby.html high_chart_iruby(placeholder, self)
-      end
+      IRuby.html to_html_iruby(placeholder)
     end
 
     # This method is not needed if `to_html` generates the same code. Here
@@ -69,15 +59,11 @@ module LazyHighCharts
     def to_html_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
-      chart_class = options.delete(:chart_class).to_s.downcase unless
-      options[:chart_class].nil?
-      if chart_class == 'map'
-        IRuby.html high_map_iruby(placeholder, self)
-      elsif chart_class == 'stock'
-        IRuby.html high_stock_iruby(placeholder, self)
-      else
-        IRuby.html high_chart_iruby(placeholder, self)
-      end
+      high_chart_iruby(extract_chart_class, placeholder, self)
+    end
+
+    def extract_chart_class
+      options.delete(:chart_class).to_s.downcase unless options[:chart_class].nil?
     end
 
     def chart_hash_must_be_present
