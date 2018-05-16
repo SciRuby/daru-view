@@ -71,7 +71,7 @@ describe LazyHighCharts::LayoutHelper do
   context "layout_helper" do
     it "should return a div with an id of high_chart object" do
       expect(@chart.chart.high_chart_iruby(
-      	"stock",
+      	"StockChart",
       	@placeholder,
       	@chart.chart)
       ).to match(/<div id="placeholder">/i)
@@ -79,7 +79,7 @@ describe LazyHighCharts::LayoutHelper do
 
     it "should return a script" do
       expect(@chart.chart.high_chart_iruby(
-      	"stock",
+      	"StockChart",
       	@placeholder,
       	@chart.chart)
       ).to match(/script/i)
@@ -90,7 +90,7 @@ describe LazyHighCharts::LayoutHelper do
     describe "ready function" do
       it "should be a javascript script" do
         expect(@chart.chart.high_chart_iruby(
-        	"stock",
+        	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/<script type="text\/javascript">/i)
@@ -100,48 +100,85 @@ describe LazyHighCharts::LayoutHelper do
     describe "initialize HighChart" do
       it "should set variables `chart` `options`" do
         expect(@chart.chart.high_chart_iruby(
-        	"stock",
+        	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/var\s+options\s+=/)
         expect(@chart.chart.high_chart_iruby(
-        	"stock",
+        	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/window.chart_placeholder\s=/)
       end
       it "should set Chart data" do
         expect(@chart.chart.high_chart_iruby(
-        	"",
+        	"Chart",
         	@placeholder,
         	@chart.chart)
         ).to match(/window\.chart_placeholder\s=\snew\sHighcharts.Chart/)
       end
       it "should set chart renderTo" do
         expect(@chart.chart.high_chart_iruby(
-        	"stock",
+        	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/"renderTo": "placeholder"/)
       end
       it "should set Chart Stock" do
         expect(@chart.chart.high_chart_iruby(
-        	"stock",
+        	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
+      end
+      it "should set correct options" do
+      	expect(@chart.chart.high_chart_iruby(
+        	"StockChart",
+        	@placeholder,
+        	@chart.chart)
+        ).to match(/series\": \[\{ \"name\": \"AAPL Stock Price\"/)
+	    expect(@chart.chart.high_chart_iruby(
+        	"StockChart",
+        	@placeholder,
+        	@chart.chart)
+        ).to match(/\"data\": \[ \[ 1147651200000,67.79 \]/)
+	    expect(@chart.chart.high_chart_iruby(
+        	"StockChart",
+        	@placeholder,
+        	@chart.chart)
+        ).to match(/\"title\": \{ \"text\": \"AAPL Stock Price\" \}/)
+	    expect(@chart.chart.high_chart_iruby(
+        	"StockChart",
+        	@placeholder,
+        	@chart.chart)
+        ).to match(/\"chart\": \{ \"type\": \"arearange\"/)
+	    expect(@chart.chart.high_chart_iruby(
+        	"StockChart",
+        	@placeholder,
+        	@chart.chart)
+        ).to match(/\"marker\": \{ \"enabled\": true/)
+	    expect(@chart.chart.high_chart_iruby(
+        	"StockChart",
+        	@placeholder,
+        	@chart.chart)
+        ).to match(/\"shadow\": true/)
+	    expect(@chart.chart.high_chart_iruby(
+        	"StockChart",
+        	@placeholder,
+        	@chart.chart)
+        ).to match(/\"tooltip\": \{ \"valueDecimals\": 2/)
       end
     end
 
     describe "HighChart Variable" do
       it "should underscore chart_ variable" do
         expect(@chart.chart.high_chart_iruby(
-        	"stock",
+        	"StockChart",
         	"place-holder",
         	@chart.chart)
         ).to match(/window.chart_place_holder\s=/)
         expect(@chart.chart.high_chart_iruby(
-        	"stock",
+        	"StockChart",
         	"PlaceHolder",
         	@chart.chart)
         ).to match(/window.chart_place_holder\s=/)
@@ -151,7 +188,7 @@ describe LazyHighCharts::LayoutHelper do
 
   it "should take a block setting attributes" do
   	@hc = Daru::View::Plot.new
-  	@chart_class = "stock"
+  	@chart_class = "StockChart"
     @hc.chart.options[:rangeSelector] = {:selected => 1};
     @hc.chart.series(:type => "spline",
                :name => "Historias",
@@ -182,7 +219,7 @@ describe LazyHighCharts::LayoutHelper do
 
   it "should allow js code as attribute" do
     @hc = Daru::View::Plot.new
-    @chart_class = "stock"
+    @chart_class = "StockChart"
     @hc.chart.options[:foo] = "function () { alert('hello') }".js_code
 
     expect(@hc.chart.high_chart_iruby(
@@ -194,7 +231,7 @@ describe LazyHighCharts::LayoutHelper do
 
   it "should convert keys to proper format" do
   	@hc = Daru::View::Plot.new
-  	@chart_class = "stock"
+  	@chart_class = "StockChart"
   	@hc.chart.options[:foo_bar] = {:bar_foo => "someattrib"}
 
     expect(@hc.chart.high_chart_iruby(
@@ -211,7 +248,7 @@ describe LazyHighCharts::LayoutHelper do
 
   it "should support js_code in Individual data label for each point" do
   	@hc = Daru::View::Plot.new
-  	@chart_class = "stock"
+  	@chart_class = "StockChart"
     @hc.chart.series(
       :data => [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, {
         :dataLabels => {:enabled => true,

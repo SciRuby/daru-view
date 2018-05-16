@@ -33,14 +33,13 @@ module LazyHighCharts
     #
     def to_html(placeholder=random_canvas_id)
       chart_hash_must_be_present
-      # Provided by user and can take two values ('stock' or 'map').
       # Helps to denote either of the three classes.
       chart_class = extract_chart_class
       # When user wants to plot a HighMap
-      if chart_class == 'map'
+      if chart_class == 'Map'
         high_map(placeholder, self)
       # When user wants to plot a HighStock
-      elsif chart_class == 'stock'
+      elsif chart_class == 'StockChart'
         high_stock(placeholder, self)
       # No need to pass any value for HighChart
       else
@@ -62,8 +61,20 @@ module LazyHighCharts
       high_chart_iruby(extract_chart_class, placeholder, self)
     end
 
+    # @return [String] the class of the chart
     def extract_chart_class
-      options.delete(:chart_class).to_s.downcase unless options[:chart_class].nil?
+      # Provided by user and can take two values ('stock' or 'map').
+      chart_class = options.delete(:chart_class).to_s.downcase unless
+      options[:chart_class].nil?
+      chart_class =
+        if chart_class == 'map'
+          'Map'
+        elsif chart_class == 'stock'
+          'StockChart'
+        else
+          'Chart'
+        end
+      chart_class
     end
 
     def chart_hash_must_be_present

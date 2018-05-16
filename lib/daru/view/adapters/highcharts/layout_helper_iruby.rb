@@ -3,19 +3,9 @@ module LazyHighCharts
     def high_chart_iruby(chart_class, placeholder, object, &block)
       object.html_options[:id] = placeholder
       object.options[:chart][:renderTo] = placeholder
-      if chart_class == 'map'
-        build_html_output_iruby(
-          'Map', placeholder, object, &block
-        ).concat(content_tag('div', '', object.html_options))
-      elsif chart_class == 'stock'
-        build_html_output_iruby(
-          'StockChart', placeholder, object, &block
-        ).concat(content_tag('div', '', object.html_options))
-      else
-        build_html_output_iruby(
-          'Chart', placeholder, object, &block
-        ).concat(content_tag('div', '', object.html_options))
-      end
+      build_html_output_iruby(
+        chart_class, placeholder, object, &block
+      ).concat(content_tag('div', '', object.html_options))
     end
 
     private
