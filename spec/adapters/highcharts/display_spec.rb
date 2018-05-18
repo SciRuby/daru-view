@@ -31,17 +31,33 @@ end
 describe LazyHighCharts::HighChart do
   before { Daru::View.plotting_library = :highcharts }
   before(:each) do
-  	@hc = Daru::View::Plot.new
-  	@hc.chart.series(:type => "spline",
-               :name => "Historias",
-               :data => [0, 1, 2, 3, 5, 6, 0, 7]
-    )
+  	@opts = {
+		  chart: {
+		    type: 'bar'
+		  },
+		  title: {
+		    text: 'Bar chart'
+		  },
+		  yAxis: {
+	      min: 0,
+	      title: {
+	          text: 'Total consumption'
+	      }
+		  },
+		  legend: {
+		    reversed: true
+		  }
+		}
+		@data_vec1 = Daru::Vector.new([5, 3, 4])
+		@data_vec2 = Daru::Vector.new([2, 2, 3])
+		@data_vec3 = Daru::Vector.new([3,4,4])
+		@data_df = Daru::DataFrame.new({John: @data_vec1, Jane: @data_vec2, Joe: @data_vec3})
+		@hc = Daru::View::Plot.new(@data_df, @opts)
     @placeholder = "placeholder"
   end
 
   describe "#to_html" do
   	before(:each) do
-  	  @placeholder = "placeholder"
 	    @opts = {
 	        chart_class: 'stock',
 	        chart: {
@@ -103,7 +119,7 @@ describe LazyHighCharts::HighChart do
 			@chart.chart.series_data = @series_dt
   	end
     it "should plot Highstock when chart_class is set to stock" do
-      @hc.chart.options[:chart_class] = "STock";
+      @hc.options[:chart_class] = "STock";
       expect(@hc.chart.to_html(
       	@placeholder)
       ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
@@ -115,13 +131,17 @@ describe LazyHighCharts::HighChart do
     end
     it "should return a div with an id of high_chart object" do
     	expect(@chart.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
+    	expect(@hc.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
     end
     it "should return a script" do
     	expect(@chart.chart.to_html(@placeholder)).to match(/script/)
+    	expect(@hc.chart.to_html(@placeholder)).to match(/script/)
     end
     it "should set variables `chart` `options`" do
     	expect(@chart.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
     	expect(@chart.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
+    	expect(@hc.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
+    	expect(@hc.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
     end
     it "should take a block setting attributes" do
     	expect(@chart.chart.options[:rangeSelector][:selected]).to eq(1)
@@ -141,18 +161,31 @@ describe LazyHighCharts::HighChart do
 	    expect(@chart.chart.to_html(
 	    	@placeholder)
 	    ).to match(/\"marker\": \{ \"enabled\": true/)
-	    expect(@chart.chart.to_html(
-	    	@placeholder)
-	    ).to match(/\"shadow\": true/)
+	    expect(@chart.chart.to_html(@placeholder)).to match(/\"shadow\": true/)
 	    expect(@chart.chart.to_html(
 	    	@placeholder)
 	    ).to match(/\"tooltip\": \{ \"valueDecimals\": 2/)
+	    expect(@hc.chart.to_html(
+	    	@placeholder)
+	    ).to match(/\"chart\": \{ \"type\": \"bar\"/)
+	    expect(@hc.chart.to_html(
+	    	@placeholder)
+	    ).to match(/\"data\": \[ \[ 5,2,3 \],\[ 3,2,4 \],\[ 4,3,4 \] \]/)
+	    expect(@hc.chart.to_html(
+	    	@placeholder)
+	    ).to match(/\"title\": \{ \"text\": \"Bar chart\" \}/)
+	    expect(@hc.chart.to_html(
+	    	@placeholder)
+	    ).to match(/\"legend\": \{ \"reversed\": true \}/)
+	    expect(@hc.chart.to_html(
+	    	@placeholder)
+	    ).to match(/\"yAxis\": \{ \"min\": 0/)
     end
   end
 
   describe "#to_html_iruby" do
     it "should plot Highstock when chart_class is set to stock" do
-      @hc.chart.options[:chart_class] = "SToCk";
+      @hc.options[:chart_class] = "SToCk";
       expect(@hc.chart.to_html_iruby(
       	@placeholder)
       ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
@@ -165,20 +198,19 @@ describe LazyHighCharts::HighChart do
   end
 
   describe "#extract_chart_class" do
-  	it "should return the class of the chart" do
-  	  @hc.chart.options[:chart_class] = "SToCk";
+  	it "should return StockChart class when chart_class is set to stock" do
+  	  @hc.options[:chart_class] = "SToCk";
       expect(@hc.chart.extract_chart_class).to eq 'StockChart'
   	end
-  	it "should return the class of the chart" do
+  	it "should return Chart class when chart_class is not set" do
       expect(@hc.chart.extract_chart_class).to eq 'Chart'
   	end
   end
 
   describe "#chart_hash_must_be_present" do
   	it "should check the presence of chart hash in options" do
-  	  @hc.chart.options[:chart] = {type: :bar}
   	  @hc.chart.chart_hash_must_be_present
-  	  expect(@hc.chart.options[:chart]).to eq type: :bar
+  	  expect(@hc.options[:chart]).to eq :type=>"bar"
   	end
   end
 end

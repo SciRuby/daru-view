@@ -24,34 +24,34 @@ describe LazyHighCharts::LayoutHelper do
       {
         name: 'AAPL Stock Price',
         data: [
-               [1147651200000,67.79],
-               [1147737600000,64.98],
-               [1147824000000,65.26],
+								[1147651200000,67.79],
+								[1147737600000,64.98],
+								[1147824000000,65.26],
 
-               [1149120000000,62.17],
-               [1149206400000,61.66],
-               [1149465600000,60.00],
-               [1149552000000,59.72],
+								[1149120000000,62.17],
+								[1149206400000,61.66],
+								[1149465600000,60.00],
+								[1149552000000,59.72],
 
-               [1157932800000,72.50],
-               [1158019200000,72.63],
-               [1158105600000,74.20],
-               [1158192000000,74.17],
-               [1158278400000,74.10],
-               [1158537600000,73.89],
+								[1157932800000,72.50],
+								[1158019200000,72.63],
+								[1158105600000,74.20],
+								[1158192000000,74.17],
+								[1158278400000,74.10],
+								[1158537600000,73.89],
 
-               [1170288000000,84.74],
-               [1170374400000,84.75],
+								[1170288000000,84.74],
+								[1170374400000,84.75],
 
-               [1174953600000,95.46],
-               [1175040000000,93.24],
-               [1175126400000,93.75],
-               [1175212800000,92.91],
+								[1174953600000,95.46],
+								[1175040000000,93.24],
+								[1175126400000,93.75],
+								[1175212800000,92.91],
 
-               [1180051200000,113.62],
-               [1180396800000,114.35],
-               [1180483200000,118.77],
-               [1180569600000,121.19],
+								[1180051200000,113.62],
+								[1180396800000,114.35],
+								[1180483200000,118.77],
+								[1180569600000,121.19],
               ],
         marker: {
           enabled: true,
@@ -65,7 +65,7 @@ describe LazyHighCharts::LayoutHelper do
     ]
     @chart = Daru::View::Plot.new
     @chart.chart.options = @opts;
-	@chart.chart.series_data = @series_dt
+		@chart.chart.series_data = @series_dt
   end
 
   context "layout_helper" do
@@ -86,7 +86,7 @@ describe LazyHighCharts::LayoutHelper do
     end
   end
 
-  context "high_chart_graph" do
+  context "high_chart_iruby" do
     describe "ready function" do
       it "should be a javascript script" do
         expect(@chart.chart.high_chart_iruby(
@@ -137,32 +137,32 @@ describe LazyHighCharts::LayoutHelper do
         	@placeholder,
         	@chart.chart)
         ).to match(/series\": \[\{ \"name\": \"AAPL Stock Price\"/)
-	    expect(@chart.chart.high_chart_iruby(
+		    expect(@chart.chart.high_chart_iruby(
         	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/\"data\": \[ \[ 1147651200000,67.79 \]/)
-	    expect(@chart.chart.high_chart_iruby(
+		    expect(@chart.chart.high_chart_iruby(
         	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/\"title\": \{ \"text\": \"AAPL Stock Price\" \}/)
-	    expect(@chart.chart.high_chart_iruby(
+		    expect(@chart.chart.high_chart_iruby(
         	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/\"chart\": \{ \"type\": \"arearange\"/)
-	    expect(@chart.chart.high_chart_iruby(
+		    expect(@chart.chart.high_chart_iruby(
         	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/\"marker\": \{ \"enabled\": true/)
-	    expect(@chart.chart.high_chart_iruby(
+		    expect(@chart.chart.high_chart_iruby(
         	"StockChart",
         	@placeholder,
         	@chart.chart)
         ).to match(/\"shadow\": true/)
-	    expect(@chart.chart.high_chart_iruby(
+		    expect(@chart.chart.high_chart_iruby(
         	"StockChart",
         	@placeholder,
         	@chart.chart)
@@ -187,14 +187,29 @@ describe LazyHighCharts::LayoutHelper do
   end
 
   it "should take a block setting attributes" do
-  	@hc = Daru::View::Plot.new
   	@chart_class = "StockChart"
-    @hc.chart.options[:rangeSelector] = {:selected => 1};
-    @hc.chart.series(:type => "spline",
-               :name => "Historias",
-               :data => [0, 1, 2, 3, 5, 6, 0, 7]
-    )
-    expect(@hc.chart.options[:rangeSelector][:selected]).to eq(1)
+  	@options = {
+  		chart_class: "stock",
+  		chart: {
+  			type: "spline"
+  		},
+  		xAxis: {
+          categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+      },
+      yAxis: {
+          min: 0,
+          title: {
+              text: 'Total fruit consumption'
+          }
+      },
+			rangeSelector: {
+				selected: 1
+			},
+			name: "Historias",
+  	}
+  	@data = Daru::Vector.new([0, 1, 2, 3, 5])
+  	@hc = Daru::View::Plot.new(@data, @options)
+    expect(@hc.options[:rangeSelector][:selected]).to eq(1)
     expect(@hc.chart.high_chart_iruby(
     	@chart_class,
     	@placeholder,
@@ -218,37 +233,55 @@ describe LazyHighCharts::LayoutHelper do
   end
 
   it "should allow js code as attribute" do
-    @hc = Daru::View::Plot.new
-    @chart_class = "StockChart"
-    @hc.chart.options[:foo] = "function () { alert('hello') }".js_code
+    @chart_class = "Chart"
+    @options = {
+    	chart: {
+    		type: "bar"
+    	},
+    	positioner: "function () { return { x: 0, y: 250 }; }".js_code
+    }
+    @data = Daru::DataFrame.new(arr1: [1, 2, 3], arr2: [4, 5, 6])
+    @hc = Daru::View::Plot.new(@data, @options)
 
     expect(@hc.chart.high_chart_iruby(
     	@chart_class,
     	@placeholder,
     	@hc.chart)
-    ).to match(/"foo": function \(\) { alert\('hello'\) }/)
+    ).to match(/"positioner": function \(\) { return { x: 0, y: 250 }; }/)
   end
 
   it "should convert keys to proper format" do
-  	@hc = Daru::View::Plot.new
-  	@chart_class = "StockChart"
-  	@hc.chart.options[:foo_bar] = {:bar_foo => "someattrib"}
+  	@chart_class = "Chart"
+  	@options = {
+  		chart: {
+  			type: "bar"
+  		},
+  		plot_options: {
+        	bar: {
+              data_labels: {
+                  enabled: true
+              }
+          }
+      }
+  	}
+  	@data = Daru::Vector.new([0, 1, 2, 3, 9])
+  	@hc = Daru::View::Plot.new(@data, @options)
 
     expect(@hc.chart.high_chart_iruby(
     	@chart_class,
     	@placeholder,
     	@hc.chart)
-    ).to match(/fooBar/)
+    ).to match(/plotOptions/)
     expect(@hc.chart.high_chart_iruby(
     	@chart_class,
     	@placeholder,
     	@hc.chart)
-    ).to match(/barFoo/)
+    ).to match(/dataLabels/)
   end
 
   it "should support js_code in Individual data label for each point" do
   	@hc = Daru::View::Plot.new
-  	@chart_class = "StockChart"
+  	@chart_class = "Chart"
     @hc.chart.series(
       :data => [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, {
         :dataLabels => {:enabled => true,
