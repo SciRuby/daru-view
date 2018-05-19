@@ -72,7 +72,7 @@ module Daru
           path = File.expand_path('../templates/highcharts/static_html.erb', __dir__)
           template = File.read(path)
           initial_script = init_script
-          chart_div = generate_body(plots)
+          chart_div = generate_body(plot)
           ERB.new(template).result(binding)
         end
 

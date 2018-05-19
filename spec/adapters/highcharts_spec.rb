@@ -4,13 +4,63 @@ require 'spec_helper.rb'
 describe Daru::View::Plot, 'plotting with highcharts' do
   before { Daru::View.plotting_library = :highcharts }
   before(:each) do
-    @data = [[1, 15], [2, 30], [4, 40]]
-
     @placeholder = "placeholder"
     @html_options = {:class => "stylin"}
-    @options = {:bars => {:show => true}}
-
-    @flot = Daru::View::Plot.new(@data, @options)
+    @data = [[1, 15], [2, 30], [4, 40]]
+    @data_vec1 = Daru::Vector.new([3,6,8,9,20])
+    @data_vec2 = Daru::Vector.new([9,4,1,3,12])
+    @data_df = Daru::DataFrame.new(rows: @data_vec1, values: @data_vec2)
+    @options_bar = {
+      chart: {
+          type: 'bar',
+      },
+      title: {
+          text: 'Demo Bar Chart'
+      },
+      plotOptions: {
+          bar: {
+              dataLabels: {
+                  enabled: true
+              }
+          }
+      }
+    }
+    @options_line = {
+      chart: {
+          type: 'line'
+      },
+      title: {
+          text: 'Demo line Chart'
+      },
+      plotOptions: {
+          line: {
+              dataLabels: {
+                  enabled: true
+              },
+              enableMouseTracking: false
+          }
+      }
+    }
+    @options_column = {
+      chart: {
+          type: 'column'
+      },
+      title: {
+          text: 'Demo Column Chart'
+      }
+    }
+    @series_dt = [{
+          name: 'Tokyo',
+          data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+      }, {
+          name: 'New York',
+          data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+    }]
+    @chart_line = Daru::View::Plot.new(@data_vec1, @options_line)
+    @chart_bar = Daru::View::Plot.new(@data_df, @options_bar)
+    @chart_column = Daru::View::Plot.new
+    @chart_column.chart.options = @options_column
+    @chart_column.chart.series_data = @data
   end
 
   describe "initialization" do
@@ -173,5 +223,202 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       expect(json).to match /\"data\": \[ 29.9,71.5,106.4,129.2,144.0,176.0,135.6,148.5,216.4,194.1,95.6,54.4 \]/
     end
 
+  end
+
+  describe "#init_script" do
+    it "generates valid initial script" do
+      js = @chart_bar.init_script
+      expect(js).to match(/BEGIN highstock.js/i)
+      expect(js).to match(/Highstock JS/i)
+      expect(js).to match(/END highstock.js/i)
+      expect(js).to match(/BEGIN modules\/exporting.js/i)
+      expect(js).to match(/END modules\/exporting.js/i)
+      expect(js).to match(/BEGIN highcharts-3d.js/i)
+      expect(js).to match(/END highcharts-3d.js/i)
+      expect(js).to match(/BEGIN modules\/data.js/i)
+      expect(js).to match(/END modules\/data.js/i)
+      expect(js).to match(/<script type='text\/javascript'>/i)
+      expect(js).to match(
+        /var event = document.createEvent\(\"HTMLEvents\"\)/i)
+      expect(js).to match(
+        /event.initEvent\(\"load_highcharts\", false, false\)/i)
+      expect(js).to match(/window.dispatchEvent\(event\)/i)
+      expect(js).to match(
+        /console.log\(\"Finish loading highchartsjs\"\)/i)
+    end
+  end
+
+  # called from #div in plot.rb as @chart_line.div
+  describe "#generate_body" do
+    context "should generate valid script of Line Chart" do
+      it "should generate valid JS of the Line Chart" do
+        js = @chart_line.adapter.generate_body(@chart_line.chart)
+        expect(js).to match(/script/)
+        expect(js).to match(/Highcharts.Chart\(options\)/)
+        expect(js).to match(/window.chart_/)
+      end
+      it "should set the correct options" do
+        js = @chart_line.adapter.generate_body(@chart_line.chart)
+        expect(js).to match(/\"chart\": { \"type\": \"line\"/)
+        expect(js).to match(/\"title\": { \"text\": \"Demo line Chart\" }/)
+        expect(js).to match(
+          /\"plotOptions\": { \"line\": { \"dataLabels\": { \"enabled\": true }/
+        )
+      end
+      it "should set correct data" do
+        js = @chart_line.adapter.generate_body(@chart_line.chart)
+        expect(js).to match(/series/)
+        expect(js).to match(/\"type\": null/)
+        expect(js).to match(/\"name\": null/)
+        expect(js).to match(/\"data\": \[ 3,6,8,9,20 \]/)
+      end
+    end
+    context "should generate valid script of Bar Chart" do
+      it "should generate valid JS of the Bar Chart" do
+        js = @chart_bar.adapter.generate_body(@chart_bar.chart)
+        expect(js).to match(/script/)
+        expect(js).to match(/Highcharts.Chart\(options\)/)
+        expect(js).to match(/window.chart_/)
+      end
+      it "should set the correct options" do
+        js = @chart_bar.adapter.generate_body(@chart_bar.chart)
+        expect(js).to match(/\"chart\": { \"type\": \"bar\"/)
+        expect(js).to match(/\"title\": { \"text\": \"Demo Bar Chart\" }/)
+        expect(js).to match(
+          /\"plotOptions\": { \"bar\": { \"dataLabels\": { \"enabled\": true }/
+        )
+      end
+      it "should set correct data" do
+        js = @chart_bar.adapter.generate_body(@chart_bar.chart)
+        expect(js).to match(/series/)
+        expect(js).to match(/\"type\": null/)
+        expect(js).to match(/\"name\": null/)
+        expect(js).to match(
+          /\"data\": \[ \[ 3,9 \],\[ 6,4 \],\[ 8,1 \],\[ 9,3 \],\[ 20,12 \] \]/
+        )
+      end
+    end
+    context "should generate valid script of Column Chart" do
+      it "should generate valid JS of the Column Chart" do
+        js = @chart_column.adapter.generate_body(@chart_column.chart)
+        expect(js).to match(/script/)
+        expect(js).to match(/Highcharts.Chart\(options\)/)
+        expect(js).to match(/window.chart_/)
+      end
+      it "should set the correct options" do
+        js = @chart_column.adapter.generate_body(@chart_column.chart)
+        expect(js).to match(/\"chart\": { \"type\": \"column\"/)
+        expect(js).to match(/\"title\": { \"text\": \"Demo Column Chart\" }/)
+      end
+      it "should set correct data" do
+        js = @chart_column.adapter.generate_body(@chart_column.chart)
+        expect(js).to match(/series": \[\[ 1,15 \],\[ 2,30 \],\[ 4,40 \]\]/)
+      end
+    end
+  end
+
+  describe "#generate_html" do
+    it "should generate valid HTML of the Line Chart" do
+      html = @chart_line.adapter.generate_html(@chart_line.chart)
+      expect(html).to match(/html/)
+      expect(html).to match(/Chart/)
+      expect(html).to match(/BEGIN highstock.js/i)
+      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN modules\/exporting.js/i)
+      expect(html).to match(/END modules\/exporting.js/i)
+      expect(html).to match(/BEGIN highcharts-3d.js/i)
+      expect(html).to match(/END highcharts-3d.js/i)
+      expect(html).to match(/BEGIN modules\/data.js/i)
+      expect(html).to match(/END modules\/data.js/i)
+      expect(html).to match(/script/)
+      expect(html).to match(/Highcharts.Chart\(options\)/)
+      expect(html).to match(/\"chart\": { \"type\": \"line\"/)
+      expect(html).to match(/\"title\": { \"text\": \"Demo line Chart\" }/)
+      expect(html).to match(/\"data\": \[ 3,6,8,9,20 \]/)
+    end
+    it "should generate valid HTML of the Bar Chart" do
+      html = @chart_bar.adapter.generate_html(@chart_bar.chart)
+      expect(html).to match(/html/)
+      expect(html).to match(/Chart/)
+      expect(html).to match(/BEGIN highstock.js/i)
+      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN modules\/exporting.js/i)
+      expect(html).to match(/END modules\/exporting.js/i)
+      expect(html).to match(/BEGIN highcharts-3d.js/i)
+      expect(html).to match(/END highcharts-3d.js/i)
+      expect(html).to match(/BEGIN modules\/data.js/i)
+      expect(html).to match(/END modules\/data.js/i)
+      expect(html).to match(/script/)
+      expect(html).to match(/Highcharts.Chart\(options\)/)
+      expect(html).to match(/\"chart\": { \"type\": \"bar\"/)
+      expect(html).to match(/\"title\": { \"text\": \"Demo Bar Chart\" }/)
+      expect(html).to match(
+        /\"data\": \[ \[ 3,9 \],\[ 6,4 \],\[ 8,1 \],\[ 9,3 \],\[ 20,12 \] \]/
+      )
+    end
+    it "should generate valid HTML of the Column Chart" do
+      html = @chart_column.adapter.generate_html(@chart_column.chart)
+      expect(html).to match(/html/)
+      expect(html).to match(/Chart/)
+      expect(html).to match(/BEGIN highstock.js/i)
+      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN modules\/exporting.js/i)
+      expect(html).to match(/END modules\/exporting.js/i)
+      expect(html).to match(/BEGIN highcharts-3d.js/i)
+      expect(html).to match(/END highcharts-3d.js/i)
+      expect(html).to match(/BEGIN modules\/data.js/i)
+      expect(html).to match(/END modules\/data.js/i)
+      expect(html).to match(/script/)
+      expect(html).to match(/Highcharts.Chart\(options\)/)
+      expect(html).to match(/\"chart\": { \"type\": \"column\"/)
+      expect(html).to match(/\"title\": { \"text\": \"Demo Column Chart\" }/)
+      expect(html).to match(/series": \[\[ 1,15 \],\[ 2,30 \],\[ 4,40 \]\]/)
+    end
+  end
+
+  describe "#export_html_file" do
+    it "should write valid html code of the Line Chart to the file" do
+      @chart_line.export_html_file('./plot.html')
+      path = File.expand_path('../../plot.html', __dir__)
+      html = File.read(path)
+      expect(html).to match(/html/)
+      expect(html).to match(/Chart/)
+      expect(html).to match(/BEGIN highstock.js/i)
+      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/script/)
+      expect(html).to match(/Highcharts.Chart\(options\)/)
+      expect(html).to match(/\"chart\": { \"type\": \"line\"/)
+      expect(html).to match(/\"title\": { \"text\": \"Demo line Chart\" }/)
+    end
+    it "should write valid html code of the Bar Chart to the file" do
+      @chart_bar.export_html_file('./plot.html')
+      path = File.expand_path('../../plot.html', __dir__)
+      html = File.read(path)
+      expect(html).to match(/html/)
+      expect(html).to match(/Chart/)
+      expect(html).to match(/BEGIN highstock.js/i)
+      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/script/)
+      expect(html).to match(/Highcharts.Chart\(options\)/)
+      expect(html).to match(/\"chart\": { \"type\": \"bar\"/)
+      expect(html).to match(/\"title\": { \"text\": \"Demo Bar Chart\" }/)
+      expect(html).to match(
+        /\"data\": \[ \[ 3,9 \],\[ 6,4 \],\[ 8,1 \],\[ 9,3 \],\[ 20,12 \] \]/
+      )
+    end
+    it "should write valid html code of the Column Chart to the file" do
+      @chart_column.export_html_file('./plot.html')
+      path = File.expand_path('../../plot.html', __dir__)
+      html = File.read(path)
+      expect(html).to match(/html/)
+      expect(html).to match(/Chart/)
+      expect(html).to match(/BEGIN highstock.js/i)
+      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/script/)
+      expect(html).to match(/Highcharts.Chart\(options\)/)
+      expect(html).to match(/\"chart\": { \"type\": \"column\"/)
+      expect(html).to match(/\"title\": { \"text\": \"Demo Column Chart\" }/)
+      expect(html).to match(/series": \[\[ 1,15 \],\[ 2,30 \],\[ 4,40 \]\]/)
+    end
   end
 end

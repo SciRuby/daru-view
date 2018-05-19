@@ -29,18 +29,18 @@ module LazyHighCharts
           "#{js_start_iruby} #{core_js} #{js_end_iruby}"
         # Turbolinks.version < 5
         elsif defined?(Turbolinks) && request_is_referrer?
-          to_s(eventlistener_page_load)
+          eventlistener_page_load(core_js)
         elsif defined?(Turbolinks) && request_turbolinks_5_tureferrer?
-          to_s(eventlistener_turbolinks_load)
+          eventlistener_turbolinks_load(core_js)
         else
-          to_s(call_core_js)
+          call_core_js(core_js)
         end
 
       defined?(raw) ? raw(js_output) : js_output
     end
     # rubocop:enable Metrics/PerceivedComplexity
 
-    def eventlistener_page_load
+    def eventlistener_page_load(core_js)
       <<-EOJS
       #{js_start_iruby}
         var f = function(){
@@ -52,7 +52,7 @@ module LazyHighCharts
       EOJS
     end
 
-    def eventlistener_turbolinks_load
+    def eventlistener_turbolinks_load(core_js)
       <<-EOJS
       #{js_start_iruby}
         document.addEventListener("turbolinks:load", function() {
@@ -62,7 +62,7 @@ module LazyHighCharts
       EOJS
     end
 
-    def call_core_js
+    def call_core_js(core_js)
       <<-EOJS
       #{js_start_iruby}
         #{core_js}
