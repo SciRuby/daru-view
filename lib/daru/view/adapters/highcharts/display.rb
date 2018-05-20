@@ -44,8 +44,6 @@ module LazyHighCharts
       # No need to pass any value for HighChart
       elsif chart_class == 'Chart'
         high_chart(placeholder, self)
-      else
-        raise 'chart_class must be selected as either chart, stock or map'
       end
     end
 
@@ -75,6 +73,8 @@ module LazyHighCharts
           'StockChart'
         elsif chart_class == 'chart' || chart_class.nil?
           'Chart'
+        else
+          raise 'chart_class must be selected as either chart, stock or map'
         end
       chart_class
     end
