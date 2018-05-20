@@ -41,7 +41,7 @@ module LazyHighCharts
       # When user wants to plot a HighStock
       elsif chart_class == 'StockChart'
         high_stock(placeholder, self)
-      # No need to pass any value for HighChart
+      # When user wants to plot a HighChart
       elsif chart_class == 'Chart'
         high_chart(placeholder, self)
       end
@@ -64,18 +64,13 @@ module LazyHighCharts
     # @return [String] the class of the chart
     def extract_chart_class
       # Provided by user and can take two values ('stock' or 'map').
-      chart_class = options.delete(:chart_class).to_s.downcase unless
+      chart_class = options.delete(:chart_class).to_s.capitalize unless
       options[:chart_class].nil?
-      chart_class =
-        if chart_class == 'map'
-          'Map'
-        elsif chart_class == 'stock'
-          'StockChart'
-        elsif chart_class == 'chart' || chart_class.nil?
-          'Chart'
-        else
-          raise 'chart_class must be selected as either chart, stock or map'
-        end
+      chart_class = 'StockChart' if chart_class == 'Stock'
+      chart_class = 'Chart' if chart_class.nil?
+      unless %w[Chart StockChart Map].include?(chart_class) || chart_class.nil?
+        raise 'chart_class must be selected as either chart, stock or map'
+      end
       chart_class
     end
 
