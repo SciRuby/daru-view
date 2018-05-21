@@ -1,6 +1,6 @@
 describe Daru::View, "Update JS files" do
   context "googlecharts" do
-    it "updates google charts javascript dependent files" do
+    it "shows the command usage description" do
       flag = system('daru-view -h')
       expect(flag).to eq(true)
     end

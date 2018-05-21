@@ -267,6 +267,26 @@ For now, other applications (Rails/Sinatra) you need to run it locally.
 
 ## Update to latest js library. Additional command line
 
+### 1. Users
+
+  - To view command usage:
+
+  ```
+  daru-view -h (or) --help
+  ```
+
+  - To update JS files for google charts:
+  ```
+  daru-view -g (or) --update-googlecharts
+  ```
+
+  - To update JS files for highcharts:
+  ```
+  daru-view -H (or) --update-highcharts
+  ```
+
+### 2. Developers
+
   To update to the current highcharts.js directly from http://code.highcharts.com/",  you can always run
 
     rake highcharts:update
