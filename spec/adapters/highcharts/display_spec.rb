@@ -205,6 +205,12 @@ describe LazyHighCharts::HighChart do
     it "should return Chart class when chart_class is not set" do
       expect(@hc.chart.extract_chart_class).to eq 'Chart'
     end
+    it "should raise error when wrong input is given" do
+      @hc.options[:chart_class] = "Daru"
+      expect{@hc.chart.extract_chart_class}.to raise_error(
+        'chart_class must be selected as either chart, stock or map'
+      )
+    end
   end
 
   describe "#chart_hash_must_be_present" do

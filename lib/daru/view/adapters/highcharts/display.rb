@@ -68,7 +68,7 @@ module LazyHighCharts
       options[:chart_class].nil?
       chart_class = 'StockChart' if chart_class == 'Stock'
       chart_class = 'Chart' if chart_class.nil?
-      unless %w[Chart StockChart Map].include?(chart_class) || chart_class.nil?
+      unless %w[Chart StockChart Map].include?(chart_class)
         raise 'chart_class must be selected as either chart, stock or map'
       end
       chart_class
