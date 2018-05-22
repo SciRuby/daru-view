@@ -12,13 +12,13 @@ namespace :googlecharts do
   task :update => [:jsapi, :loader]
   task :jsapi do
     say "Grabbing Core from google jsapi codebase..." do
-      sh "curl -# https://www.google.com/jsapi -L --compressed -o lib/daru/view/adapters/js/googlecharts_js/google_visualr.js"
+      sh "curl -# http://www.google.com/jsapi -L --compressed -o lib/daru/view/adapters/js/googlecharts_js/google_visualr.js"
     end
   end
 
   task :loader do
     say "Grabbing loader.js from the google website..." do
-      sh "curl -# https://www.gstatic.com/charts/loader.js -L --compressed -o lib/daru/view/adapters/js/googlecharts_js/loader.js"
+      sh "curl -# http://www.gstatic.com/charts/loader.js -L --compressed -o lib/daru/view/adapters/js/googlecharts_js/loader.js"
     end
   end
 
