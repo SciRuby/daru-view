@@ -4,7 +4,8 @@ require 'daru/view/constants'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=HIGHCHARTS_DEPENDENCIES
+    dependent_js=HIGHCHARTS_DEPENDENCIES,
+    dependent_css=['highcharts.css']
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
@@ -14,6 +15,9 @@ module LazyHighCharts
     # Note: Don't reorder the dependent_js elements. It must be loaded in
     # the same sequence. Otherwise some of the JS overlap and doesn't work.
     js =  ''
+    js << "\n<style type='text/css'>"
+    js << LazyHighCharts.generate_init_code_css(dependent_css)
+    js << "\n</style>"
     js << "\n<script type='text/javascript'>"
     js << LazyHighCharts.generate_init_code(dependent_js)
     js << "\n</script>"
@@ -34,6 +38,7 @@ module LazyHighCharts
     def to_html(placeholder=random_canvas_id)
       chart_hash_must_be_present
       script = load_dependencies('web_frameworks')
+      script << high_chart_css(placeholder)
       # Helps to denote either of the three classes.
       chart_class = extract_chart_class
       # When user wants to plot a HighMap
@@ -61,7 +66,26 @@ module LazyHighCharts
     def to_html_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
-      high_chart_iruby(extract_chart_class, placeholder, self)
+      script = high_chart_css(placeholder)
+      script << high_chart_iruby(extract_chart_class, placeholder, self)
+      script
+    end
+
+    # return [String] css code of the chart
+    def high_chart_css(placeholder)
+      # contains the css provided by the user as a String array
+      css_data = options[:css].nil? ? '' : option.delete(:css)
+      script = ''
+      if css_data != ''
+        script << '<style>'
+        # Applying the css to chart div
+        css_data.each do |css|
+          script << '#' + placeholder + ' '
+          script << css
+        end
+        script << '</style>'
+      end
+      script
     end
 
     # Loads the dependent mapdata and dependent modules of the chart

@@ -5,11 +5,13 @@ describe LazyHighCharts do
   describe "#init_script" do
     it "generates valid initial script" do
       js = LazyHighCharts.init_script
-      expect(js).to match(/BEGIN highstock.js/i)
+      expect(js).to match(/BEGIN js\/highstock.js/i)
       expect(js).to match(/Highstock JS/i)
-      expect(js).to match(/END highstock.js/i)
       expect(js).to match(/BEGIN map.js/i)
       expect(js).to match(/END map.js/i)
+      expect(js).to match(/END js\/highstock.js/i)
+      expect(js).to match(/BEGIN highcharts.css/i)
+      expect(js).to match(/END highcharts.css/i)
       expect(js).to match(/BEGIN modules\/exporting.js/i)
       expect(js).to match(/END modules\/exporting.js/i)
       expect(js).to match(/BEGIN highcharts-3d.js/i)
@@ -35,6 +37,8 @@ describe LazyHighCharts::HighChart do
       chart: {
         type: 'bar'
       },
+      css: ['.highcharts-color-1 {fill: #90ed7d;stroke: #90ed7d;}',
+            '.highcharts-background {fill: #efefef;stroke: #a4edba;stroke-width: 2px;}'],
       title: {
         text: 'Bar chart'
       },
@@ -90,6 +94,9 @@ describe LazyHighCharts::HighChart do
     before(:each) do
       @opts = {
           chart_class: 'stock',
+          css: [
+            '.highcharts-background {fill: #efefef;stroke: #a4edba;stroke-width: 2px;}'
+          ],
           chart: {
             type: 'arearange'
           },
@@ -203,6 +210,18 @@ describe LazyHighCharts::HighChart do
         @placeholder)
       ).to match(/END mapdata\/custom\/europe.js/)
     end
+    it "should return style tag if css option is given" do
+      expect(@chart.chart.to_html(@placeholder)).to match(/style/)
+      expect(@hc.chart.to_html(@placeholder)).to match(/style/)
+    end
+    it "should set css correctly" do
+      expect(@chart.chart.to_html(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-background {fill/)
+      expect(@hc.chart.to_html(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-color-1 {/)
+    end
     it "should take a block setting attributes" do
       expect(@chart.chart.options[:rangeSelector][:selected]).to eq(1)
       expect(@chart.chart.to_html(@placeholder)).to match(/rangeSelector/)
@@ -302,6 +321,11 @@ describe LazyHighCharts::HighChart do
         @placeholder)
       ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Chart/)
     end
+    it "should set css correctly" do
+      expect(@hc.chart.to_html_iruby(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-background {fill/)
+    end
   end
 
   describe "#extract_chart_class" do
@@ -321,6 +345,16 @@ describe LazyHighCharts::HighChart do
       expect{@hc.chart.extract_chart_class}.to raise_error(
         'chart_class must be selected as either chart, stock or map'
       )
+    end
+  end
+
+  describe "#high_chart_css" do
+    it "return the correct css of the chart" do
+      # cannot check another value of css in array as `css` option
+      # got deleted as we check the first value
+      expect(@hc.chart.high_chart_css(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-background {fill/)
     end
   end
 
