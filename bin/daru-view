@@ -9,7 +9,8 @@ parser = OptionParser.new do |opts|
   opts.banner = "Usage: daru-view [options]"
   # TODO add arguments to update only modules/adapters/a particular file
 
-  # Update google charts javascript dependent files, from latest Builds on google developers website
+  # Update google charts javascript dependent files, from latest Builds
+  # on the google developers website
   opts.on('-g', '--update-googlecharts', 'Update googlecharts.js libraries') do
     sh "mkdir -p #{path}/view/adapters/js/googlecharts_js/"
 
@@ -17,7 +18,8 @@ parser = OptionParser.new do |opts|
     sh "curl -# http://www.gstatic.com/charts/loader.js -L --compressed -o #{path}/view/adapters/js/googlecharts_js/loader.js"
   end
 
-  # Update highcharts.js from latest Builds on Highcharts codebase: http://code.highcharts.com/
+  # Update highcharts.js from latest Builds on Highcharts codebase
+  # http://code.highcharts.com/
   opts.on('-H', '--update-highcharts', 'Update highcharts.js libraries') do
     sh "mkdir -p #{path}/view/adapters/js/highcharts_js/modules/"
     sh "mkdir -p #{path}/view/adapters/js/highcharts_js/adapters/"
