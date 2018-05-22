@@ -1,13 +1,11 @@
 module LazyHighCharts
   module LayoutHelper
-    def high_chart_iruby(placeholder, object, &block)
+    def high_chart_iruby(chart_class, placeholder, object, &block)
       object.html_options[:id] = placeholder
       object.options[:chart][:renderTo] = placeholder
-      high_graph_iruby(placeholder, object, &block).concat(content_tag('div', '', object.html_options))
-    end
-
-    def high_graph_iruby(placeholder, object, &block)
-      build_html_output_iruby('Chart', placeholder, object, &block)
+      build_html_output_iruby(
+        chart_class, placeholder, object, &block
+      ).concat(content_tag('div', '', object.html_options))
     end
 
     private
@@ -29,18 +27,18 @@ module LazyHighCharts
           "#{js_start_iruby} #{core_js} #{js_end_iruby}"
         # Turbolinks.version < 5
         elsif defined?(Turbolinks) && request_is_referrer?
-          to_s(eventlistener_page_load)
+          eventlistener_page_load(core_js)
         elsif defined?(Turbolinks) && request_turbolinks_5_tureferrer?
-          to_s(eventlistener_turbolinks_load)
+          eventlistener_turbolinks_load(core_js)
         else
-          to_s(call_core_js)
+          call_core_js(core_js)
         end
 
       defined?(raw) ? raw(js_output) : js_output
     end
     # rubocop:enable Metrics/PerceivedComplexity
 
-    def eventlistener_page_load
+    def eventlistener_page_load(core_js)
       <<-EOJS
       #{js_start_iruby}
         var f = function(){
@@ -52,7 +50,7 @@ module LazyHighCharts
       EOJS
     end
 
-    def eventlistener_turbolinks_load
+    def eventlistener_turbolinks_load(core_js)
       <<-EOJS
       #{js_start_iruby}
         document.addEventListener("turbolinks:load", function() {
@@ -62,7 +60,7 @@ module LazyHighCharts
       EOJS
     end
 
-    def call_core_js
+    def call_core_js(core_js)
       <<-EOJS
       #{js_start_iruby}
         #{core_js}
