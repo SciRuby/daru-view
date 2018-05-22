@@ -12,49 +12,49 @@ describe Daru::View::Plot, 'plotting with highcharts' do
     @data_df = Daru::DataFrame.new(rows: @data_vec1, values: @data_vec2)
     @options_bar = {
       chart: {
-          type: 'bar',
+        type: 'bar',
       },
       title: {
-          text: 'Demo Bar Chart'
+        text: 'Demo Bar Chart'
       },
       plotOptions: {
-          bar: {
-              dataLabels: {
-                  enabled: true
-              }
+        bar: {
+          dataLabels: {
+            enabled: true
           }
+        }
       }
     }
     @options_line = {
       chart: {
-          type: 'line'
+        type: 'line'
       },
       title: {
-          text: 'Demo line Chart'
+        text: 'Demo line Chart'
       },
       plotOptions: {
-          line: {
-              dataLabels: {
-                  enabled: true
-              },
-              enableMouseTracking: false
-          }
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: false
+        }
       }
     }
     @options_column = {
       chart: {
-          type: 'column'
+        type: 'column'
       },
       title: {
-          text: 'Demo Column Chart'
+        text: 'Demo Column Chart'
       }
     }
     @series_dt = [{
-          name: 'Tokyo',
-          data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        name: 'Tokyo',
+        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
       }, {
-          name: 'New York',
-          data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+        name: 'New York',
+        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
     }]
     @chart_line = Daru::View::Plot.new(@data_vec1, @options_line)
     @chart_bar = Daru::View::Plot.new(@data_df, @options_bar)
@@ -91,16 +91,17 @@ describe Daru::View::Plot, 'plotting with highcharts' do
 
     it "should set options by default" do
       expect(Daru::View::Plot.new.chart.options).to eq({
-          :title => {:text => nil},
-          :legend => {:layout => "vertical", :style => {}},
-          :xAxis => {},
-          :yAxis => {:title => {:text => nil}, :labels => {}},
-          :tooltip => {:enabled => true},
-          :credits => {:enabled => false},
-          :plotOptions => {:areaspline => {}},
-          :chart => {:defaultSeriesType => "line", :renderTo => nil},
-          :subtitle => {}})
-    end
+        :title => {:text => nil},
+        :legend => {:layout => "vertical", :style => {}},
+        :xAxis => {},
+        :yAxis => {:title => {:text => nil}, :labels => {}},
+        :tooltip => {:enabled => true},
+        :credits => {:enabled => false},
+        :plotOptions => {:areaspline => {}},
+        :chart => {:defaultSeriesType => "line", :renderTo => nil},
+        :subtitle => {}
+      })
+  end
 
     it "should set data empty by default" do
       expect(Daru::View::Plot.new.chart.series_data).to eq(
