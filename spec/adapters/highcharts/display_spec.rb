@@ -8,14 +8,22 @@ describe LazyHighCharts do
       expect(js).to match(/BEGIN highstock.js/i)
       expect(js).to match(/Highstock JS/i)
       expect(js).to match(/END highstock.js/i)
-      expect(js).to match(/BEGIN highcharts-more.js/i)
-      expect(js).to match(/END highcharts-more.js/i)
+      expect(js).to match(/BEGIN map.js/i)
+      expect(js).to match(/END map.js/i)
+      expect(js).to match(/BEGIN modules\/highcharts-more.js/i)
+      expect(js).to match(/END modules\/highcharts-more.js/i)
       expect(js).to match(/BEGIN modules\/exporting.js/i)
       expect(js).to match(/END modules\/exporting.js/i)
       expect(js).to match(/BEGIN highcharts-3d.js/i)
       expect(js).to match(/END highcharts-3d.js/i)
       expect(js).to match(/BEGIN modules\/data.js/i)
       expect(js).to match(/END modules\/data.js/i)
+      expect(js).to match(/BEGIN modules\/europe.js/i)
+      expect(js).to match(/END modules\/europe.js/i)
+      expect(js).to match(/BEGIN modules\/us-all.js/i)
+      expect(js).to match(/END modules\/us-all.js/i)
+      expect(js).to match(/BEGIN modules\/world.js/i)
+      expect(js).to match(/END modules\/world.js/i)
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(
         /var event = document.createEvent\(\"HTMLEvents\"\)/i)
@@ -117,7 +125,55 @@ describe LazyHighCharts::HighChart do
       @chart = Daru::View::Plot.new
       @chart.chart.options = @opts;
       @chart.chart.series_data = @series_dt
-  	end
+
+      @opts_map = {
+        chart_class: 'map',
+        chart: {
+          map: 'custom/europe',
+          borderWidth: 1
+        },
+
+        title: {
+            text: 'Nordic countries'
+        },
+
+        subtitle: {
+            text: 'Demo of drawing all areas in the map, only highlighting partial data'
+        },
+
+        legend: {
+            enabled: false
+        }
+      }
+      @series_dt_map = [{
+        name: 'Country',
+        data: [
+            ['is', 1],
+            ['no', 1],
+            ['se', 1],
+            ['dk', 1],
+            ['fi', 1]
+        ],
+        dataLabels: {
+            enabled: true,
+            color: '#FFFFFF',
+            formatter: 'function () {
+                if (this.point.value) {
+                    return this.point.name;
+                }
+            }'.js_code
+        }
+      }]
+      @map = Daru::View::Plot.new
+      @map.chart.options = @opts_map;
+      @map.chart.series_data = @series_dt_map
+    end
+    it "should plot HighMap when chart_class is set to map" do
+      @hc.options[:chart_class] = "Map";
+      expect(@hc.chart.to_html(
+        @placeholder)
+      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Map/)
+    end
     it "should plot Highstock when chart_class is set to stock" do
       @hc.options[:chart_class] = "STock";
       expect(@hc.chart.to_html(
@@ -132,16 +188,20 @@ describe LazyHighCharts::HighChart do
     it "should return a div with an id of high_chart object" do
       expect(@chart.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
       expect(@hc.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
+      expect(@map.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
     end
     it "should return a script" do
       expect(@chart.chart.to_html(@placeholder)).to match(/script/)
       expect(@hc.chart.to_html(@placeholder)).to match(/script/)
+      expect(@map.chart.to_html(@placeholder)).to match(/script/)
     end
     it "should set variables `chart` `options`" do
       expect(@chart.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
       expect(@chart.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
       expect(@hc.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
       expect(@hc.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
+      expect(@map.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
+      expect(@map.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
     end
     it "should take a block setting attributes" do
       expect(@chart.chart.options[:rangeSelector][:selected]).to eq(1)
@@ -165,6 +225,7 @@ describe LazyHighCharts::HighChart do
       expect(@chart.chart.to_html(
         @placeholder)
       ).to match(/\"tooltip\": \{ \"valueDecimals\": 2/)
+
       expect(@hc.chart.to_html(
         @placeholder)
       ).to match(/\"chart\": \{ \"type\": \"bar\"/)
@@ -180,11 +241,30 @@ describe LazyHighCharts::HighChart do
       expect(@hc.chart.to_html(
         @placeholder)
       ).to match(/\"yAxis\": \{ \"min\": 0/)
+
+      expect(@map.chart.to_html(
+        @placeholder)
+      ).to match(/\"chart\": { \"map\": \"custom\/europe\"/)
+      expect(@map.chart.to_html(
+        @placeholder)
+      ).to match(/\"title\": { \"text\": \"Nordic countries\"/)
+      expect(@map.chart.to_html(
+        @placeholder)
+      ).to match(/\"legend\": { \"enabled\": false }/)
+      expect(@map.chart.to_html(
+        @placeholder)
+      ).to match(/\"data\": \[ \[ \"is\",1 \]/)
     end
   end
 
   describe "#to_html_iruby" do
-    it "should plot Highstock when chart_class is set to stock" do
+    it "should plot HighMap when chart_class is set to map" do
+      @hc.options[:chart_class] = "Map";
+      expect(@hc.chart.to_html_iruby(
+        @placeholder)
+      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Map/)
+    end
+    it "should plot HighStock when chart_class is set to stock" do
       @hc.options[:chart_class] = "SToCk";
       expect(@hc.chart.to_html_iruby(
         @placeholder)
@@ -198,6 +278,10 @@ describe LazyHighCharts::HighChart do
   end
 
   describe "#extract_chart_class" do
+    it "should return Map class when chart_class is set to map" do
+      @hc.options[:chart_class] = "map";
+      expect(@hc.chart.extract_chart_class).to eq 'Map'
+    end
     it "should return StockChart class when chart_class is set to stock" do
       @hc.options[:chart_class] = "SToCk";
       expect(@hc.chart.extract_chart_class).to eq 'StockChart'

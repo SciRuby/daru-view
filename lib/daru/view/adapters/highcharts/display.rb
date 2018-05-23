@@ -3,8 +3,10 @@ require_relative 'iruby_notebook'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=['highstock.js', 'highcharts-more.js', 'modules/exporting.js',
-                  'highcharts-3d.js', 'modules/data.js']
+    dependent_js=['highstock.js', 'map.js', 'modules/highcharts-more.js',
+                  'modules/exporting.js', 'modules/tilemap.js', 'highcharts-3d.js',
+                  'modules/data.js', 'modules/europe.js', 'modules/us-all.js',
+                  'modules/world.js']
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
@@ -49,6 +51,8 @@ module LazyHighCharts
 
     def show_in_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
+      LazyHighCharts.init_iruby(options.delete(:modules).collect { |module_js| 'modules/' + module_js }) unless
+      options[:modules].nil?
       IRuby.html to_html_iruby(placeholder)
     end
 

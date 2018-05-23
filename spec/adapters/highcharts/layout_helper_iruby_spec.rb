@@ -13,17 +13,17 @@ describe LazyHighCharts::LayoutHelper do
           type: 'arearange'
         },
         rangeSelector: {
-            selected: 1
+          selected: 1
         },
 
         title: {
-            text: 'AAPL Stock Price'
+          text: 'AAPL Stock Price'
         }
     }
     @series_dt = [
       {
         name: 'AAPL Stock Price',
-                data: [
+        data: [
                 [1147651200000,67.79],
                 [1147737600000,64.98],
                 [1147824000000,65.26],
@@ -51,7 +51,7 @@ describe LazyHighCharts::LayoutHelper do
                 [1180051200000,113.62],
                 [1180396800000,114.35],
                 [1180483200000,118.77],
-                [1180569600000,121.19],
+                [1180569600000,121.19]
               ],
         marker: {
           enabled: true,
@@ -66,6 +66,48 @@ describe LazyHighCharts::LayoutHelper do
     @chart = Daru::View::Plot.new
     @chart.chart.options = @opts;
     @chart.chart.series_data = @series_dt
+
+    @opts_map = {
+      chart_class: 'map',
+      chart: {
+        map: 'custom/europe',
+        borderWidth: 1
+      },
+
+      title: {
+        text: 'Nordic countries'
+      },
+
+      subtitle: {
+        text: 'Demo of drawing all areas in the map, only highlighting partial data'
+      },
+
+      legend: {
+        enabled: false
+      }
+    }
+    @series_dt_map = [{
+      name: 'Country',
+      data: [
+        ['is', 1],
+        ['no', 1],
+        ['se', 1],
+        ['dk', 1],
+        ['fi', 1]
+      ],
+      dataLabels: {
+        enabled: true,
+        color: '#FFFFFF',
+        formatter: 'function () {
+            if (this.point.value) {
+                return this.point.name;
+            }
+        }'.js_code
+      }
+    }]
+    @map = Daru::View::Plot.new
+    @map.chart.options = @opts_map;
+    @map.chart.series_data = @series_dt_map
   end
 
   context "layout_helper" do
@@ -75,6 +117,11 @@ describe LazyHighCharts::LayoutHelper do
         @placeholder,
         @chart.chart)
       ).to match(/<div id="placeholder">/i)
+      expect(@map.chart.high_chart_iruby(
+        "Map",
+        @placeholder,
+        @map.chart)
+      ).to match(/<div id="placeholder">/i)
     end
 
     it "should return a script" do
@@ -82,6 +129,11 @@ describe LazyHighCharts::LayoutHelper do
         "StockChart",
         @placeholder,
         @chart.chart)
+      ).to match(/script/i)
+      expect(@chart.chart.high_chart_iruby(
+        "Map",
+        @placeholder,
+        @map.chart)
       ).to match(/script/i)
     end
   end
@@ -93,6 +145,13 @@ describe LazyHighCharts::LayoutHelper do
           "StockChart",
           @placeholder,
           @chart.chart)
+        ).to match(/<script type="text\/javascript">/i)
+      end
+      it "should be a javascript script" do
+        expect(@map.chart.high_chart_iruby(
+        	"Map",
+        	@placeholder,
+        	@map.chart)
         ).to match(/<script type="text\/javascript">/i)
       end
     end
@@ -131,38 +190,45 @@ describe LazyHighCharts::LayoutHelper do
           @chart.chart)
         ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
       end
+      it "should set Chart Map" do
+        expect(@chart.chart.high_chart_iruby(
+          "Map",
+          @placeholder,
+          @chart.chart)
+        ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Map/)
+      end
       it "should set correct options" do
-      	expect(@chart.chart.high_chart_iruby(
+        expect(@chart.chart.high_chart_iruby(
           "StockChart",
           @placeholder,
           @chart.chart)
         ).to match(/series\": \[\{ \"name\": \"AAPL Stock Price\"/)
-		    expect(@chart.chart.high_chart_iruby(
+        expect(@chart.chart.high_chart_iruby(
           "StockChart",
           @placeholder,
           @chart.chart)
         ).to match(/\"data\": \[ \[ 1147651200000,67.79 \]/)
-		    expect(@chart.chart.high_chart_iruby(
+        expect(@chart.chart.high_chart_iruby(
           "StockChart",
           @placeholder,
           @chart.chart)
         ).to match(/\"title\": \{ \"text\": \"AAPL Stock Price\" \}/)
-		    expect(@chart.chart.high_chart_iruby(
+        expect(@chart.chart.high_chart_iruby(
           "StockChart",
           @placeholder,
           @chart.chart)
         ).to match(/\"chart\": \{ \"type\": \"arearange\"/)
-		    expect(@chart.chart.high_chart_iruby(
+        expect(@chart.chart.high_chart_iruby(
           "StockChart",
           @placeholder,
           @chart.chart)
         ).to match(/\"marker\": \{ \"enabled\": true/)
-		    expect(@chart.chart.high_chart_iruby(
+        expect(@chart.chart.high_chart_iruby(
           "StockChart",
           @placeholder,
           @chart.chart)
         ).to match(/\"shadow\": true/)
-		    expect(@chart.chart.high_chart_iruby(
+        expect(@chart.chart.high_chart_iruby(
           "StockChart",
           @placeholder,
           @chart.chart)
@@ -194,13 +260,13 @@ describe LazyHighCharts::LayoutHelper do
         type: "spline"
       },
       xAxis: {
-          categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+        categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
       },
       yAxis: {
-          min: 0,
-          title: {
-              text: 'Total fruit consumption'
-          }
+        min: 0,
+        title: {
+          text: 'Total fruit consumption'
+        }
       },
       rangeSelector: {
         selected: 1
@@ -236,7 +302,7 @@ describe LazyHighCharts::LayoutHelper do
     @chart_class = "Chart"
     @options = {
       chart: {
-       type: "bar"
+        type: "bar"
       },
       positioner: "function () { return { x: 0, y: 250 }; }".js_code
     }
@@ -259,7 +325,7 @@ describe LazyHighCharts::LayoutHelper do
       plot_options: {
         bar: {
           data_labels: {
-              enabled: true
+            enabled: true
           }
         }
       }
@@ -299,5 +365,22 @@ describe LazyHighCharts::LayoutHelper do
       @placeholder,
       @hc.chart)
     ).to match(/"formatter": function\(\) {\ return this.x;\ }/)
+  end
+
+  describe "#high_map" do
+    it "should generate valid js code" do
+      expect(@map.chart.high_map(
+        @placeholder, @map.chart)
+      ).to match(/\"chart\": { \"map\": \"custom\/europe\"/)
+      expect(@map.chart.high_map(
+        @placeholder, @map.chart)
+      ).to match(/\"title\": { \"text\": \"Nordic countries\"/)
+      expect(@map.chart.high_map(
+        @placeholder, @map.chart)
+      ).to match(/\"legend\": { \"enabled\": false }/)
+      expect(@map.chart.high_map(
+        @placeholder, @map.chart)
+      ).to match(/\"data\": \[ \[ \"is\",1 \]/)
+    end
   end
 end
