@@ -126,47 +126,31 @@ describe LazyHighCharts::HighChart do
       @chart.chart.options = @opts;
       @chart.chart.series_data = @series_dt
 
-      @opts_map = {
-        chart_class: 'map',
-        chart: {
-          map: 'custom/europe',
-          borderWidth: 1
-        },
-
-        title: {
-            text: 'Nordic countries'
-        },
-
-        subtitle: {
-            text: 'Demo of drawing all areas in the map, only highlighting partial data'
-        },
-
-        legend: {
-            enabled: false
-        }
+    @opts_map = {
+      chart_class: 'map',
+      chart: {
+        map: 'custom/europe',
+        borderWidth: 1
+      },
+      modules: ['europe.js'],
+      title: {
+        text: 'Nordic countries'
+      },
+      subtitle: {
+        text: 'Demo of drawing all areas in the map, only highlighting partial data'
+      },
+      legend: {
+        enabled: false
       }
-      @series_dt_map = [{
-        name: 'Country',
-        data: [
-            ['is', 1],
-            ['no', 1],
-            ['se', 1],
-            ['dk', 1],
-            ['fi', 1]
-        ],
-        dataLabels: {
-            enabled: true,
-            color: '#FFFFFF',
-            formatter: 'function () {
-                if (this.point.value) {
-                    return this.point.name;
-                }
-            }'.js_code
-        }
-      }]
-      @map = Daru::View::Plot.new
-      @map.chart.options = @opts_map;
-      @map.chart.series_data = @series_dt_map
+    }
+    @df = Daru::DataFrame.new(
+      {
+        countries: ['is', 'no', 'se', 'dk', 'fi'],
+        data: [1, 1, 1, 1, 1]
+      },
+        index: [:one, :two, :three, :four, :five]
+    )
+    @map = Daru::View::Plot.new(@df, @opts_map)
     end
     it "should plot HighMap when chart_class is set to map" do
       @hc.options[:chart_class] = "Map";
