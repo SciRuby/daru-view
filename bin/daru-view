@@ -3,7 +3,7 @@
 require 'optparse'
 require 'rake'
 
-path = File.expand_path('../lib/daru',__dir__)
+Dir.chdir File.expand_path('..',__dir__)
 
 parser = OptionParser.new do |opts|
   opts.banner = "Usage: daru-view [options]"
@@ -28,16 +28,15 @@ parser = OptionParser.new do |opts|
 end
 
 def update(type)
-  app = Rake.application
+  path = File.expand_path('../lib/tasks',__dir__)
+  app  = Rake.application
   app.init
   case type
   when :googlecharts
-    app.add_import File.expand_path('../lib/tasks/google_charts.rake',__dir__)
-    app.load_rakefile
+    app.rake_require 'google_charts', paths = [path]
     app['googlecharts:update'].invoke
   when :highcharts
-    app.add_import File.expand_path('../lib/tasks/google_charts.rake',__dir__)
-    app.load_rakefile
+    app.rake_require 'high_charts', paths = [path]
     app['highcharts:update'].invoke
   end
 end
