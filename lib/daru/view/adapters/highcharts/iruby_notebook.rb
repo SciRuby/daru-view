@@ -18,6 +18,9 @@ module LazyHighCharts
     # Highstock.js includes the highcharts.js, so only one of them required.
     # see: https://www.highcharts.com/errors/16
     #
+    # Using Highmaps as a plugin for HighCharts so using map.js instead of
+    # highmaps.js
+    #
     # , 'modules/exporting.js' : for the exporting button
     # data.js for getting data as csv or html table.
     # 'highcharts-more.js' : for arearange and some other chart type
