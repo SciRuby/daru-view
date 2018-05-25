@@ -33,7 +33,7 @@ module LazyHighCharts
     #
     def to_html(placeholder=random_canvas_id)
       chart_hash_must_be_present
-      script = load_modules
+      script = load_modules('web_frameworks')
       # Helps to denote either of the three classes.
       chart_class = extract_chart_class
       # When user wants to plot a HighMap
@@ -49,17 +49,9 @@ module LazyHighCharts
       script
     end
 
-    # @return the script of dependent modules of the chart
-    def load_modules
-      init = ''
-      init = LazyHighCharts.init_script(options.delete(:modules).collect { |module_js| 'modules/' + module_js }) unless
-      options[:modules].nil?
-      init
-    end
-
     def show_in_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
-      load_modules_iruby
+      load_modules('iruby')
       IRuby.html to_html_iruby(placeholder)
     end
 
@@ -72,10 +64,15 @@ module LazyHighCharts
       high_chart_iruby(extract_chart_class, placeholder, self)
     end
 
-    # @return load the dependent modules of the chart in IRuby notebook
-    def load_modules_iruby
-      LazyHighCharts.init_iruby(options.delete(:modules).collect { |module_js| 'modules/' + module_js }) unless
+    # @return load the dependent modules of the chart
+    def load_modules(type)
+      modules = options.delete(:modules).collect { |module_js| 'modules/' + module_js } unless
       options[:modules].nil?
+      if type == 'iruby'
+        LazyHighCharts.init_iruby(modules) unless modules.nil?
+      elsif type == 'web_frameworks'
+        modules.nil? ? '' : LazyHighCharts.init_script(modules)
+      end
     end
 
     # @return [String] the class of the chart

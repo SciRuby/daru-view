@@ -260,10 +260,14 @@ describe LazyHighCharts::HighChart do
 
   describe "#load_modules" do
     it "should load correct modules of the chart" do
-      expect(map.chart.load_modules).to match(/BEGIN modules\/europe.js/)
+      expect(map.chart.load_modules(
+        'web_frameworks')
+      ).to match(/BEGIN modules\/europe.js/)
     end
     it "should load correct modules of the chart" do
-      expect(map.chart.load_modules).to match(/END modules\/europe.js/)
+      expect(map.chart.load_modules(
+        'web_frameworks')
+      ).to match(/END modules\/europe.js/)
     end
   end
 
