@@ -356,6 +356,11 @@ describe LazyHighCharts::HighChart do
         @placeholder)
       ).to match(/#placeholder .highcharts-background {fill/)
     end
+    it "return the correct css of the chart" do
+      expect(@hc.chart.high_chart_css(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-color-1 {/)
+    end
   end
 
   describe "#chart_hash_must_be_present" do
