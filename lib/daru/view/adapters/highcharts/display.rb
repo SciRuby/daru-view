@@ -14,14 +14,15 @@ module LazyHighCharts
     #
     # Note: Don't reorder the dependent_js elements. It must be loaded in
     # the same sequence. Otherwise some of the JS overlap and doesn't work.
-    js =  ''
-    js << "\n<style type='text/css'>"
-    js << LazyHighCharts.generate_init_code_css(dependent_css)
-    js << "\n</style>"
+    css =  ''
+    css << "\n<style type='text/css'>"
+    css << LazyHighCharts.generate_init_code_css(dependent_css)
+    css << "\n</style>"
+    js = ''
     js << "\n<script type='text/javascript'>"
     js << LazyHighCharts.generate_init_code(dependent_js)
     js << "\n</script>"
-    js
+    css + js
   end
 
   class HighChart
