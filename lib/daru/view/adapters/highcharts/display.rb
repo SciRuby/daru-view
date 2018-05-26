@@ -64,7 +64,12 @@ module LazyHighCharts
       high_chart_iruby(extract_chart_class, placeholder, self)
     end
 
-    # @return load the dependent modules of the chart
+    # Loads the dependent modules of the chart
+    #
+    # @param [String] to determine whether to load modules in IRuby or web
+    #   frameworks
+    # @return [void, String] loads the initial script of the modules for IRuby
+    #   notebook and returns initial script of the modules for web frameworks
     def load_modules(type)
       modules = options.delete(:modules).collect { |module_js| 'modules/' + module_js } unless
       options[:modules].nil?
