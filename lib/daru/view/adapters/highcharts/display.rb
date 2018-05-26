@@ -3,9 +3,12 @@ require_relative 'iruby_notebook'
 require 'daru/view/constants'
 
 module LazyHighCharts
+  # Loads the dependent javascript required
+  #
+  # @param [Array] dependent js files required
+  # @return [String] js code of the dependent files
   def self.init_script(
-    dependent_js=HIGHCHARTS_DEPENDENCIES,
-    dependent_css=['highcharts.css']
+    dependent_js=HIGHCHARTS_DEPENDENCIES
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
@@ -14,15 +17,25 @@ module LazyHighCharts
     #
     # Note: Don't reorder the dependent_js elements. It must be loaded in
     # the same sequence. Otherwise some of the JS overlap and doesn't work.
-    css =  ''
-    css << "\n<style type='text/css'>"
-    css << LazyHighCharts.generate_init_code_css(dependent_css)
-    css << "\n</style>"
     js = ''
     js << "\n<script type='text/javascript'>"
     js << LazyHighCharts.generate_init_code(dependent_js)
     js << "\n</script>"
-    css + js
+    js
+  end
+
+  # Loads the dependent css required in styled mode
+  #
+  # @param [Array] dependent css files required
+  # @return [String] CSS code of the dependent file(s)
+  def self.init_css(
+    dependent_css=['highcharts.css']
+  )
+    css =  ''
+    css << "\n<style type='text/css'>"
+    css << LazyHighCharts.generate_init_code_css(dependent_css)
+    css << "\n</style>"
+    css
   end
 
   class HighChart

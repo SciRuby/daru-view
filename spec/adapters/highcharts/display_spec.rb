@@ -28,6 +28,13 @@ describe LazyHighCharts do
         /console.log\(\"Finish loading highchartsjs\"\)/i)
     end
   end
+  describe "#init_css" do
+    it "generates valid initial css" do
+      css = LazyHighCharts.init_css
+      expect(css).to match(/BEGIN highcharts.css/i)
+      expect(css).to match(/END highcharts.css/i)
+    end
+  end
 end
 
 describe LazyHighCharts::HighChart do

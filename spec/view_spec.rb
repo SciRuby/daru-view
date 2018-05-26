@@ -44,4 +44,23 @@ describe Daru::View, "Daru::View class basic methods" do
     end
   end
 
+  context "#dependent_script" do
+    it "should generate valid dependent script of highcharts" do
+      script = Daru::View.dependent_script(:highcharts)
+      expect(script).to match(/BEGIN highcharts.css/i)
+      expect(script).to match(/END highcharts.css/i)
+      expect(script).to match(/BEGIN js\/highstock.js/i)
+      expect(script).to match(/Highstock JS/i)
+      expect(script).to match(/END js\/highstock.js/i)
+      expect(script).to match(/BEGIN highcharts-more.js/i)
+      expect(script).to match(/END highcharts-more.js/i)
+      expect(script).to match(/BEGIN modules\/exporting.js/i)
+      expect(script).to match(/END modules\/exporting.js/i)
+      expect(script).to match(/BEGIN highcharts-3d.js/i)
+      expect(script).to match(/END highcharts-3d.js/i)
+      expect(script).to match(/BEGIN modules\/data.js/i)
+      expect(script).to match(/END modules\/data.js/i)
+    end
+  end
+
 end
