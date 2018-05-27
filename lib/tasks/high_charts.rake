@@ -18,7 +18,7 @@ namespace :highcharts do
       sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/adapters/"
 
       sh "curl -# http://code.highcharts.com/highcharts.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/highcharts.js"
-      sh "curl -# http://code.highcharts.com/highcharts-more.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/modules/highcharts-more.js"
+      sh "curl -# http://code.highcharts.com/highcharts-more.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/highcharts-more.js"
       sh "curl -# http://code.highcharts.com/highcharts-3d.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/highcharts-3d.js"
 
       # Modules
@@ -52,7 +52,7 @@ namespace :highcharts do
       sh "curl -# http://code.highcharts.com/stock/highstock.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/highstock.js"
       sh "curl -# http://code.highcharts.com/stock/highcharts-more.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/highcharts-more.js"
       sh "curl -# http://code.highcharts.com/stock/modules/exporting.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/modules/exporting.js"
-      sh "curl -# http://code.highcharts.com/stock/modules/funnel.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/modules/funnel.js"
+      sh "curl -# http://code.highcharts.com/stock/modules/funnel.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/modules/funnel.js"
       sh "curl -# http://code.highcharts.com/stock/adapters/mootools-adapter.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/adapters/mootools-adapter.js"
       sh "curl -# http://code.highcharts.com/stock/adapters/prototype-adapter.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/adapters/prototype-adapter.js"
     end
@@ -61,12 +61,27 @@ namespace :highcharts do
   task :map do
     say "Grabbing HighMaps JS from Upstream..." do
 
-      sh "curl -# http://code.highcharts.com/maps/highmaps.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/highmaps.js"
+      sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/mapdata/countries/"
+      sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/mapdata/custom/"
+
+      countries_folders = ['in', 'us', 'gb', 'af', 'au', 'bd', 'be', 'ca', 'cn', 'fr']
+      countries_folders.each do |country|
+        sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/mapdata/countries/" + country
+      end
+      sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/mapdata/countries/in/custom"
+
+      custom_areas = ['europe.js', 'world.js']
+      custom_areas.each do |custom_area|
+        sh "curl -# http://code.highcharts.com/mapdata/custom/" + custom_area + " -L --compressed -o lib/daru/view/adapters/js/highcharts_js/mapdata/custom/" + custom_area
+      end
+
+      countries_dependencies = ['in-all.js', 'us-all.js', 'gb-all.js', 'af-all.js', 'au-all.js', 'bd-all.js', 'be-all.js', 'ca-all.js', 'cn-all.js', 'fr-all.js']
+      countries_dependencies.each do |dep|
+        sh "curl -# http://code.highcharts.com/mapdata/countries/" + dep[0,2] + "/" + dep + " -L --compressed -o lib/daru/view/adapters/js/highcharts_js/mapdata/countries/"  + dep[0,2] + "/" + dep
+      end
+
       sh "curl -# http://code.highcharts.com/maps/modules/map.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/map.js"
-      sh "curl -# http://code.highcharts.com/mapdata/countries/us/us-all.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/modules/us-all.js"
-      sh "curl -# http://code.highcharts.com/mapdata/countries/gb/gb-all.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/modules/gb-all.js"
-      sh "curl -# http://code.highcharts.com/mapdata/custom/europe.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/modules/europe.js"
-      sh "curl -# http://code.highcharts.com/mapdata/custom/world.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/modules/world.js"
+      sh "curl -# http://code.highcharts.com/mapdata/countries/in/custom/in-all-andaman-and-nicobar.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/mapdata/countries/in/custom/in-all-andaman-and-nicobar.js"
     end  
   end
 

@@ -1,10 +1,10 @@
 require_relative 'layout_helper_iruby'
 require_relative 'iruby_notebook'
+require 'daru/view/constants'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=['highstock.js', 'map.js', 'modules/exporting.js',
-                  'highcharts-3d.js', 'modules/data.js']
+    dependent_js=[HIGHSTOCK, MAP, EXPORTING, HIGHCHARTS_3D, DATA]
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
@@ -33,7 +33,7 @@ module LazyHighCharts
     #
     def to_html(placeholder=random_canvas_id)
       chart_hash_must_be_present
-      script = load_modules('web_frameworks')
+      script = load_dependencies('web_frameworks')
       # Helps to denote either of the three classes.
       chart_class = extract_chart_class
       # When user wants to plot a HighMap
@@ -51,7 +51,7 @@ module LazyHighCharts
 
     def show_in_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
-      load_modules('iruby')
+      load_dependencies('iruby')
       IRuby.html to_html_iruby(placeholder)
     end
 
@@ -64,21 +64,46 @@ module LazyHighCharts
       high_chart_iruby(extract_chart_class, placeholder, self)
     end
 
-    # Loads the dependent modules of the chart
+    # Loads the dependent mapdata and dependent modules of the chart
     #
     # @param [String] to determine whether to load modules in IRuby or web
     #   frameworks
     # @return [void, String] loads the initial script of the modules for IRuby
     #   notebook and returns initial script of the modules for web frameworks
-    def load_modules(type)
-      modules = options.delete(:modules).collect { |module_js| 'modules/' + module_js } unless
-      options[:modules].nil?
+    def load_dependencies(type)
+      dep_js = extract_dependencies
       if type == 'iruby'
-        LazyHighCharts.init_iruby(modules) unless modules.nil?
+        LazyHighCharts.init_iruby(dep_js) unless dep_js.nil?
       elsif type == 'web_frameworks'
-        modules.nil? ? '' : LazyHighCharts.init_script(modules)
+        dep_js.nil? ? '' : LazyHighCharts.init_script(dep_js)
       end
     end
+
+    # Extracts the required dependencies for the chart. User does not need
+    #   to provide any mapdata requirement explicity in the `options`.
+    #   MapData will be extracted using `options[:chart][:map]` already
+    #   provided by the user. In `modules` user needs to provide the required
+    #   modules (like tilemap in highcharts) in the form of Array. Once the
+    #   dependency is loaded on a page, there is no need to provide it again in
+    #   the `modules` option.
+    #
+    # @return [Array] the required dependencies (mapdata or modules)
+    #   to load the chart
+    # rubocop:disable Metrics/AbcSize
+    def extract_dependencies
+      dep_js = []
+      # Mapdata dependencies
+      if !options[:chart_class].nil? && options[:chart_class].capitalize == 'Map'
+        dep_js.push('mapdata/' + options[:chart][:map].to_s + '.js') if
+        options[:chart] && options[:chart][:map]
+      end
+      # Dependencies provided in modules option (of highcharts mainly
+      #   like tilemap) by the user
+      dep_js |= options.delete(:modules).map! { |js| "#{js}.js" } unless
+      options[:modules].nil?
+      dep_js
+    end
+    # rubocop:enable Metrics/AbcSize
 
     # @return [String] the class of the chart
     def extract_chart_class

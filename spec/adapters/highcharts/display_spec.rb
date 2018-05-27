@@ -35,6 +35,7 @@ describe LazyHighCharts::HighChart do
       chart: {
         type: 'bar'
       },
+      modules: ['modules/treemap'],
       title: {
         text: 'Bar chart'
       },
@@ -62,7 +63,6 @@ describe LazyHighCharts::HighChart do
       map: 'custom/europe',
       borderWidth: 1
     },
-    modules: ['europe.js'],
     title: {
       text: 'Nordic countries'
     },
@@ -94,7 +94,7 @@ describe LazyHighCharts::HighChart do
           chart: {
             type: 'arearange'
           },
-          modules: ['highcharts-more.js'],
+          modules: ['highcharts-more'],
           rangeSelector: {
               selected: 1
           },
@@ -191,18 +191,18 @@ describe LazyHighCharts::HighChart do
       #   another example
       expect(@chart.chart.to_html(
         @placeholder)
-      ).to match(/BEGIN modules\/highcharts-more.js/)
+      ).to match(/BEGIN highcharts-more.js/)
       expect(map.chart.to_html(
         @placeholder)
-      ).to match(/BEGIN modules\/europe.js/)
+      ).to match(/BEGIN mapdata\/custom\/europe.js/)
     end
     it "should load the script of dependent modules" do
       expect(@chart.chart.to_html(
         @placeholder)
-      ).to match(/END modules\/highcharts-more.js/)
+      ).to match(/END highcharts-more.js/)
       expect(map.chart.to_html(
         @placeholder)
-      ).to match(/END modules\/europe.js/)
+      ).to match(/END mapdata\/custom\/europe.js/)
     end
     it "should take a block setting attributes" do
       expect(@chart.chart.options[:rangeSelector][:selected]).to eq(1)
@@ -258,16 +258,23 @@ describe LazyHighCharts::HighChart do
     end
   end
 
-  describe "#load_modules" do
-    it "should load correct modules of the chart" do
-      expect(map.chart.load_modules(
+  describe "#load_dependencies" do
+    it "should load correct dependencies of the chart" do
+      expect(map.chart.load_dependencies(
         'web_frameworks')
-      ).to match(/BEGIN modules\/europe.js/)
+      ).to match(/BEGIN mapdata\/custom\/europe.js/)
     end
-    it "should load correct modules of the chart" do
-      expect(map.chart.load_modules(
+    it "should load correct dependencies of the chart" do
+      expect(map.chart.load_dependencies(
         'web_frameworks')
-      ).to match(/END modules\/europe.js/)
+      ).to match(/END mapdata\/custom\/europe.js/)
+    end
+  end
+
+  describe "#extract_dependencies" do
+    it "should extract correct dependencies of the chart" do
+      expect(map.chart.extract_dependencies).to eq ['mapdata/custom/europe.js']
+      expect(@hc.chart.extract_dependencies).to eq ['modules/treemap.js']
     end
   end
 

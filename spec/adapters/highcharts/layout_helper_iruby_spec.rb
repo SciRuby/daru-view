@@ -12,6 +12,7 @@ describe LazyHighCharts::LayoutHelper do
         chart: {
           type: 'arearange'
         },
+        modules: ['highcharts-more'],
         rangeSelector: {
           selected: 1
         },
