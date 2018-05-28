@@ -4,7 +4,15 @@ MAP = 'map.js'.freeze
 EXPORTING = 'modules/exporting.js'.freeze
 HIGHCHARTS_3D = 'highcharts-3d.js'.freeze
 DATA = 'modules/data.js'.freeze
-HIGHCHARTS_DEPENDENCIES = [HIGHSTOCK, MAP, EXPORTING, HIGHCHARTS_3D, DATA].freeze
+OFFLINE_EXPORTING = 'modules/offline-exporting.js'.freeze
+
+# HighCharts IRuby notebook dependencies
+HIGHCHARTS_DEPENDENCIES_IRUBY = [HIGHSTOCK, MAP, EXPORTING, HIGHCHARTS_3D,
+                                 DATA].freeze
+
+# HighCharts Web Frameworks dependencies
+HIGHCHARTS_DEPENDENCIES_WEB = [HIGHSTOCK, MAP, EXPORTING,
+                               HIGHCHARTS_3D, DATA, OFFLINE_EXPORTING].freeze
 
 # Regex pattern to match a valid URL
 PATTERN_URL = Regexp.new(

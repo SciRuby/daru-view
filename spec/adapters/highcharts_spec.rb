@@ -447,4 +447,17 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       expect(html).to match(/series": \[\[ 1,15 \],\[ 2,30 \],\[ 4,40 \]\]/)
     end
   end
+
+  describe "#export" do
+    it "should generate the valid script to export the chart" do
+      js = @chart_bar.adapter.export(@chart_bar.chart, 'png')
+      expect(js).to match(/\s+new\s+Highcharts.Chart/)
+      expect(js).to match(/var\s+options\s+=/)
+      expect(js).to match(/window.chart_/)
+      expect(js).to match(/\"chart\": \{ \"type\": \"bar\"/)
+      expect(js).to match(/script/)
+      expect(js).to match(/image\/png/)
+      expect(js).to match(/chart.exportChartLocal/)
+    end
+  end
 end

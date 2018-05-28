@@ -70,6 +70,21 @@ module Daru
           File.write(path, str)
         end
 
+        # Expoting in web frameforks is completely offline. In IRuby notebook,
+        #   offline-export supports only the exporting to png, jpeg and svg format.
+        #   Export to PDF is not working (not even through the exporting button in
+        #   highchart). So, online exporting is done in IRuby notebook. There is a
+        #   problem in online exporting that if we run-all all the cells of IRuby
+        #   notebook then only the last chart will be exported. Individually,
+        #   running the cells works fine.
+        #
+        # @see #Daru::View::Plot.export
+        def export(plot, export_type='png', file_name='chart')
+          plot.export_iruby(export_type, file_name) if defined? IRuby
+        rescue NameError
+          plot.export(export_type, file_name)
+        end
+
         def show_in_iruby(plot)
           plot.show_in_iruby
         end

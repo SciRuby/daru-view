@@ -77,6 +77,18 @@ module Daru
         @adapter.export_html_file(@chart, path)
       end
 
+      # @param type [String] format to which chart has to be exported
+      # @param file_name [String] The name of the file after exporting the chart
+      # @return [String, void] js code of chart along with the code to export it
+      #   and loads the js code to export it in IRuby.
+      # @example Export a HighChart
+      #   data = Daru::Vector.new([5 ,3, 4])
+      #   hchart = Daru::View::Plot.new(data)
+      #   hchart.export('png', 'daru')
+      def export(export_type='png', file_name='chart')
+        @adapter.export(@chart, export_type, file_name)
+      end
+
       # load the corresponding JS files in IRuby notebook.
       # This is done automatically when plotting library is set using
       # Daru::View.plotting_library = :new_library
