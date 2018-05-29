@@ -51,6 +51,13 @@ getElementById\(\'id\'\)/i)
     end
   end
 
+  describe "#query_response_function_name" do
+    it "should generate unique function name to handle query response" do
+      func = data_table.table.query_response_function_name('i-d')
+      expect(func).to eq('handleQueryResponse_i_d')
+    end
+  end
+
   describe "#load_js" do
   	it "loads valid packages" do
     js = data_table.table.load_js('id')

@@ -83,7 +83,8 @@ module GoogleVisualr
   class DataTable
     # Holds a value only when generate_body or show_in_iruby method
     #   is invoked in googlecharts.rb
-    # Data of GoogleVisualr DataTable
+    # @return [Array, Daru::DataFrame, Daru::Vector, String] Data of
+    #   GoogleVisualr DataTable
     attr_accessor :data
     include Display
   end
@@ -91,7 +92,8 @@ module GoogleVisualr
   class BaseChart
     # Holds a value only when generate_body or show_in_iruby method
     #   is invoked in googlecharts.rb
-    # Data of GoogleVisualr Chart
+    # @return [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
+    #   Data of GoogleVisualr Chart
     attr_accessor :data
     include Display
 

@@ -124,8 +124,9 @@ getElementById\(\'id\'\)/i)
 google.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gvi\
 z\/tq\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
       expect(chart_script).to match(/var data_table = response.getDataTable/i)
-      expect(chart_script).to match(/google.visualization.ColumnChart\(document.\
-getElementById\(\'id\'\)/i)
+      expect(chart_script).to match(
+        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+      )
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
     it "generates valid script of the data_table without script tag" do
@@ -169,8 +170,9 @@ getElementById\(\'id\'\)/i)
 .com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\?\
 gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
       expect(chart_script).to match(/var data_table = response.getDataTable/i)
-      expect(chart_script).to match(/google.visualization.ColumnChart\(document.\
-getElementById\(\'id\'\)/i)
+      expect(chart_script).to match(
+        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+      )
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
   end
@@ -189,6 +191,13 @@ describe GoogleVisualr::BaseChart do
                         )
   end
 
+  describe "#query_response_function_name" do
+    it "should generate unique function name to handle query response" do
+      func = @plot_spreadsheet.chart.query_response_function_name('i-d')
+      expect(func).to eq('handleQueryResponse_i_d')
+    end
+  end
+
   describe "#to_js_spreadsheet" do
     it "generates valid JS of the chart when "\
        "data is imported from google spreadsheets" do
@@ -199,8 +208,9 @@ describe GoogleVisualr::BaseChart do
 .com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\
 \?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
       expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(/google.visualization.ColumnChart\(document.\
-getElementById\(\'id\'\)/i)
+      expect(js).to match(
+        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+      )
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
   end
@@ -213,8 +223,9 @@ getElementById\(\'id\'\)/i)
 .com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\?\
 gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
       expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(/google.visualization.ColumnChart\(document.\
-getElementById\(\'id\'\)/i)
+      expect(js).to match(
+        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+      )
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
   end
