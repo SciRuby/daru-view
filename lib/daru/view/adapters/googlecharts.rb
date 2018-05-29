@@ -3,7 +3,6 @@ require_relative 'googlecharts/iruby_notebook'
 require_relative 'googlecharts/display'
 require 'daru'
 require 'bigdecimal'
-require 'uri'
 
 module Daru
   module View
@@ -15,13 +14,14 @@ module Daru
         # the google charts option concept.
         # and google_visualr : http://googlevisualr.herokuapp.com/
         #
-        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
-        #   The data provided by the user to generate the google chart. Data in String
-        #   format represents the URL of the google spreadsheet from which data has to
-        #   invoked.
-        # @param options [Hash] Various options provided by the user to incorporate in
-        #   google charts.
-        # @return [GoogleVisualr::Interactive] Returns the chart object based on the chart_type.
+        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table,
+        #   String] The data provided by the user to generate the google chart.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @param options [Hash] Various options provided by the user to
+        #   incorporate in google charts
+        # @return [GoogleVisualr::Interactive] Returns the chart object based
+        #   on the chart_type
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data) unless data.is_a?(String)
@@ -34,12 +34,12 @@ module Daru
         end
 
         # @param data [Array, Daru::DataFrame, Daru::Vector, String]
-        #   The data provided by the user to generate the google datatable. Data in String
-        #   format represents the URL of the google spreadsheet from which data has to
-        #   invoked.
-        # @param options [Hash] Various options provided by the user to incorporate in
-        #   google datatables.
-        # @return [GoogleVisualr::DataTable] Returns the table object.
+        #   The data provided by the user to generate the google datatable.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @param options [Hash] Various options provided by the user to
+        #   incorporate in google datatables
+        # @return [GoogleVisualr::DataTable] Returns the table object
         def init_table(data=[], options={})
           # if `options` is something like this :
           # {
@@ -60,6 +60,11 @@ module Daru
           @table
         end
 
+        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table]
+        #   The data provided by the user to generate the google datatable.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @return [GoogleVisualr::DataTable] the table object will the data filled
         def get_table(data)
           if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
             data.table
