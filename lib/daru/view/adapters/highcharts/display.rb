@@ -85,7 +85,9 @@ module LazyHighCharts
       script
     end
 
-    # return [String] css code of the chart
+    # @param placeholder [String] ID of the div in which highchart has to
+    #   rendered
+    # @return [String] css code of the chart
     def high_chart_css(placeholder)
       # contains the css provided by the user as a String array
       css_data = options[:css].nil? ? '' : option.delete(:css)
