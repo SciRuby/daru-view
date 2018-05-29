@@ -85,6 +85,10 @@ module GoogleVisualr
     attr_accessor :data
     include Display
 
+    def query_response_function_name(element_id)
+      "handleQueryResponse_#{element_id.tr('-', '_')}"
+    end
+
     # Generates JavaScript when data is imported from spreadsheet and renders
     # the Google Chart in the final HTML output.
     #
@@ -115,9 +119,9 @@ module GoogleVisualr
       js = ''
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n  var query = new google.visualization.Query('#{data}');"
-      js << "\n  query.send(handleQueryResponse);"
+      js << "\n  query.send(#{query_response_function_name(element_id)});"
       js << "\n  }"
-      js << "\n  function handleQueryResponse(response) {"
+      js << "\n  function #{query_response_function_name(element_id)}(response) {"
       js << "\n  var data_table = response.getDataTable();"
       js << "\n  var chart = new google.#{chart_class}.#{chart_name}"\
             "(document.getElementById('#{element_id}'));"

@@ -24,7 +24,7 @@ module Daru
         # @return [GoogleVisualr::Interactive] Returns the chart object based on the chart_type.
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
-          @table = get_table(data)
+          @table = get_table(data) unless data.is_a?(String)
           @chart_type = extract_chart_type(options)
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
@@ -56,7 +56,7 @@ module Daru
           # then directly DatTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
           @table.data = data
-          add_data_in_table(data)
+          add_data_in_table(data) unless data.is_a?(String)
           @table
         end
 
@@ -65,13 +65,6 @@ module Daru
             data.table
           elsif data.is_a?(GoogleVisualr::DataTable)
             data
-          elsif data.is_a?(String)
-            begin
-              URI.parse(data)
-              return GoogleVisualr::DataTable.new
-            rescue URI::InvalidURIError
-              return
-            end
           else
             add_data_in_table(data)
           end
@@ -133,16 +126,9 @@ module Daru
         # data rows
         #
         # TODO : Currently I didn't find use case for multi index.
-        # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+        # rubocop:disable Metrics/MethodLength
         def add_data_in_table(data_set)
           case
-          when data_set.is_a?(String)
-            begin
-              URI.parse(data_set)
-              return
-            rescue URI::InvalidURIError
-              return
-            end
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
             rows = add_dataframe_data(data_set)
@@ -160,7 +146,7 @@ module Daru
           @table.add_rows(rows)
           @table
         end
-        # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+        # rubocop:enable Metrics/MethodLength
 
         def add_dataframe_data(data_set)
           rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)

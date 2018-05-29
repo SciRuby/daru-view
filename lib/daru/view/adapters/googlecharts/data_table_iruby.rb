@@ -64,6 +64,10 @@ module GoogleVisualr
       "draw_#{element_id.tr('-', '_')}"
     end
 
+    def query_response_function_name(element_id)
+      "handleQueryResponse_#{element_id.tr('-', '_')}"
+    end
+
     def google_table_version
       '1.0'.freeze
     end
@@ -117,9 +121,9 @@ module GoogleVisualr
       js = ''
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n  var query = new google.visualization.Query('#{data}');"
-      js << "\n  query.send(handleQueryResponse);"
+      js << "\n  query.send(#{query_response_function_name(element_id)});"
       js << "\n  }"
-      js << "\n  function handleQueryResponse(response) {"
+      js << "\n  function #{query_response_function_name(element_id)}(response) {"
       js << "\n  var data_table = response.getDataTable();"
       js << "\n  var table = new google.visualization.Table"\
             "(document.getElementById('#{element_id}'));"
