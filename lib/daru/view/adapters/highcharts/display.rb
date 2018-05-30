@@ -4,7 +4,7 @@ require 'daru/view/constants'
 
 module LazyHighCharts
   def self.init_script(
-    dependent_js=[HIGHSTOCK, MAP, EXPORTING, HIGHCHARTS_3D, DATA]
+    dependent_js=HIGHCHARTS_DEPENDENCIES
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So

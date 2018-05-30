@@ -11,7 +11,7 @@ module LazyHighCharts
 
   # Enable to show plots on IRuby notebook
   def self.init_iruby(
-    dependent_js=[HIGHSTOCK, MAP, EXPORTING, HIGHCHARTS_3D, DATA]
+    dependent_js=HIGHCHARTS_DEPENDENCIES
   )
     # TODO: include highstock.js for highstock and modules/*.js files for
     # exporting and getting data from various source like csv files etc.
