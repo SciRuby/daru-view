@@ -29,8 +29,6 @@ module Daru
         # @param [Array/Daru::DataFrame/Daru::Vector] data
         #
         def init(data=[], options={})
-          data_new = guess_data(data)
-          # TODO : for multiple series need some modification
           # Alternate way is using `add_series` method.
           #
           # There are many options present in Highcharts so it is better to use
@@ -42,10 +40,14 @@ module Daru
             # all the options present in `options` and about the
             # series (means name, type, data) used in f.series(..)
             f.options = options.empty? ? LazyHighCharts::HighChart.new.defaults_options : options
-
-            series_type = options[:type] unless options[:type].nil?
-            series_name = options[:name] unless options[:name].nil?
-            f.series(type: series_type, name: series_name, data: data_new)
+            if data.is_a?(Array) && data[0].is_a?(Hash)
+              f.series_data = data
+            else
+              data_new = guess_data(data)
+              series_type = options[:type] unless options[:type].nil?
+              series_name = options[:name] unless options[:name].nil?
+              f.series(type: series_type, name: series_name, data: data_new)
+            end
           end
           @chart
         end
