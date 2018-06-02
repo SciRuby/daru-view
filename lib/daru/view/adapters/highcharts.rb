@@ -40,6 +40,7 @@ module Daru
             # all the options present in `options` and about the
             # series (means name, type, data) used in f.series(..)
             f.options = options.empty? ? LazyHighCharts::HighChart.new.defaults_options : options
+            # For multiple series
             if data.is_a?(Array) && data[0].is_a?(Hash)
               f.series_data = data
             else
