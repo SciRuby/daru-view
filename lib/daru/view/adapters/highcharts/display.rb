@@ -89,19 +89,26 @@ module LazyHighCharts
     #
     # @return [Array] the required dependencies (mapdata or modules)
     #   to load the chart
-    # rubocop:disable Metrics/AbcSize
     def extract_dependencies
       dep_js = []
       # Mapdata dependencies
-      if !options[:chart_class].nil? && options[:chart_class].capitalize == 'Map'
-        dep_js.push('mapdata/' + options[:chart][:map].to_s + '.js') if
-        options[:chart] && options[:chart][:map]
-      end
+      get_map_data_dependencies(dep_js)
       # Dependencies provided in modules option (of highcharts mainly
       #   like tilemap) by the user
       dep_js |= options.delete(:modules).map! { |js| "#{js}.js" } unless
       options[:modules].nil?
       dep_js
+    end
+
+    # @param dep_js [Array] JS dependencies required for drawing a map(mapdata)
+    # @return [void] Appends the map data in dep_js
+    # rubocop:disable Metrics/AbcSize
+    def get_map_data_dependencies(dep_js)
+      dep_js.push('mapdata/' + options[:chart][:map].to_s + '.js') if
+      !options[:chart_class].nil? &&
+      options[:chart_class].capitalize == 'Map' &&
+      options[:chart] &&
+      options[:chart][:map]
     end
     # rubocop:enable Metrics/AbcSize
 

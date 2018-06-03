@@ -35,7 +35,6 @@ describe LazyHighCharts::HighChart do
       chart: {
         type: 'bar'
       },
-      modules: ['modules/treemap'],
       title: {
         text: 'Bar chart'
       },
@@ -274,7 +273,14 @@ describe LazyHighCharts::HighChart do
   describe "#extract_dependencies" do
     it "should extract correct dependencies of the chart" do
       expect(map.chart.extract_dependencies).to eq ['mapdata/custom/europe.js']
-      expect(@hc.chart.extract_dependencies).to eq ['modules/treemap.js']
+    end
+  end
+
+  describe "#get_map_data_dependencies" do
+    dep_js = []
+    it "should return the correct map data" do
+      map.chart.get_map_data_dependencies(dep_js)
+      expect(dep_js).to eq ['mapdata/custom/europe.js']
     end
   end
 
