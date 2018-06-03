@@ -272,17 +272,22 @@ For now, other applications (Rails/Sinatra) you need to run it locally.
   - To view command usage:
 
   ```
-  daru-view -h (or) --help
+  daru-view
+  ```
+
+  - To update al the JS files:
+  ```
+  daru-view update
   ```
 
   - To update JS files for google charts:
   ```
-  daru-view -g (or) --update-googlecharts
+  daru-view update -g (or) --googlecharts
   ```
 
   - To update JS files for highcharts:
   ```
-  daru-view -H (or) --update-highcharts
+  daru-view update -H (or) --highcharts
   ```
 
 ### 2. Developers

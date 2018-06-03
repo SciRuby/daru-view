@@ -49,4 +49,7 @@ Gem::Specification.new do |spec|
 
   # build gem and release it on rubygems
   spec.add_development_dependency 'rubygems-tasks'
+
+  # gem for CLI
+  spec.add_runtime_dependency 'thor'
 end

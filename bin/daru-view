@@ -2,43 +2,31 @@
 
 require 'optparse'
 require 'rake'
+require 'thor'
 
 Dir.chdir File.expand_path('..',__dir__)
 
-parser = OptionParser.new do |opts|
-  opts.banner = "Usage: daru-view [options]"
-  # TODO add arguments to update only modules/adapters/a particular file
+class CLI < Thor
+  # TODO: add arguments to update only modules/adapters/a particular file
 
-  # Update google charts javascript dependent files, from latest Builds
-  # on the google developers website
-  opts.on('-g', '--update-googlecharts', 'Update googlecharts.js libraries') do
-    update(:googlecharts)
-  end
+  desc 'update','Update the JS files. See `daru-view help update`.'
+  method_option :googlecharts, aliases: '-g', desc: 'Update the googlecharts library'
+  method_option :highcharts, aliases: '-H', desc: 'Update the highcharts library'
+  def update
+    path = [File.expand_path('../lib/tasks',__dir__)]
 
-  # Update highcharts.js from latest Builds on Highcharts codebase
-  # http://code.highcharts.com/
-  opts.on('-H', '--update-highcharts', 'Update highcharts.js libraries') do
-    update(:highcharts)
-  end
+    Rake.application.rake_require 'google_charts', path
+    Rake.application.rake_require 'high_charts', path
 
-  opts.on('-h', '--help', 'Displays Help') do
-    puts opts
-    exit
-  end
-end
+    unless options[:googlecharts] || options[:highcharts]
+      Rake.application['googlecharts:update'].invoke
+      Rake.application['highcharts:update'].invoke
+      return
+    end
 
-def update(type)
-  path = File.expand_path('../lib/tasks',__dir__)
-  app  = Rake.application
-  app.init
-  case type
-  when :googlecharts
-    app.rake_require 'google_charts', paths = [path]
-    app['googlecharts:update'].invoke
-  when :highcharts
-    app.rake_require 'high_charts', paths = [path]
-    app['highcharts:update'].invoke
+    Rake.application['googlecharts:update'].invoke if options[:googlecharts]
+    Rake.application['highcharts:update'].invoke   if options[:highcharts]
   end
 end
 
-parser.parse!
+CLI.start
