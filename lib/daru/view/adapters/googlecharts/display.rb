@@ -19,28 +19,30 @@ module GoogleVisualr
     #   Google DataTable should be rendered in
     attr_accessor :html_id
 
-    # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
       if script_tag
-        # if it is data table and importing data from spreadsheet
-        if is_a?(GoogleVisualr::DataTable) && data.is_a?(String)
-          to_js_full_script_spreadsheet(data, dom)
-        elsif is_a?(GoogleVisualr::DataTable)
-          to_js_full_script(dom)
-        # Importing data from spreadsheet
-        elsif data.is_a?(String)
-          to_js_spreadsheet(data, dom)
-        else
-          to_js(dom)
-        end
+        show_script_with_script_tag(dom)
       elsif data.is_a?(String)
         get_html_spreadsheet(data, dom)
       else
         get_html(dom)
       end
     end
-    # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
+
+    def show_script_with_script_tag(dom=SecureRandom.uuid)
+      # if it is data table and importing data from spreadsheet
+      if is_a?(GoogleVisualr::DataTable) && data.is_a?(String)
+        to_js_full_script_spreadsheet(data, dom)
+      elsif is_a?(GoogleVisualr::DataTable)
+        to_js_full_script(dom)
+      # Importing data from spreadsheet
+      elsif data.is_a?(String)
+        to_js_spreadsheet(data, dom)
+      else
+        to_js(dom)
+      end
+    end
 
     # @param dom [String] The ID of the DIV element that the Google
     #   Chart should be rendered in
