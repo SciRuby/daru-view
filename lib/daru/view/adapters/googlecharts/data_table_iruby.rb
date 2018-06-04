@@ -3,6 +3,11 @@ require 'google_visualr'
 
 module GoogleVisualr
   class DataTable
+    # Holds a value only when generate_body or show_in_iruby method
+    #   is invoked in googlecharts.rb
+    # @return [Array, Daru::DataFrame, Daru::Vector, String] Data of
+    #   GoogleVisualr DataTable
+    attr_accessor :data
     # options will enable us to give some styling for table.
     # E.g. pagination, row numbers, etc
     attr_accessor :options
