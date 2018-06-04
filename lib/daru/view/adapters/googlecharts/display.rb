@@ -31,6 +31,9 @@ module GoogleVisualr
       end
     end
 
+    # @param dom [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
+    # @return [String] js code to render the chart with script tag
     def show_script_with_script_tag(dom=SecureRandom.uuid)
       # if it is data table and importing data from spreadsheet
       if is_a?(GoogleVisualr::DataTable) && data.is_a?(String)

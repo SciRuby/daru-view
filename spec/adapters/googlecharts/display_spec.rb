@@ -115,9 +115,31 @@ z\/tq\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
 getElementById\(\'id\'\)/i)
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
+    it "generates valid script of the data_table without script tag" do
+      table_script = data_table.table.show_script("id", script_tag: false)
+      expect(table_script).to match(/google.visualization.DataTable\(\);/i)
+      expect(table_script).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(table_script).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+    end
+  end
+
+  describe "#show_script_with_script_tag" do
+    it "generates valid script of the google chart with script tag" do
+      chart_script = area_chart_chart.chart.show_script_with_script_tag("id")
+      expect(chart_script).to match(/<script type='text\/javascript'>/i)
+      expect(chart_script).to match(/google.visualization.DataTable\(\);/i)
+      expect(chart_script).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+      expect(chart_script).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+      expect(chart_script).to match(/google.visualization.AreaChart/i)
+      expect(chart_script).to match(/chart.draw\(data_table, \{\}/i)
+    end
     it "generates valid script of the google chart when data is imported " \
        "from google spreadsheet with script tag" do
-      chart_script = plot_spreadsheet.chart.show_script("id")
+      chart_script = plot_spreadsheet.chart.show_script_with_script_tag("id")
       expect(chart_script).to match(/<script type='text\/javascript'>/i)
       expect(chart_script).to match(/google.load\(/i)
       expect(chart_script).to match(/google.visualization.Query\('https:\/\/docs.\
@@ -129,16 +151,8 @@ z\/tq\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
       )
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
-    it "generates valid script of the data_table without script tag" do
-      table_script = data_table.table.show_script("id", script_tag: false)
-      expect(table_script).to match(/google.visualization.DataTable\(\);/i)
-      expect(table_script).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
-      expect(table_script).to match(
-        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
-    end
     it "generates valid script of the data_table with script tag" do
-      table_script = data_table.table.show_script("id")
+      table_script = data_table.table.show_script_with_script_tag("id")
       expect(table_script).to match(/<script type='text\/javascript'>/i)
       expect(table_script).to match(/google.visualization.DataTable\(\);/i)
       expect(table_script).to match(
