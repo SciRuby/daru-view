@@ -40,7 +40,9 @@ module Daru
             # all the options present in `options` and about the
             # series (means name, type, data) used in f.series(..)
             f.options = options.empty? ? LazyHighCharts::HighChart.new.defaults_options : options
-            # For multiple series
+            # For multiple series when data is in a series format as in
+            # HighCharts official examples
+            # TODO: Add support for multiple series when data as Daru::DataFrame/Daru::Vector
             if data.is_a?(Array) && data[0].is_a?(Hash)
               f.series_data = data
             else
