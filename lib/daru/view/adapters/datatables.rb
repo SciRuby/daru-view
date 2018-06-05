@@ -12,7 +12,7 @@ module Daru
         # the datatables option concept.
         #
         # TODO : this docs must be improved
-        def init_table(data=[], options={})
+        def init_table(data=[], options={}, _user_options={})
           # TODO : create data array from the df and vector data. So that
           # we can directly use the array.(No need to create df or vector and
           # generate the html table using to_html)

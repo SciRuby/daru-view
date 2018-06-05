@@ -28,7 +28,7 @@ module Daru
         #
         # @param [Array/Daru::DataFrame/Daru::Vector] data
         #
-        def init(data=[], options={})
+        def init(data=[], options={}, _user_options={})
           data_new = guess_data(data)
           # TODO : for multiple series need some modification
           # Alternate way is using `add_series` method.

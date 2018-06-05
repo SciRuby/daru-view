@@ -15,24 +15,19 @@ module Daru
         # and google_visualr : http://googlevisualr.herokuapp.com/
         #
         # TODO : this docs must be improved
-        def init(data=[], options={})
+        def init(data=[], options={}, user_options={})
           @table = GoogleVisualr::DataTable.new
-          @table =
-            if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
-              data.table
-            elsif data.is_a?(GoogleVisualr::DataTable)
-              data
-            else
-              add_data_in_table(data)
-            end
+          @table = get_table(data) unless data.is_a?(String)
           @chart_type = extract_chart_type(options)
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
           ).new(@table, options)
+          @chart.class_chart = get_class_chart(user_options)
+          @chart.data = data
           @chart
         end
 
-        def init_table(data=[], options={})
+        def init_table(data=[], options={}, user_options={})
           # if `options` is something like this :
           # {
           #   cols: [{id: 'task', label: 'Employee Name', type: 'string'},
@@ -47,8 +42,32 @@ module Daru
           # }
           # then directly DatTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
-          add_data_in_table(data)
+          @table.data = data
+          @table.class_chart = get_class_chart(user_options)
+          add_data_in_table(data) unless data.is_a?(String)
           @table
+        end
+
+        # @param user_options [Hash] Extra options provided by the user like class_chart
+        # @return [String] The class of the chart (Chart, Charteditor or Chartwrapper)
+        def get_class_chart(user_options={})
+          return 'Chart' if user_options[:class_chart].nil?
+          user_options.delete(:class_chart).to_s.capitalize
+        end
+
+        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table]
+        #   The data provided by the user to generate the google datatable.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @return [GoogleVisualr::DataTable] the table object will the data filled
+        def get_table(data)
+          if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
+            data.table
+          elsif data.is_a?(GoogleVisualr::DataTable)
+            data
+          else
+            add_data_in_table(data)
+          end
         end
 
         def init_script
