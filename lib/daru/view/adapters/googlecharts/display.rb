@@ -24,6 +24,8 @@ module GoogleVisualr
       script_tag = options.fetch(:script_tag) { true }
       if script_tag
         show_script_with_script_tag(dom)
+      elsif class_chart == 'Chartwrapper'
+        get_html_chart_wrapper(data, dom)
       elsif data.is_a?(String)
         get_html_spreadsheet(data, dom)
       else
@@ -35,12 +37,15 @@ module GoogleVisualr
     #   Chart should be rendered in
     # @return [String] js code to render the chart with script tag
     def show_script_with_script_tag(dom=SecureRandom.uuid)
-      # if it is data table and importing data from spreadsheet
-      if is_a?(GoogleVisualr::DataTable) && data.is_a?(String)
+      # if it is data table
+      if is_a?(GoogleVisualr::DataTable) && class_chart == 'Chartwrapper'
+        to_js_full_script_chart_wrapper(data, dom)
+      elsif is_a?(GoogleVisualr::DataTable) && data.is_a?(String)
         to_js_full_script_spreadsheet(data, dom)
       elsif is_a?(GoogleVisualr::DataTable)
         to_js_full_script(dom)
-      # Importing data from spreadsheet
+      elsif class_chart == 'Chartwrapper'
+        to_js_chart_wrapper(data, dom)
       elsif data.is_a?(String)
         to_js_spreadsheet(data, dom)
       else
@@ -72,6 +77,12 @@ module GoogleVisualr
       html << load_js(dom)
       html << draw_js_spreadsheet(data, dom)
       html
+
+    def get_html_chart_wrapper(data, dom)
+      html = ''
+      html << load_js(dom)
+      html << draw_js_chart_wrapper(data, dom)
+      html
     end
 
     def to_html(id=nil, options={})
@@ -86,7 +97,7 @@ module GoogleVisualr
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
-      IRuby.html(to_html(dom))
+      IRuby.html to_html(dom)
     end
   end
 

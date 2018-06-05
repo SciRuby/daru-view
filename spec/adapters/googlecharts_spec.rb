@@ -57,6 +57,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     )
   }
   let(:data_table) {Daru::View::Table.new(data)}
+  let(:user_options) {{chart_class: 'Chartwrapper'}}
   let(:area_chart_options) {{
       type: :area
     }}
@@ -67,6 +68,14 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     new(data_table.table, area_chart_options)}
   let(:column_chart_chart) {Daru::View::Plot.
   new(data_table.table, column_chart_options)}
+  let(:area_chart_wrapper) {Daru::View::Plot.new(
+    data_table.table,
+    area_chart_options,
+    user_options)
+  }
+  let(:table_chart_wrapper) {Daru::View::Table.new(
+    data, {}, user_options)
+  }
 
 
   describe "initialization Charts" do
@@ -151,6 +160,18 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
   end
 
+  describe "#get_class_chart" do
+    it "should return valid class of the chart" do
+      expect(area_chart_chart.adapter.get_class_chart(
+        {chart_class: 'ChartWrapper'})
+      ).to eq('Chartwrapper')
+    end
+    it "should return valid class of the chart" do
+      expect(area_chart_chart.adapter.get_class_chart()
+      ).to eq('Chart')
+    end
+  end
+
   describe "#generate_body" do
     it "generates valid JS of the Area Chart" do
       js = area_chart_chart.adapter.generate_body(area_chart_chart.chart)
@@ -207,6 +228,24 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/var data_table = response.getDataTable/i)
       expect(js).to match(/google.visualization.ColumnChart/)
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
+    end
+    it "should generate valid JS of the Chartwrapper" do
+      js = area_chart_wrapper.adapter.generate_body(area_chart_wrapper.chart)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+    end
+    it "should generate valid JS of the DataTable Chartwrapper" do
+      js = table_chart_wrapper.adapter.generate_body(table_chart_wrapper.table)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
     end
   end
 

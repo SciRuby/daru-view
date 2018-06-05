@@ -1,7 +1,7 @@
 module Daru
   module View
     class Plot
-      attr_reader :chart, :data, :options
+      attr_reader :chart, :data, :options, :user_options
       attr_accessor :adapter
       class << self
         # class method
@@ -33,12 +33,13 @@ module Daru
       # To use a particular adapter in certain plot object(s), then user
       # must pass the adapter in `options` hash. e.g. `adapter: :highcharts`
       #
-      def initialize(data=[], options={}, &block)
+      def initialize(data=[], options={}, user_options={}, &block)
         # TODO: &block is not used, right now.
         @data = data
         @options = options
+        @user_options = user_options
         self.adapter = options.delete(:adapter) unless options[:adapter].nil?
-        @chart = plot_data(data, options, &block)
+        @chart = plot_data(data, options, user_options, &block)
       end
 
       # instance method
@@ -95,11 +96,11 @@ module Daru
 
       private
 
-      def plot_data(data, options)
+      def plot_data(data, options, user_options)
         # class variable @@aapter is used in instance variable @adapter.
         # so in each object `adapter` variable can be accessed.
         @adapter ||= @@adapter
-        @adapter.init(data, options)
+        @adapter.init(data, options, user_options)
       end
     end
   end
