@@ -1,6 +1,6 @@
 # coding: utf-8
 
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.files         = `git ls-files -z`.split("\x0")
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.executables   = ['daru-view']
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rspec'
@@ -48,5 +49,7 @@ Gem::Specification.new do |spec|
 
   # build gem and release it on rubygems
   spec.add_development_dependency 'rubygems-tasks'
-end
 
+  # gem for CLI
+  spec.add_runtime_dependency 'thor'
+end

@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'rake'
+require 'thor'
+
+Dir.chdir File.expand_path('..',__dir__)
+
+class CLI < Thor
+  # TODO: add arguments to update only modules/adapters/a particular file
+
+  desc 'update','Update the JS files. See `daru-view help update`.'
+  method_option :googlecharts, aliases: '-g', desc: 'Update the googlecharts library'
+  method_option :highcharts, aliases: '-H', desc: 'Update the highcharts library'
+  def update
+    path = [File.expand_path('../lib/tasks',__dir__)]
+
+    Rake.application.rake_require 'google_charts', path
+    Rake.application.rake_require 'high_charts', path
+
+    unless options[:googlecharts] || options[:highcharts]
+      Rake.application['googlecharts:update'].invoke
+      Rake.application['highcharts:update'].invoke
+      return
+    end
+
+    Rake.application['googlecharts:update'].invoke if options[:googlecharts]
+    Rake.application['highcharts:update'].invoke   if options[:highcharts]
+  end
+end
+
+CLI.start
