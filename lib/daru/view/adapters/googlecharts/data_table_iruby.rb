@@ -53,6 +53,14 @@ module GoogleVisualr
       js
     end
 
+    # Generates JavaScript and renders the Google Chartwrapper in the
+    #   final HTML output.
+    #
+    # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
+    #   Data of GoogleVisualr Chart
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chartwrapper should be rendered in
+    # @return [String] Javascript code to render the Google Chartwrapper
     def to_js_full_script_chart_wrapper(data, element_id=SecureRandom.uuid)
       js =  ''
       js << "\n<script type='text/javascript'>"
@@ -74,17 +82,25 @@ module GoogleVisualr
       'table'
     end
 
+    # @param data [Array, Daru::DataFrame, Daru::Vector, String] Data
+    #   of GoogleVisualr DataTable
+    # @return [String] Data option (dataSourceUrl or dataTable) required to
+    #   draw the Chartwrapper based upon the data provided.
     def append_data(data)
       return "\n       dataSourceUrl: '#{data}'," if data.is_a? String
       "\n       dataTable: data_table,"
     end
 
+    # @return [String] Returns value of the view option provided by the user
+    #   and '' otherwise
     def extract_option_view
       return js_parameters(@options.delete(:view)) unless @options[:view].nil?
       '\'\''
     end
 
     # So that it can be used in ChartEditor also
+    #
+    # @return [String] Returns string to draw the Chartwrapper and '' otherwise
     def draw_wrapper
       return "\n    wrapper.draw();" if class_chart == 'Chartwrapper'
       ''
@@ -102,6 +118,12 @@ module GoogleVisualr
       js
     end
 
+    # Generates JavaScript of callback to render chart. Packages are not
+    #   required to load explicitly in Chartwrapper
+    #
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
+    # @return [String] JS of callback to render chart.
     def load_js_chart_wrapper(element_id)
       js = ''
       js << "\n  google.load('visualization', #{google_table_version}, "
@@ -125,6 +147,10 @@ module GoogleVisualr
       js
     end
 
+    # Generates JavaScript function for rendering the chartwrapper
+    #
+    # @param (see #to_js_chart_wrapper)
+    # @return [String] JS function to render the chartwrapper
     def draw_js_chart_wrapper(data, element_id)
       js = ''
       js << "\n  function #{chart_function_name(element_id)}() {"

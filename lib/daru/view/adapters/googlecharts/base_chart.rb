@@ -18,17 +18,22 @@ module GoogleVisualr
       "handleQueryResponse_#{element_id.tr('-', '_')}"
     end
 
+    # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
+    #   Data of GoogleVisualr DataTable
+    # @return [String] Data option (dataSourceUrl or dataTable) required to
+    #   draw the Chartwrapper based upon the data provided.
     def append_data(data)
       return "\n       dataSourceUrl: '#{data}'," if data.is_a? String
       "\n       dataTable: data_table,"
     end
 
+    # @see #GooleVisualr::DataTable.extract_option_view
     def extract_option_view
       return js_parameters(@options.delete('view')) unless @options['view'].nil?
       '\'\''
     end
 
-    # So that it can be used in ChartEditor also
+    # @see #GooleVisualr::DataTable.draw_wrapper
     def draw_wrapper
       return "\n    wrapper.draw();" if class_chart == 'Chartwrapper'
       ''
@@ -71,6 +76,7 @@ module GoogleVisualr
       js
     end
 
+    # @see #GooleVisualr::DataTable.load_js_chart_wrapper
     def load_js_chart_wrapper(element_id)
       js = ''
       js << "\n  google.load('visualization', '#{version}', "
@@ -79,6 +85,10 @@ module GoogleVisualr
       js
     end
 
+    # Generates JavaScript function for rendering the chartwrapper
+    #
+    # @param (see #to_js_chart_wrapper)
+    # @return [String] JS function to render the chartwrapper
     def draw_js_chart_wrapper(data, element_id)
       js = ''
       js << "\n  function #{chart_function_name(element_id)}() {"

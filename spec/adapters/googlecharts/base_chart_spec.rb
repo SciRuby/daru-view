@@ -20,7 +20,7 @@ describe GoogleVisualr::BaseChart do
             ]
     @area_chart = Daru::View::Plot.new(
       @data,
-      {type: :area, width: 800, view: {'columns': [0, 1]}},
+      {type: :area, width: 800, view: {columns: [0, 1]}},
       class_chart: 'ChartWrapper'
     )
     @area_chart_spreadsheet = Daru::View::Plot.new(

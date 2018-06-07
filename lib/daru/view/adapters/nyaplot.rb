@@ -1,4 +1,3 @@
-
 require_relative 'nyaplot/iruby_notebook'
 require 'daru'
 require 'nyaplot'

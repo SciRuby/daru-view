@@ -20,7 +20,7 @@ describe GoogleVisualr::DataTable do
   let(:data_table) {Daru::View::Table.new(data)}
   let (:table_spreadsheet_chartwrapper) {
     Daru::View::Table.new(
-      data_spreadsheet, {width: 800, view: {'columns': [0, 1]}}, class_chart: 'ChartWrapper'
+      data_spreadsheet, {width: 800, view: {columns: [0, 1]}}, class_chart: 'ChartWrapper'
     )
   }
   let(:table_chartwrapper) {Daru::View::Table.new(data, {}, class_chart: 'ChartWrapper')}
