@@ -42,16 +42,16 @@ module GoogleVisualr
     #   of the google spreadsheet
     def draw_js_spreadsheet(data, element_id=SecureRandom.uuid)
       js = ''
-      js << "\n  function #{chart_function_name(element_id)}() {"
-      js << "\n  var query = new google.visualization.Query('#{data}');"
-      js << "\n  query.send(#{query_response_function_name(element_id)});"
-      js << "\n  }"
-      js << "\n  function #{query_response_function_name(element_id)}(response) {"
-      js << "\n  var data_table = response.getDataTable();"
-      js << "\n  var chart = new google.#{chart_class}.#{chart_name}"\
+      js << "\n function #{chart_function_name(element_id)}() {"
+      js << "\n 	var query = new google.visualization.Query('#{data}');"
+      js << "\n 	query.send(#{query_response_function_name(element_id)});"
+      js << "\n }"
+      js << "\n function #{query_response_function_name(element_id)}(response) {"
+      js << "\n 	var data_table = response.getDataTable();"
+      js << "\n 	var chart = new google.#{chart_class}.#{chart_name}"\
             "(document.getElementById('#{element_id}'));"
-      js << "\n  chart.draw(data_table, #{js_parameters(@options)});"
-      js << "\n  };"
+      js << "\n 	chart.draw(data_table, #{js_parameters(@options)});"
+      js << "\n };"
       js
     end
   end
