@@ -70,18 +70,9 @@ module GoogleVisualr
     def to_js_chart_wrapper(data, element_id=SecureRandom.uuid)
       js =  ''
       js << "\n<script type='text/javascript'>"
-      js << load_js_chart_wrapper(element_id)
+      js << load_js(element_id)
       js << draw_js_chart_wrapper(data, element_id)
       js << "\n</script>"
-      js
-    end
-
-    # @see #GooleVisualr::DataTable.load_js_chart_wrapper
-    def load_js_chart_wrapper(element_id)
-      js = ''
-      js << "\n  google.load('visualization', '#{version}', "
-      js << "\n {callback:"
-      js << "\n #{chart_function_name(element_id)}});"
       js
     end
 

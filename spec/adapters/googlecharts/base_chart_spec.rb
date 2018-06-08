@@ -96,20 +96,12 @@ describe GoogleVisualr::BaseChart do
         'id'
       )
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartWrapper/)
       expect(js).to match(/chartType: 'AreaChart'/)
       expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
       expect(js).to match(/options: {}/)
       expect(js).to match(/containerId: 'id'/)
-    end
-  end
-
-  describe "#load_js_chart_wrapper" do
-    it "load valid JS of the ChartWrapper" do
-      js = @area_chart.chart.load_js_chart_wrapper('id')
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
     end
   end
 

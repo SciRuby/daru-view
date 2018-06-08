@@ -64,7 +64,7 @@ module GoogleVisualr
     def to_js_full_script_chart_wrapper(data, element_id=SecureRandom.uuid)
       js =  ''
       js << "\n<script type='text/javascript'>"
-      js << load_js_chart_wrapper(element_id)
+      js << load_js(element_id)
       js << draw_js_chart_wrapper(data, element_id)
       js << "\n</script>"
       js
@@ -114,20 +114,6 @@ module GoogleVisualr
       js = ''
       js << "\n  google.load('visualization', #{google_table_version}, "
       js << "\n {packages: ['#{package_name}'], callback:"
-      js << "\n #{chart_function_name(element_id)}});"
-      js
-    end
-
-    # Generates JavaScript of callback to render chart. Packages are not
-    #   required to load explicitly in Chartwrapper
-    #
-    # @param element_id [String] The ID of the DIV element that the Google
-    #   Chart should be rendered in
-    # @return [String] JS of callback to render chart.
-    def load_js_chart_wrapper(element_id)
-      js = ''
-      js << "\n  google.load('visualization', #{google_table_version}, "
-      js << "\n {callback:"
       js << "\n #{chart_function_name(element_id)}});"
       js
     end

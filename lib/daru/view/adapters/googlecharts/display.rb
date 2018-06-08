@@ -38,7 +38,7 @@ module GoogleVisualr
     # @return [String] js code to render the chart
     def get_html_chart_wrapper(data, dom)
       html = ''
-      html << load_js_chart_wrapper(dom)
+      html << load_js(dom)
       html << draw_js_chart_wrapper(data, dom)
       html
     end

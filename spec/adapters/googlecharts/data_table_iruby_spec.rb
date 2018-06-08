@@ -101,14 +101,6 @@ describe GoogleVisualr::DataTable do
   	end
   end
 
-  describe "#load_js_chart_wrapper" do
-    it "load valid JS of the ChartWrapper" do
-      js = table_chartwrapper.table.load_js_chart_wrapper('id')
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
-    end
-  end
-
   describe "#draw_js" do
   	it "draws valid JS of the table" do
   	  js = data_table.table.draw_js('id')
