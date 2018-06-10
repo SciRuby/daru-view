@@ -102,15 +102,13 @@ module LazyHighCharts
 
     # @param dep_js [Array] JS dependencies required for drawing a map(mapdata)
     # @return [void] Appends the map data in dep_js
-    # rubocop:disable Metrics/AbcSize
     def get_map_data_dependencies(dep_js)
-      dep_js.push('mapdata/' + options[:chart][:map].to_s + '.js') if
-      !options[:chart_class].nil? &&
-      options[:chart_class].capitalize == 'Map' &&
-      options[:chart] &&
-      options[:chart][:map]
+      if !options[:chart_class].nil? && options[:chart_class].capitalize == 'Map' &&
+         options[:chart] && options[:chart][:map]
+        dep_js.push(options[:chart][:map].to_s)
+        dep_js.map! { |js| "mapdata/#{js}.js" }
+      end
     end
-    # rubocop:enable Metrics/AbcSize
 
     # @return [String] the class of the chart
     def extract_chart_class
