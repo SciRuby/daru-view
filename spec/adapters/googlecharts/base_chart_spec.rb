@@ -62,13 +62,16 @@ describe GoogleVisualr::BaseChart do
   describe "#draw_wrapper" do
     it "should draw the chartwrapper only when class_chart is"\
        " set to Chartwrapper" do
-      js = @area_chart.chart.draw_wrapper
-      expect(js).to match(/wrapper.draw\(\);/)
+      js = @area_chart.chart.draw_wrapper('id')
+      expect(js).to match(/wrapper_id.draw\(\);/)
     end
     it "should draw the chartwrapper only when class_chart is"\
        " set to Chartwrapper" do
-      js = @plot_spreadsheet.chart.draw_wrapper
-      expect(js).to eql("")
+      js = @plot_spreadsheet.chart.draw_wrapper('id')
+      expect(js).to match(/wrapper_id.draw\(\);/)
+      expect(js).to match(/new google.visualization.ChartEditor()/)
+      expect(js).to match(/google.visualization.events.addListener/)
+      expect(js).to match(/chartEditor_id, 'ok', saveChart_id/)
     end
   end
 

@@ -25,6 +25,8 @@ module GoogleVisualr
         show_script_with_script_tag(dom)
       elsif class_chart == 'Chartwrapper'
         get_html_chart_wrapper(data, dom)
+      elsif class_chart == 'Charteditor'
+        get_html_chart_editor(data, dom)
       else
         html = ''
         html << load_js(dom)
@@ -45,6 +47,20 @@ module GoogleVisualr
 
     # @param dom [String] The ID of the DIV element that the Google
     #   Chart should be rendered in
+    # @return [String] js code to render the chart
+    def get_html_chart_editor(data, dom)
+      html = ''
+      html << if is_a?(GoogleVisualr::DataTable)
+                load_js(dom)
+              else
+                load_js_chart_editor(dom)
+              end
+      html << draw_js_chart_editor(data, dom)
+      html
+    end
+
+    # @param dom [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
     # @return [String] js code to render the chart with script tag
     def show_script_with_script_tag(dom=SecureRandom.uuid)
       # if it is data table
@@ -60,7 +76,12 @@ module GoogleVisualr
     end
 
     def to_html(id=nil, options={})
-      path = File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
+      path =
+        if class_chart == 'Charteditor'
+          File.expand_path('../../templates/googlecharts/chart_editor_div.erb', __dir__)
+        else
+          File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
+        end
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id

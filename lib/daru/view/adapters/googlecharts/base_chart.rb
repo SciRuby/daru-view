@@ -33,10 +33,32 @@ module GoogleVisualr
       '\'\''
     end
 
+    def save_chart_function_name(element_id)
+      "saveChart_#{element_id.tr('-', '_')}"
+    end
+
     # @see #GooleVisualr::DataTable.draw_wrapper
-    def draw_wrapper
-      return "\n    wrapper.draw();" if class_chart == 'Chartwrapper'
-      ''
+    def draw_wrapper(element_id)
+      return "\n    wrapper_#{element_id.tr('-', '_')}.draw();" if
+      class_chart == 'Chartwrapper'
+      js = ''
+      js << "\n    wrapper_#{element_id.tr('-', '_')}.draw();"
+      js << "\n    chartEditor_#{element_id.tr('-', '_')} = "\
+            'new google.visualization.ChartEditor();'
+      js << "\n    google.visualization.events.addListener("\
+            "chartEditor_#{element_id.tr('-', '_')},"\
+            " 'ok', #{save_chart_function_name(element_id)});"
+      js
+    end
+
+    def extract_chart_wrapper_options(data, element_id)
+      js = ''
+      js << "\n      chartType: '#{chart_name}',"
+      js << append_data(data)
+      js << "\n      options: #{js_parameters(@options)},"
+      js << "\n      containerId: '#{element_id}',"
+      js << "\n      view: #{extract_option_view}"
+      js
     end
 
     # Generates JavaScript when data is imported from spreadsheet and renders
@@ -76,23 +98,44 @@ module GoogleVisualr
       js
     end
 
+    def load_js_chart_editor(element_id)
+      js = ''
+      js << "\n  google.load('visualization', '#{version}', "
+      js << "\n {packages: ['charteditor'], callback:"
+      js << "\n #{chart_function_name(element_id)}});"
+      js
+    end
+
     # Generates JavaScript function for rendering the chartwrapper
     #
     # @param (see #to_js_chart_wrapper)
     # @return [String] JS function to render the chartwrapper
     def draw_js_chart_wrapper(data, element_id)
       js = ''
+      js << "\n  var wrapper_#{element_id.tr('-', '_')} = null;"
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n    #{@data_table.to_js}"
-      js << "\n    var wrapper = new google.visualization.ChartWrapper({"
-      js << "\n      chartType: '#{chart_name}',"
-      js << append_data(data)
-      js << "\n      options: #{js_parameters(@options)},"
-      js << "\n      containerId: '#{element_id}',"
-      js << "\n      view: #{extract_option_view}"
+      js << "\n    wrapper_#{element_id.tr('-', '_')} = "\
+            'new google.visualization.ChartWrapper({'
+      js << extract_chart_wrapper_options(data, element_id)
       js << "\n    });"
-      js << draw_wrapper
+      js << draw_wrapper(element_id)
       js << "\n  };"
+      js
+    end
+
+    def draw_js_chart_editor(data, element_id)
+      js = ''
+      js << "\n  var chartEditor_#{element_id.tr('-', '_')} = null;"
+      js << draw_js_chart_wrapper(data, element_id)
+      js << "\n  function #{save_chart_function_name(element_id)}(){"
+      js << "\n    chartEditor_#{element_id.tr('-', '_')}.getChartWrapper()."\
+            "draw(document.getElementById('#{element_id}'));"
+      js << "\n  }"
+      js << "\n  function loadEditor_#{element_id.tr('-', '_')}(){"
+      js << "\n    chartEditor_#{element_id.tr('-', '_')}.openDialog("\
+            "wrapper_#{element_id.tr('-', '_')}, {});"
+      js << "\n  }"
       js
     end
 
