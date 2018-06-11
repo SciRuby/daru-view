@@ -3,6 +3,7 @@ require_relative 'googlecharts/iruby_notebook'
 require_relative 'googlecharts/display'
 require 'daru'
 require 'bigdecimal'
+require 'daru/view/constants'
 
 module Daru
   module View
@@ -25,6 +26,7 @@ module Daru
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data) unless data.is_a?(String)
+          validate_url(data) if data.is_a?(String)
           @chart_type = extract_chart_type(options)
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
@@ -57,6 +59,7 @@ module Daru
           @table = GoogleVisualr::DataTable.new(options)
           @table.data = data
           add_data_in_table(data) unless data.is_a?(String)
+          validate_url(data) if data.is_a?(String)
           @table
         end
 
@@ -73,6 +76,14 @@ module Daru
           else
             add_data_in_table(data)
           end
+        end
+
+        # @param data [String] URL of the google spreadsheet from which data
+        #   has to invoked
+        # @return [void] raises error for invalid URL
+        def validate_url(data)
+          # `PATTERN_URL.match? data` is faster but does not support older ruby versions
+          raise 'Invalid URL' unless data.match(PATTERN_URL)
         end
 
         def init_script
@@ -121,7 +132,7 @@ module Daru
           chart_type = chart_type.to_s.capitalize
           chart_type = 'SteppedArea' if chart_type == 'Steppedarea'
           chart_type = 'TreeMap' if chart_type == 'Treemap'
-          direct_name = %w[Map Histogram TreeMap Timeline Gauge Table]
+          direct_name = %w[Map Histogram TreeMap Timeline Gauge]
           direct_name.include?(chart_type) ? chart_type : chart_type + 'Chart'
         end
 

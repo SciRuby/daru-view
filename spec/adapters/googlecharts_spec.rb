@@ -130,6 +130,13 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
   end
 
+  describe "#validate_url" do
+    it "should raise error for invalid URL" do
+      expect{area_chart_chart.adapter.validate_url('http/hi.com')}
+      .to raise_error('Invalid URL')
+    end
+  end
+
   describe "#generate_body" do
     it "generates valid JS of the Area Chart" do
       js = area_chart_chart.adapter.generate_body(area_chart_chart.chart)
