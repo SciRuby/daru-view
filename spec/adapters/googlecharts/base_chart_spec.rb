@@ -2,20 +2,20 @@ require 'spec_helper.rb'
 
 describe GoogleVisualr::BaseChart do
   before { Daru::View.plotting_library = :googlecharts }
-  before(:each) do
-    @query_string = 'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'
-    @data_spreadsheet = 'https://docs.google.com/spreadsheets/d/1XWJLkAwch'\
-              '5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers=1&tq='
-    @data_spreadsheet << @query_string
-    @plot_spreadsheet = Daru::View::Plot.new(
-                          @data_spreadsheet,
-                          {type: :column, width: 800}
-                        )
-  end
+  let(:query_string) {'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'}
+  let(:data_spreadsheet) {'https://docs.google.com/spreadsheets/d/1XWJLkAwch'\
+              '5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers='\
+              '1&tq=' << query_string}
+  let(:plot_spreadsheet) {
+    Daru::View::Plot.new(
+      data_spreadsheet,
+      {type: :column, width: 800}
+    )
+  }
 
   describe "#query_response_function_name" do
     it "should generate unique function name to handle query response" do
-      func = @plot_spreadsheet.chart.query_response_function_name('i-d')
+      func = plot_spreadsheet.chart.query_response_function_name('i-d')
       expect(func).to eq('handleQueryResponse_i_d')
     end
   end
@@ -23,7 +23,7 @@ describe GoogleVisualr::BaseChart do
   describe "#to_js_spreadsheet" do
     it "generates valid JS of the chart when "\
        "data is imported from google spreadsheets" do
-      js = @plot_spreadsheet.chart.to_js_spreadsheet(@data_spreadsheet, 'id')
+      js = plot_spreadsheet.chart.to_js_spreadsheet(data_spreadsheet, 'id')
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(/google.load\(/i)
       expect(js).to match(/google.visualization.Query\('https:\/\/docs.google\
@@ -40,7 +40,7 @@ describe GoogleVisualr::BaseChart do
   describe "#draw_js_spreadsheet" do
     it "draws valid JS of the chart when "\
        "data is imported from google spreadsheets" do
-      js = @plot_spreadsheet.chart.draw_js_spreadsheet(@data_spreadsheet, 'id')
+      js = plot_spreadsheet.chart.draw_js_spreadsheet(data_spreadsheet, 'id')
       expect(js).to match(/google.visualization.Query\('https:\/\/docs.google\
 .com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\?\
 gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)

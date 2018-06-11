@@ -23,6 +23,32 @@ module Daru
         #   incorporate in google charts
         # @return [GoogleVisualr::Interactive] Returns the chart object based
         #   on the chart_type
+        #
+        # @example GoogleChart
+        #   First, set Daru::View.plotting_library = :googlecharts
+        #     (Also set Daru::View.dependent_script(:googlecharts) in web
+        #     frameworks in head tag)
+        #   Formulate the data to visualize
+        #     idx = Daru::Index.new ['Year', 'Sales']
+        #     data_rows = [
+        #                   ['2004',  1000],
+        #                   ['2005',  1170],
+        #                   ['2006',  660],
+        #                   ['2007',  1030]
+        #                 ]
+        #     df_sale_exp = Daru::DataFrame.rows(data_rows)
+        #     df_sale_exp.vectors = idx
+        #
+        #   Set the options required
+        #     line_options = {
+        #       title: 'Company Performance',
+        #       curveType: 'function',
+        #       legend: { position: 'bottom' }
+        #     }
+        #
+        #   Draw the Daru::View::Plot object. Default chart type is Line.
+        #     line_chart = Daru::View::Plot.new(df_sale_exp, line_options)
+        #     bar_chart = Daru::View::Plot.new(df_sale_exp, type: :bar)
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data) unless data.is_a?(String)
@@ -42,6 +68,31 @@ module Daru
         # @param options [Hash] Various options provided by the user to
         #   incorporate in google datatables
         # @return [GoogleVisualr::DataTable] Returns the table object
+        #
+        # @example GoogleChart DataTable
+        #   First, set Daru::View.plotting_library = :googlecharts
+        #     (Also set Daru::View.dependent_script(:googlecharts) in web
+        #     frameworks in head tag)
+        #   Formulate the data to visualize
+        #     idx = Daru::Index.new ['Year', 'Sales']
+        #     data_rows = [
+        #                   ['2004',  1000],
+        #                   ['2005',  1170],
+        #                   ['2006',  660],
+        #                   ['2007',  1030]
+        #                 ]
+        #     df_sale_exp = Daru::DataFrame.rows(data_rows)
+        #     df_sale_exp.vectors = idx
+        #
+        #   Set the options required
+        #     table_options = {
+        #       showRowNumber: true,
+        #       width: '100%',
+        #       height: '100%' ,
+        #     }
+        #
+        #   Draw the Daru::View::Table object.
+        #     line_chart = Daru::View::Table.new(df_sale_exp, table_options)
         def init_table(data=[], options={})
           # if `options` is something like this :
           # {
@@ -58,6 +109,10 @@ module Daru
           # then directly DatTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
           @table.data = data
+          # When data is the URL of the spreadsheet then plot.table will contain the empty
+          #   table as the DataTable is generated in query response in js and we can not
+          #   retrieve the data from google spreadsheet
+          #   (@see #GoogleVisualr::DataTable.draw_js_spreadsheet)
           add_data_in_table(data) unless data.is_a?(String)
           validate_url(data) if data.is_a?(String)
           @table
