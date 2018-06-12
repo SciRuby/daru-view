@@ -19,7 +19,7 @@ module GoogleVisualr
     end
 
     # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
-    #   Data of GoogleVisualr DataTable
+    #   Data of GoogleVisualr Chart
     # @return [String] Data option (dataSourceUrl or dataTable) required to
     #   draw the Chartwrapper based upon the data provided.
     def append_data(data)
@@ -33,6 +33,9 @@ module GoogleVisualr
       '\'\''
     end
 
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
+    # @return [String] unique function name to save the chart
     def save_chart_function_name(element_id)
       "saveChart_#{element_id.tr('-', '_')}"
     end
@@ -51,6 +54,8 @@ module GoogleVisualr
       js
     end
 
+    # @param (see #draw_js_chart_editor)
+    # @return [String] options of the ChartWrapper
     def extract_chart_wrapper_options(data, element_id)
       js = ''
       js << "\n      chartType: '#{chart_name}',"
@@ -98,6 +103,10 @@ module GoogleVisualr
       js
     end
 
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   ChartEditor should be rendered in
+    # @return [String] Generates JavaScript for loading the charteditor package,
+    #   with callback to render ChartEditor
     def load_js_chart_editor(element_id)
       js = ''
       js << "\n  google.load('visualization', '#{version}', "
@@ -124,6 +133,11 @@ module GoogleVisualr
       js
     end
 
+    # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
+    #   Data of GoogleVisualr Chart
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   ChartEditor should be rendered in
+    # @return [String] JS function to render the ChartEditor
     def draw_js_chart_editor(data, element_id)
       js = ''
       js << "\n  var chartEditor_#{element_id.tr('-', '_')} = null;"

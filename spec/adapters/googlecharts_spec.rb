@@ -61,6 +61,12 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   let(:table_chart_wrapper) {Daru::View::Table.new(
     data, {}, user_options)
   }
+  let(:plot_charteditor) {Daru::View::Plot.new(
+    data_table.table, {}, class_chart: 'Charteditor')
+  }
+  let(:table_charteditor) {Daru::View::Table.new(
+    data, {}, class_chart: 'Charteditor')
+  }
 
   describe "initialization Charts" do
     it "Default chart GoogleVisualr::Interactive::LineChart " do
@@ -116,6 +122,11 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   end
 
   describe "#get_class_chart" do
+    it "should return valid class of the chart" do
+      expect(area_chart_chart.adapter.get_class_chart(
+        {class_chart: 'ChartEditor'})
+      ).to eq('Charteditor')
+    end
     it "should return valid class of the chart" do
       expect(area_chart_chart.adapter.get_class_chart(
         {class_chart: 'ChartWrapper'})
@@ -176,6 +187,26 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
       expect(js).to match(/options: {}/)
+    end
+    it "should generate the valid JS of charteditor" do
+      js = plot_charteditor.adapter.generate_body(plot_charteditor.chart)
+      expect(js).to match(/<input id="loadcharteditor_/)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/view: ''/)
+    end
+    it "should generate the valid JS of datatable charteditor" do
+      js = table_charteditor.adapter.generate_body(table_charteditor.table)
+      expect(js).to match(/<input id="loadcharteditor_/)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/view: ''/)
     end
   end
 

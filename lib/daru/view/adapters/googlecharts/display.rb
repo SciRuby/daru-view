@@ -35,6 +35,8 @@ module GoogleVisualr
       end
     end
 
+    # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
+    #   Data of GoogleVisualr Chart or GoogleVisualr DataTable
     # @param dom [String] The ID of the DIV element that the Google
     #   Chart should be rendered in
     # @return [String] js code to render the chart
@@ -45,9 +47,11 @@ module GoogleVisualr
       html
     end
 
+    # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
+    #   Data of GoogleVisualr Chart or GoogleVisualr DataTable
     # @param dom [String] The ID of the DIV element that the Google
     #   Chart should be rendered in
-    # @return [String] js code to render the chart
+    # @return [String] js code to render the charteditor
     def get_html_chart_editor(data, dom)
       html = ''
       html << if is_a?(GoogleVisualr::DataTable)

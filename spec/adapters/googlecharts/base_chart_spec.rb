@@ -29,6 +29,12 @@ describe GoogleVisualr::BaseChart do
       class_chart: 'ChartWrapper'
     )
   end
+  let (:plot_spreadsheet_charteditor) {
+    Daru::View::Plot.new(
+      @data_spreadsheet, {width: 800, view: {columns: [0, 1]}}, class_chart: 'Charteditor'
+    )
+  }
+  let(:plot_charteditor) {Daru::View::Plot.new(@data, {}, class_chart: 'Charteditor')}
 
   describe "#query_response_function_name" do
     it "should generate unique function name to handle query response" do
@@ -67,11 +73,39 @@ describe GoogleVisualr::BaseChart do
     end
     it "should draw the chartwrapper only when class_chart is"\
        " set to Chartwrapper" do
-      js = @plot_spreadsheet.chart.draw_wrapper('id')
+      js = plot_charteditor.chart.draw_wrapper('id')
       expect(js).to match(/wrapper_id.draw\(\);/)
       expect(js).to match(/new google.visualization.ChartEditor()/)
       expect(js).to match(/google.visualization.events.addListener/)
       expect(js).to match(/chartEditor_id, 'ok', saveChart_id/)
+    end
+  end
+
+  describe "#extract_chart_wrapper_options" do
+    it "should return correct options of chartwrapper" do
+      js = plot_charteditor.chart.extract_chart_wrapper_options(@data, 'id')
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: \{\}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
+    it "should return correct options of chartwrapper when data is URL" do
+      js = plot_spreadsheet_charteditor.chart.extract_chart_wrapper_options(
+        @data_spreadsheet, 'id'
+      )
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+      expect(js).to match(/options: {width: 800/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: {columns: \[0,1\]}/)
+    end
+  end
+
+  describe "#save_chart_function_name" do
+    it "should generate unique function name to save the chart" do
+      func = plot_spreadsheet_charteditor.chart.save_chart_function_name('i-d')
+      expect(func).to eq('saveChart_i_d')
     end
   end
 
@@ -108,6 +142,15 @@ describe GoogleVisualr::BaseChart do
     end
   end
 
+  describe "#load_js_chart_editor" do
+    it "loads valid packages" do
+      js = plot_charteditor.chart.load_js_chart_editor('id')
+      expect(js).to match(/google.load\('visualization', '1.0',/i)
+      expect(js).to match(/\{packages: \['charteditor'\], callback:/i)
+      expect(js).to match(/draw_id\}\)/i)
+    end
+  end
+
   describe "#draw_js_chart_wrapper" do
     it "draws valid JS of the ChartWrapper" do
       js = @area_chart.chart.draw_js_chart_wrapper(@data, 'id')
@@ -118,6 +161,35 @@ describe GoogleVisualr::BaseChart do
       expect(js).to match(/options: {width: 800/)
       expect(js).to match(/containerId: 'id'/)
       expect(js).to match(/view: {columns: \[0,1\]}/)
+    end
+  end
+
+  describe "#draw_js_chart_editor" do
+    it "draws valid JS of the ChartEditor" do
+      js = plot_charteditor.chart.draw_js_chart_editor(@data, 'id')
+      expect(js).to match(/var chartEditor_id = null/)
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: \{\}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
+      expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+      expect(js).to match(/containerId: 'id'/)
+    end
+    it "draws valid JS of the ChartEditor when URL of spreadsheet is provided" do
+      js = plot_spreadsheet_charteditor.chart.draw_js_chart_editor(@data_spreadsheet, 'id')
+      expect(js).to match(/var chartEditor_id = null/)
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+      expect(js).to match(/options: {width: 800/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
+      expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+      expect(js).to match(/containerId: 'id'/)
     end
   end
 

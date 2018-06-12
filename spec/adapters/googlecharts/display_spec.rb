@@ -28,6 +28,12 @@ describe GoogleVisualr::Display do
   let(:table_chart_wrapper) {Daru::View::Table.new(
     data, {}, user_options)
   }
+  let(:plot_charteditor) {Daru::View::Plot.new(
+    data, {}, class_chart: 'Charteditor')
+  }
+  let(:table_charteditor) {Daru::View::Table.new(
+    data, {}, class_chart: 'Charteditor')
+  }
 
   describe "#to_html" do
     it "generates valid JS of the Area Chart" do
@@ -87,6 +93,30 @@ describe GoogleVisualr::Display do
       expect(js).to match(/containerId: 'id'/)
       expect(js).to match(/view: ''/)
     end
+    it "should generate the valid JS of charteditor" do
+      js = plot_charteditor.chart.to_html('id')
+      expect(js).to match(/<input id="loadcharteditor_id/)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
+    it "should generate the valid JS of datatable charteditor" do
+      js = table_charteditor.table.to_html('id')
+      expect(js).to match(/<input id="loadcharteditor_id/)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
   end
 
   describe "#get_html_chart_wrapper" do
@@ -106,6 +136,31 @@ describe GoogleVisualr::Display do
       expect(js).to match(/google.load\('visualization'/)
       expect(js).to match(/callback:\n draw_id/)
       expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
+  end
+
+  describe "#get_html_chart_editor" do
+    it "should generate the valid JS of charteditor" do
+      js = plot_charteditor.chart.get_html_chart_editor(data, 'id')
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
+    it "should generate the valid JS of datatable charteditor" do
+      js = table_charteditor.table.get_html_chart_editor(data, 'id')
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
       expect(js).to match(/options: {}/)
