@@ -131,9 +131,20 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   end
 
   describe "#validate_url" do
-    it "should raise error for invalid URL" do
-      expect{area_chart_chart.adapter.validate_url('http/hi.com')}
+    subject(:chart) { area_chart_chart.adapter }
+    it "raises error for invalid URL" do
+      expect{chart.validate_url('http/hi.com')}
       .to raise_error('Invalid URL')
+      expect{chart.validate_url('daru')}
+      .to raise_error('Invalid URL')
+    end
+    it "returns true for valid URL" do
+      expect(chart.validate_url(@data_spreadsheet))
+      .to eq(true)
+      expect(chart.validate_url('https://docs.google.com'))
+      .to eq(true)
+      expect(chart.validate_url('http://google.com'))
+      .to eq(true)
     end
   end
 

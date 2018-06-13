@@ -25,7 +25,7 @@ module Daru
         #   on the chart_type
         #
         # @example GoogleChart
-        #   First, set Daru::View.plotting_library = :googlecharts
+        #   Set Daru::View.plotting_library = :googlecharts
         #     (Also set Daru::View.dependent_script(:googlecharts) in web
         #     frameworks in head tag)
         #   Formulate the data to visualize
@@ -49,6 +49,14 @@ module Daru
         #   Draw the Daru::View::Plot object. Default chart type is Line.
         #     line_chart = Daru::View::Plot.new(df_sale_exp, line_options)
         #     bar_chart = Daru::View::Plot.new(df_sale_exp, type: :bar)
+        #
+        # @example GoogleChart with data as a link of google spreadsheet
+        #   data = 'https://docs.google.com/spreadsheets/d/1XWJLkAwch5GXAt'\
+        #          '_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers=1&tq='
+        #   query = 'SELECT H, O, Q, R WHERE O > 1'
+        #   data << query
+        #   options = {type: :area}
+        #   chart = Daru::View::Plot.new(data, options)
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data) unless data.is_a?(String)
@@ -93,6 +101,14 @@ module Daru
         #
         #   Draw the Daru::View::Table object.
         #     line_chart = Daru::View::Table.new(df_sale_exp, table_options)
+        #
+        # @example GoogleChart Datatable with data as a link of google
+        #   spreadsheet
+        #   data = 'https://docs.google.com/spreadsheets/d/1XWJLkAwch5GXAt'\
+        #          '_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers=1&tq='
+        #   query = 'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'
+        #   data << query
+        #   chart = Daru::View::Table.new(data)
         def init_table(data=[], options={})
           # if `options` is something like this :
           # {
@@ -106,7 +122,7 @@ module Daru
           #          {c:[{v: 'Fritz'}, {v: new Date(2011, 6, 1)}]}
           #         ]
           # }
-          # then directly DatTable is created using options. Use data=[] or nil
+          # then directly DataTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
           @table.data = data
           # When data is the URL of the spreadsheet then plot.table will contain the empty
@@ -135,10 +151,14 @@ module Daru
 
         # @param data [String] URL of the google spreadsheet from which data
         #   has to invoked
-        # @return [void] raises error for invalid URL
+        # @return [Boolean, void] returns true for valid URL and raises error
+        #   for invalid URL
         def validate_url(data)
-          # `PATTERN_URL.match? data` is faster but does not support older ruby versions
-          raise 'Invalid URL' unless data.match(PATTERN_URL)
+          # `PATTERN_URL.match? data` is faster but does not support older ruby
+          #  versions
+          # For testing purpose, it is returning true
+          return true if data.match(PATTERN_URL)
+          raise 'Invalid URL'
         end
 
         def init_script
