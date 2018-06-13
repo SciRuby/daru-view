@@ -252,7 +252,7 @@ describe Daru::View::Plot, 'plotting with highcharts' do
 
   # called from #div in plot.rb as @chart_line.div
   describe "#generate_body" do
-    context "should generate valid script of Line Chart" do
+    context "when Line Chart is drawn" do
       it "should generate valid JS of the Line Chart" do
         js = @chart_line.adapter.generate_body(@chart_line.chart)
         expect(js).to match(/script/)
@@ -275,7 +275,7 @@ describe Daru::View::Plot, 'plotting with highcharts' do
         expect(js).to match(/\"data\": \[ 3,6,8,9,20 \]/)
       end
     end
-    context "should generate valid script of Bar Chart" do
+    context "when Bar Chart is drawn" do
       it "should generate valid JS of the Bar Chart" do
         js = @chart_bar.adapter.generate_body(@chart_bar.chart)
         expect(js).to match(/script/)
@@ -300,7 +300,7 @@ describe Daru::View::Plot, 'plotting with highcharts' do
         )
       end
     end
-    context "should generate valid script of Column Chart" do
+    context "when Column Chart is drawn" do
       it "should generate valid JS of the Column Chart" do
         js = @chart_column.adapter.generate_body(@chart_column.chart)
         expect(js).to match(/script/)
@@ -317,8 +317,8 @@ describe Daru::View::Plot, 'plotting with highcharts' do
         expect(js).to match(/series": \[\[ 1,15 \],\[ 2,30 \],\[ 4,40 \]\]/)
       end
     end
-    context "should generate valid script of when multiple series are used" do
-      it "should generate valid JS of the Column Chart" do
+    context "when multiple series is used as data" do
+      it "should generate valid JS of the Chart" do
         js = @chart_multiple_series.adapter.generate_body(@chart_multiple_series.chart)
         expect(js).to match(/script/)
         expect(js).to match(/Highcharts.Chart\(options\)/)

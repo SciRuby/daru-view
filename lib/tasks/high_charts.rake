@@ -95,13 +95,16 @@ namespace :highcharts do
       end
       sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/mapdata/countries/in/custom"
 
-      custom_areas = ['africa', 'antarctica', 'asia', 'benelux', 'british-isles',
-                      'british-isles-all', 'usa-and-canada', 'central-america',
-                      'europe', 'european-union', 'middle-east', 'nordic-countries',
-                      'nordic-countries-core', 'north-america', 'north-america-no-central',
-                      'nato', 'oceania', 'scandinavia', 'south-america',
-                      'world-continents', 'world-palestine-highres', 'world-palestine-lowres',
-                      'world-palestine', 'world-eckert3', 'world', 'world-robinson']
+      custom_areas = ['africa', 'antarctica', 'asia', 'benelux',
+                      'british-isles', 'british-isles-all', 'usa-and-canada',
+                      'central-america', 'europe', 'european-union',
+                      'middle-east', 'nordic-countries',
+                      'nordic-countries-core', 'north-america',
+                      'north-america-no-central', 'nato', 'oceania',
+                      'scandinavia', 'south-america', 'world-continents',
+                      'world-palestine-highres', 'world-palestine-lowres',
+                      'world-palestine', 'world-eckert3', 'world',
+                      'world-robinson']
       custom_areas.each do |custom_area|
         sh "curl -# http://code.highcharts.com/mapdata/custom/" + custom_area + ".js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/mapdata/custom/" + custom_area + ".js"
       end
