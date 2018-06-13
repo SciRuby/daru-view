@@ -82,7 +82,9 @@ module GoogleVisualr
     def to_html(id=nil, options={})
       path =
         if class_chart == 'Charteditor'
-          File.expand_path('../../templates/googlecharts/chart_editor_div.erb', __dir__)
+          File.expand_path(
+            '../../templates/googlecharts/chart_editor_div.erb', __dir__
+          )
         else
           File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
         end
