@@ -59,10 +59,12 @@ module GoogleVisualr
     end
 
     # @param data [String] URL of the google spreadsheet in the specified
-    #   format: https://developers.google.com/chart/interactive/docs/spreadsheets
+    #   format: https://developers.google.com/chart/interactive/docs
+    #   /spreadsheets
     #   Query string can be appended to retrieve the data accordingly
     # @param dom [String] The ID of the DIV element that the Google
-    #   Chart should be rendered in when data is the the URL of the google spreadsheet
+    #   Chart should be rendered in when data is the the URL of the google
+    #   spreadsheet
     # @return [String] js code to render the chart when data is the URL of
     #   the google spreadsheet
     def get_html_spreadsheet(data, dom)
@@ -73,7 +75,9 @@ module GoogleVisualr
     end
 
     def to_html(id=nil, options={})
-      path = File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
+      path = File.expand_path(
+        '../../templates/googlecharts/chart_div.erb', __dir__
+      )
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id

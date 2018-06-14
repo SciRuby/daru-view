@@ -26,7 +26,8 @@ describe GoogleVisualr::DataTable do
       expect(js).to match(/google.load\(/i)
       expect(js).to match(/google.visualization.DataTable\(\)/i)
   	  expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
@@ -41,12 +42,13 @@ describe GoogleVisualr::DataTable do
       to_js_full_script_spreadsheet(data_spreadsheet, 'id')
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(/google.load\(/i)
-      expect(js).to match(/google.visualization.Query\('https:\/\/docs.google\
-.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\
-\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(js).to match(/gid=0&headers=1&tq=/i)
+      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(/google.visualization.Table\(document.\
-getElementById\(\'id\'\)/i)
+      expect(js).to match(
+        /google.visualization.Table\(document.getElementById\(\'id\'\)/
+      )
       expect(js).to match(/table.draw\(data_table, \{width: 800\}/i)
     end
   end
@@ -72,7 +74,8 @@ getElementById\(\'id\'\)/i)
   	  js = data_table.table.draw_js('id')
   	  expect(js).to match(/google.visualization.DataTable\(\)/i)
   	  expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
@@ -84,12 +87,13 @@ getElementById\(\'id\'\)/i)
     it "draws valid JS of the table when "\
        "data is imported from google spreadsheets" do
       js = table_spreadsheet.table.draw_js_spreadsheet(data_spreadsheet, 'id')
-      expect(js).to match(/google.visualization.Query\('https:\/\/docs.google\
-.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\?\
-gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(js).to match(/gid=0&headers=1&tq=/i)
+      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(/google.visualization.Table\(document.\
-getElementById\(\'id\'\)/i)
+      expect(js).to match(
+        /google.visualization.Table\(document.getElementById\(\'id\'\)/
+      )
       expect(js).to match(/table.draw\(data_table, \{width: 800\}/i)
     end
   end

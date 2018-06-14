@@ -125,10 +125,10 @@ module Daru
           # then directly DataTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
           @table.data = data
-          # When data is the URL of the spreadsheet then plot.table will contain the empty
-          #   table as the DataTable is generated in query response in js and we can not
-          #   retrieve the data from google spreadsheet
-          #   (@see #GoogleVisualr::DataTable.draw_js_spreadsheet)
+          # When data is the URL of the spreadsheet then plot.table will
+          #   contain the empty table as the DataTable is generated in query
+          #   response in js and we can not retrieve the data from google
+          #   spreadsheet (@see #GoogleVisualr::DataTable.draw_js_spreadsheet)
           add_data_in_table(data) unless data.is_a?(String)
           validate_url(data) if data.is_a?(String)
           @table
@@ -138,9 +138,11 @@ module Daru
         #   The data provided by the user to generate the google datatable.
         #   Data in String format represents the URL of the google spreadsheet
         #   from which data has to invoked
-        # @return [GoogleVisualr::DataTable] the table object will the data filled
+        # @return [GoogleVisualr::DataTable] the table object will the data
+        #   filled
         def get_table(data)
-          if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
+          if data.is_a?(Daru::View::Table) &&
+             data.table.is_a?(GoogleVisualr::DataTable)
             data.table
           elsif data.is_a?(GoogleVisualr::DataTable)
             data
@@ -180,7 +182,9 @@ module Daru
         end
 
         def generate_html(plot)
-          path = File.expand_path('../templates/googlecharts/static_html.erb', __dir__)
+          path = File.expand_path(
+            '../templates/googlecharts/static_html.erb', __dir__
+          )
           template = File.read(path)
           chart_script = generate_body(plot)
           initial_script = init_script

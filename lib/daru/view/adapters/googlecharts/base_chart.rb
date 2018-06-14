@@ -19,7 +19,8 @@ module GoogleVisualr
     #   google spreadsheet
     #
     # @param data [String] URL of the google spreadsheet in the specified
-    #   format: https://developers.google.com/chart/interactive/docs/spreadsheets
+    #   format: https://developers.google.com/chart/interactive/docs
+    #   /spreadsheets
     #   Query string can be appended to retrieve the data accordingly
     # @param element_id [String] The ID of the DIV element that the Google
     #   Chart should be rendered in

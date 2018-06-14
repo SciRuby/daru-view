@@ -61,12 +61,13 @@ describe GoogleVisualr::Display do
       expect(js).to match(/<div id='id'>/i)
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.load\(/i)
-      expect(js).to match(/google.visualization.Query\('https:\/\/docs.\
-google.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gvi\
-z\/tq\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(js).to match(/gid=0&headers=1&tq=/i)
+      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(/google.visualization.ColumnChart\(document.\
-getElementById\(\'id\'\)/i)
+      expect(js).to match(
+        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+      )
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
     it "generates valid JS of the google data_table" do
@@ -107,12 +108,13 @@ getElementById\(\'id\'\)/i)
        "from google spreadsheet without script tag" do
       chart_script = plot_spreadsheet.chart.show_script("id", script_tag: false)
       expect(chart_script).to match(/google.load\(/i)
-      expect(chart_script).to match(/google.visualization.Query\('https:\/\/docs.\
-google.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gvi\
-z\/tq\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(chart_script).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(chart_script).to match(/gid=0&headers=1&tq=/i)
+      expect(chart_script).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(chart_script).to match(/var data_table = response.getDataTable/i)
-      expect(chart_script).to match(/google.visualization.ColumnChart\(document.\
-getElementById\(\'id\'\)/i)
+      expect(chart_script).to match(
+        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+      )
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
     it "generates valid script of the data_table without script tag" do
@@ -142,9 +144,9 @@ getElementById\(\'id\'\)/i)
       chart_script = plot_spreadsheet.chart.show_script_with_script_tag("id")
       expect(chart_script).to match(/<script type='text\/javascript'>/i)
       expect(chart_script).to match(/google.load\(/i)
-      expect(chart_script).to match(/google.visualization.Query\('https:\/\/docs.\
-google.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gvi\
-z\/tq\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(chart_script).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(chart_script).to match(/gid=0&headers=1&tq=/i)
+      expect(chart_script).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(chart_script).to match(/var data_table = response.getDataTable/i)
       expect(chart_script).to match(
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
@@ -178,11 +180,13 @@ z\/tq\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
   describe "#get_html_spreadsheet" do
     it "draws valid JS of the chart when "\
        "data is imported from google spreadsheets" do
-      chart_script = plot_spreadsheet.chart.get_html_spreadsheet(data_spreadsheet, 'id')
+      chart_script = plot_spreadsheet.chart.get_html_spreadsheet(
+        data_spreadsheet, 'id'
+      )
       expect(chart_script).to match(/google.load\(/i)
-      expect(chart_script).to match(/google.visualization.Query\('https:\/\/docs.google\
-.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\?\
-gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(chart_script).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(chart_script).to match(/gid=0&headers=1&tq=/i)
+      expect(chart_script).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(chart_script).to match(/var data_table = response.getDataTable/i)
       expect(chart_script).to match(
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/

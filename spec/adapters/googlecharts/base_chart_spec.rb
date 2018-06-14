@@ -26,9 +26,9 @@ describe GoogleVisualr::BaseChart do
       js = plot_spreadsheet.chart.to_js_spreadsheet(data_spreadsheet, 'id')
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(/google.load\(/i)
-      expect(js).to match(/google.visualization.Query\('https:\/\/docs.google\
-.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\
-\?gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(js).to match(/gid=0&headers=1&tq=/i)
+      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(js).to match(/var data_table = response.getDataTable/i)
       expect(js).to match(
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
@@ -41,9 +41,9 @@ describe GoogleVisualr::BaseChart do
     it "draws valid JS of the chart when "\
        "data is imported from google spreadsheets" do
       js = plot_spreadsheet.chart.draw_js_spreadsheet(data_spreadsheet, 'id')
-      expect(js).to match(/google.visualization.Query\('https:\/\/docs.google\
-.com\/spreadsheets\/d\/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE\/gviz\/tq\?\
-gid=0&headers=1&tq=SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'\)/i)
+      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(js).to match(/gid=0&headers=1&tq=/i)
+      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
       expect(js).to match(/var data_table = response.getDataTable/i)
       expect(js).to match(
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
