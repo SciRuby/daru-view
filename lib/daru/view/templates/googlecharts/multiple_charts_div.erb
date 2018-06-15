@@ -1,0 +1,12 @@
+<table class='columns'>
+  <tr>
+    <% id.each do |div_id| %>  
+      <td><div id='<%= div_id %>'></div></td>
+    <% end %>
+  </tr>
+</table>
+<script>
+  <% chart_script.each do |ch_script| %>
+    <%= ch_script %>
+  <% end %>
+</script>

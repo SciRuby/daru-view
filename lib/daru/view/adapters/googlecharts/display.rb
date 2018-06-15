@@ -75,18 +75,61 @@ module GoogleVisualr
     end
 
     def to_html(id=nil, options={})
-      path = File.expand_path(
-        '../../templates/googlecharts/chart_div.erb', __dir__
-      )
+      if data.is_a?(Array) &&
+         (data[0].is_a?(Daru::View::Plot) || data[0].is_a?(Daru::View::Table))
+        id, chart_script, path = extract_multiple_charts_id_script_path
+      else
+        id, chart_script, path = extract_chart_id_script_path(id)
+      end
       template = File.read(path)
-      id ||= SecureRandom.uuid
-      @html_id = id
-      chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
       IRuby.html(to_html(dom))
+    end
+
+    # @return [Array] Array of IDs of the multiple  charts, Array of scripts
+    #   of the multiple charts, path of the template used to render the
+    #   multiple charts
+    def extract_multiple_charts_id_script_path
+      path = File.expand_path(
+        '../../templates/googlecharts/multiple_charts_div.erb', __dir__
+      )
+      id = []
+      chart_script = []
+      data.each_with_index do |plot, index|
+        id[index] ||= SecureRandom.uuid
+        chart_script[index] = set_chart_script(plot, id[index])
+      end
+      [id, chart_script, path]
+    end
+
+    # @param id [String] The ID of the DIV element that the Google Chart
+    #   should be rendered in
+    # @return [Array] ID of the div element, script of the chart, path of
+    #   the template which will be used to render the chart
+    def extract_chart_id_script_path(id=nil)
+      path = File.expand_path(
+        '../../templates/googlecharts/chart_div.erb', __dir__
+      )
+      id ||= SecureRandom.uuid
+      @html_id = id
+      chart_script = show_script(id, script_tag: false)
+      [id, chart_script, path]
+    end
+
+    # @param plot [Daru::View::Plot, Daru::View::Table] one of the plot or
+    #   table objects that will be shown in a row
+    # @param id [String] The ID of the DIV element that the Google Chart
+    #   should be rendered in
+    # @return [String] Javascript of the table or chart
+    def set_chart_script(plot, id)
+      if plot.is_a?(Daru::View::Plot)
+        plot.chart.show_script(id, script_tag: false)
+      else
+        plot.table.show_script(id, script_tag: false)
+      end
     end
   end
 

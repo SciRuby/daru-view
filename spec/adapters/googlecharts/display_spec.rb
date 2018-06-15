@@ -29,6 +29,9 @@ describe GoogleVisualr::Display do
     new(data_table.table, area_chart_options)}
   let(:column_chart_chart) {Daru::View::Plot.
   new(data_table.table, column_chart_options)}
+  let(:combined) {
+    Daru::View::Plot.new([data_table, area_chart_chart, column_chart_chart])
+  }
 
   describe "#to_html" do
     it "generates valid JS of the Area Chart" do

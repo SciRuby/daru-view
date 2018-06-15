@@ -57,14 +57,28 @@ module Daru
         #   data << query
         #   options = {type: :area}
         #   chart = Daru::View::Plot.new(data, options)
+        #
+        # @example Multiple Charts in a row
+        #   Draw the Daru::View::Plot object with the data as an array of
+        #   Daru::View::Plots(s) or Daru::View::Table(s) or both
+        #     combined = Daru::View::Plot([line_chart, bar_chart])
         def init(data=[], options={})
-          @table = GoogleVisualr::DataTable.new
-          @table = get_table(data) unless data.is_a?(String)
-          validate_url(data) if data.is_a?(String)
-          @chart_type = extract_chart_type(options)
-          @chart = GoogleVisualr::Interactive.const_get(
-            @chart_type
-          ).new(@table, options)
+          # When multiple charts are shown in a row, @chart will contain the
+          #   instance of GoogleVisular::BaseChart so that its data can contain
+          #   the array of plots (this will be used in display.rb). Further,
+          #   @chart will be used to call show_in_iruby and to_html.
+          if data.is_a?(Array) &&
+             (data[0].is_a?(Daru::View::Plot) || data[0].is_a?(Daru::View::Table))
+            @chart = GoogleVisualr::BaseChart.new(GoogleVisualr::DataTable.new)
+          else
+            @table = GoogleVisualr::DataTable.new
+            @table = get_table(data)
+            validate_url(data) if data.is_a?(String)
+            @chart_type = extract_chart_type(options)
+            @chart = GoogleVisualr::Interactive.const_get(
+              @chart_type
+            ).new(@table, options)
+          end
           @chart.data = data
           @chart
         end
