@@ -319,18 +319,24 @@ describe Daru::View::Plot, 'plotting with highcharts' do
     end
     context "when multiple series is used as data" do
       it "should generate valid JS of the Chart" do
-        js = @chart_multiple_series.adapter.generate_body(@chart_multiple_series.chart)
+        js = @chart_multiple_series.adapter.generate_body(
+          @chart_multiple_series.chart
+        )
         expect(js).to match(/script/)
         expect(js).to match(/Highcharts.Chart\(options\)/)
         expect(js).to match(/window.chart_/)
       end
       it "should set the correct options" do
-        js = @chart_multiple_series.adapter.generate_body(@chart_multiple_series.chart)
+        js = @chart_multiple_series.adapter.generate_body(
+          @chart_multiple_series.chart
+        )
         expect(js).to match(/\"chart\": { \"type\": \"bar\"/)
         expect(js).to match(/\"title\": { \"text\": \"Demo Bar Chart\" }/)
       end
       it "should set correct data" do
-        js = @chart_multiple_series.adapter.generate_body(@chart_multiple_series.chart)
+        js = @chart_multiple_series.adapter.generate_body(
+          @chart_multiple_series.chart
+        )
         # indicates series contains array of hashes
         expect(js).to match(/series": \[\{/)
       end
