@@ -3,6 +3,11 @@ require 'google_visualr'
 
 module GoogleVisualr
   class DataTable
+    # Holds a value only when generate_body or show_in_iruby method
+    #   is invoked in googlecharts.rb
+    # @return [Array, Daru::DataFrame, Daru::Vector, String] Data of
+    #   GoogleVisualr DataTable
+    attr_accessor :data
     # options will enable us to give some styling for table.
     # E.g. pagination, row numbers, etc
     attr_accessor :options
@@ -31,10 +36,11 @@ module GoogleVisualr
     end
 
     # Generates JavaScript and renders the Google Chart DataTable in the
-    # final HTML output.
+    #   final HTML output
     #
-    # Parameters:
-    #  *div_id            [Required] The ID of the DIV element that the Google Chart DataTable should be rendered in.
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] Javascript code to render the Google Chart DataTable
     def to_js_full_script(element_id=SecureRandom.uuid)
       js =  ''
       js << '\n<script type=\'text/javascript\'>'
@@ -44,8 +50,35 @@ module GoogleVisualr
       js
     end
 
+    # Generates JavaScript and renders the Google Chart DataTable in the
+    #   final HTML output when data is URL of the google spreadsheet
+    #
+    # @param data [String] URL of the google spreadsheet in the specified
+    #   format: https://developers.google.com/chart/interactive/docs
+    #   /spreadsheets
+    #   Query string can be appended to retrieve the data accordingly
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] Javascript code to render the Google Chart DataTable
+    #   when data is given as the URL of the google spreadsheet
+    def to_js_full_script_spreadsheet(data, element_id=SecureRandom.uuid)
+      js =  ''
+      js << '\n<script type=\'text/javascript\'>'
+      js << load_js(element_id)
+      js << draw_js_spreadsheet(data, element_id)
+      js << '\n</script>'
+      js
+    end
+
     def chart_function_name(element_id)
       "draw_#{element_id.tr('-', '_')}"
+    end
+
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] unique function name to handle query response
+    def query_response_function_name(element_id)
+      "handleQueryResponse_#{element_id.tr('-', '_')}"
     end
 
     def google_table_version
@@ -56,10 +89,12 @@ module GoogleVisualr
       'table'
     end
 
-    # Generates JavaScript for loading the appropriate Google Visualization package, with callback to render chart.
+    # Generates JavaScript for loading the appropriate Google Visualization
+    #   package, with callback to render chart.
     #
-    # Parameters:
-    #  *div_id            [Required] The ID of the DIV element that the Google Chart should be rendered in.
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] JS to load to appropriate Google Visualization package
     def load_js(element_id)
       js = ''
       js << "\n  google.load('visualization', #{google_table_version}, "
@@ -68,10 +103,11 @@ module GoogleVisualr
       js
     end
 
-    # Generates JavaScript function for rendering the chart.
+    # Generates JavaScript function for rendering the google chart table.
     #
-    # Parameters:
-    #  *div_id            [Required] The ID of the DIV element that the Google Chart should be rendered in.
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] JS function to render the google chart table
     def draw_js(element_id)
       js = ''
       js << "\n  function #{chart_function_name(element_id)}() {"
@@ -80,6 +116,27 @@ module GoogleVisualr
       js << "\n    document.getElementById('#{element_id}'));"
       js << "\n    table.draw(data_table, #{js_parameters(@options)}); "
       js << "\n  };"
+      js
+    end
+
+    # Generates JavaScript function for rendering the google chart table when
+    #   data is URL of the google spreadsheet
+    #
+    # @param (see #to_js_full_script_spreadsheet)
+    # @return [String] JS function to render the google chart table when data
+    #   is URL of the google spreadsheet
+    def draw_js_spreadsheet(data, element_id)
+      js = ''
+      js << "\n function #{chart_function_name(element_id)}() {"
+      js << "\n 	var query = new google.visualization.Query('#{data}');"
+      js << "\n 	query.send(#{query_response_function_name(element_id)});"
+      js << "\n }"
+      js << "\n function #{query_response_function_name(element_id)}(response) {"
+      js << "\n 	var data_table = response.getDataTable();"
+      js << "\n 	var table = new google.visualization.Table"\
+            "(document.getElementById('#{element_id}'));"
+      js << "\n 	table.draw(data_table, #{js_parameters(@options)});"
+      js << "\n };"
       js
     end
   end
