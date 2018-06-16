@@ -72,7 +72,7 @@ module Daru
             @chart = GoogleVisualr::BaseChart.new(GoogleVisualr::DataTable.new)
           else
             @table = GoogleVisualr::DataTable.new
-            @table = get_table(data)
+            @table = get_table(data) unless data.is_a?(String)
             validate_url(data) if data.is_a?(String)
             @chart_type = extract_chart_type(options)
             @chart = GoogleVisualr::Interactive.const_get(
