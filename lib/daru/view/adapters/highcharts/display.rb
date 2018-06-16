@@ -8,7 +8,7 @@ module LazyHighCharts
   # @param [Array] dependent js files required
   # @return [String] js code of the dependent files
   def self.init_script(
-    dependent_js=HIGHCHARTS_DEPENDENCIES
+    dependent_js=HIGHCHARTS_DEPENDENCIES_WEB
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
@@ -29,7 +29,7 @@ module LazyHighCharts
   # @param [Array] dependent css files required
   # @return [String] CSS code of the dependent file(s)
   def self.init_css(
-    dependent_css=['highcharts.css']
+    dependent_css=HIGHCHARTS_DEPENDENCIES_CSS
   )
     css =  ''
     css << "\n<style type='text/css'>"

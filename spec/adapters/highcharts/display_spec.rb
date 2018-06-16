@@ -7,11 +7,9 @@ describe LazyHighCharts do
       js = LazyHighCharts.init_script
       expect(js).to match(/BEGIN js\/highstock.js/i)
       expect(js).to match(/Highstock JS/i)
-      expect(js).to match(/BEGIN map.js/i)
-      expect(js).to match(/END map.js/i)
+      expect(js).to match(/BEGIN js\/map.js/i)
+      expect(js).to match(/END js\/map.js/i)
       expect(js).to match(/END js\/highstock.js/i)
-      expect(js).to match(/BEGIN highcharts.css/i)
-      expect(js).to match(/END highcharts.css/i)
       expect(js).to match(/BEGIN modules\/exporting.js/i)
       expect(js).to match(/END modules\/exporting.js/i)
       expect(js).to match(/BEGIN highcharts-3d.js/i)

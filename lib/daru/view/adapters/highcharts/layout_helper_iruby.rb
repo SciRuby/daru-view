@@ -8,6 +8,14 @@ module LazyHighCharts
       ).concat(content_tag('div', '', object.html_options))
     end
 
+    def high_map(placeholder, object, &block)
+      object.html_options[:id] = placeholder
+      object.options[:chart][:renderTo] = placeholder
+      build_html_output(
+        'Map', placeholder, object, &block
+      ).concat(content_tag('div', '', object.html_options))
+    end
+
     private
 
     def build_html_output_iruby(type, placeholder, object, &block)
