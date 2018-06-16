@@ -3,6 +3,7 @@ require_relative 'googlecharts/iruby_notebook'
 require_relative 'googlecharts/display'
 require 'daru'
 require 'bigdecimal'
+require 'daru/view/constants'
 
 module Daru
   module View
@@ -14,24 +15,100 @@ module Daru
         # the google charts option concept.
         # and google_visualr : http://googlevisualr.herokuapp.com/
         #
-        # TODO : this docs must be improved
+        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table,
+        #   String] The data provided by the user to generate the google chart.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @param options [Hash] Various options provided by the user to
+        #   incorporate in google charts
+        # @return [GoogleVisualr::Interactive] Returns the chart object based
+        #   on the chart_type
+        #
+        # @example GoogleChart
+        #   Set Daru::View.plotting_library = :googlecharts
+        #     (Also set Daru::View.dependent_script(:googlecharts) in web
+        #     frameworks in head tag)
+        #   Formulate the data to visualize
+        #     idx = Daru::Index.new ['Year', 'Sales']
+        #     data_rows = [
+        #                   ['2004',  1000],
+        #                   ['2005',  1170],
+        #                   ['2006',  660],
+        #                   ['2007',  1030]
+        #                 ]
+        #     df_sale_exp = Daru::DataFrame.rows(data_rows)
+        #     df_sale_exp.vectors = idx
+        #
+        #   Set the options required
+        #     line_options = {
+        #       title: 'Company Performance',
+        #       curveType: 'function',
+        #       legend: { position: 'bottom' }
+        #     }
+        #
+        #   Draw the Daru::View::Plot object. Default chart type is Line.
+        #     line_chart = Daru::View::Plot.new(df_sale_exp, line_options)
+        #     bar_chart = Daru::View::Plot.new(df_sale_exp, type: :bar)
+        #
+        # @example GoogleChart with data as a link of google spreadsheet
+        #   data = 'https://docs.google.com/spreadsheets/d/1XWJLkAwch5GXAt'\
+        #          '_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers=1&tq='
+        #   query = 'SELECT H, O, Q, R WHERE O > 1'
+        #   data << query
+        #   options = {type: :area}
+        #   chart = Daru::View::Plot.new(data, options)
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
-          @table =
-            if data.is_a?(Daru::View::Table) && data.table.is_a?(GoogleVisualr::DataTable)
-              data.table
-            elsif data.is_a?(GoogleVisualr::DataTable)
-              data
-            else
-              add_data_in_table(data)
-            end
+          @table = get_table(data) unless data.is_a?(String)
+          validate_url(data) if data.is_a?(String)
           @chart_type = extract_chart_type(options)
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
           ).new(@table, options)
+          @chart.data = data
           @chart
         end
 
+        # @param data [Array, Daru::DataFrame, Daru::Vector, String]
+        #   The data provided by the user to generate the google datatable.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @param options [Hash] Various options provided by the user to
+        #   incorporate in google datatables
+        # @return [GoogleVisualr::DataTable] Returns the table object
+        #
+        # @example GoogleChart DataTable
+        #   First, set Daru::View.plotting_library = :googlecharts
+        #     (Also set Daru::View.dependent_script(:googlecharts) in web
+        #     frameworks in head tag)
+        #   Formulate the data to visualize
+        #     idx = Daru::Index.new ['Year', 'Sales']
+        #     data_rows = [
+        #                   ['2004',  1000],
+        #                   ['2005',  1170],
+        #                   ['2006',  660],
+        #                   ['2007',  1030]
+        #                 ]
+        #     df_sale_exp = Daru::DataFrame.rows(data_rows)
+        #     df_sale_exp.vectors = idx
+        #
+        #   Set the options required
+        #     table_options = {
+        #       showRowNumber: true,
+        #       width: '100%',
+        #       height: '100%' ,
+        #     }
+        #
+        #   Draw the Daru::View::Table object.
+        #     line_chart = Daru::View::Table.new(df_sale_exp, table_options)
+        #
+        # @example GoogleChart Datatable with data as a link of google
+        #   spreadsheet
+        #   data = 'https://docs.google.com/spreadsheets/d/1XWJLkAwch5GXAt'\
+        #          '_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers=1&tq='
+        #   query = 'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'
+        #   data << query
+        #   chart = Daru::View::Table.new(data)
         def init_table(data=[], options={})
           # if `options` is something like this :
           # {
@@ -45,10 +122,45 @@ module Daru
           #          {c:[{v: 'Fritz'}, {v: new Date(2011, 6, 1)}]}
           #         ]
           # }
-          # then directly DatTable is created using options. Use data=[] or nil
+          # then directly DataTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
-          add_data_in_table(data)
+          @table.data = data
+          # When data is the URL of the spreadsheet then plot.table will
+          #   contain the empty table as the DataTable is generated in query
+          #   response in js and we can not retrieve the data from google
+          #   spreadsheet (@see #GoogleVisualr::DataTable.draw_js_spreadsheet)
+          add_data_in_table(data) unless data.is_a?(String)
+          validate_url(data) if data.is_a?(String)
           @table
+        end
+
+        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table]
+        #   The data provided by the user to generate the google datatable.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @return [GoogleVisualr::DataTable] the table object will the data
+        #   filled
+        def get_table(data)
+          if data.is_a?(Daru::View::Table) &&
+             data.table.is_a?(GoogleVisualr::DataTable)
+            data.table
+          elsif data.is_a?(GoogleVisualr::DataTable)
+            data
+          else
+            add_data_in_table(data)
+          end
+        end
+
+        # @param data [String] URL of the google spreadsheet from which data
+        #   has to invoked
+        # @return [Boolean, void] returns true for valid URL and raises error
+        #   for invalid URL
+        def validate_url(data)
+          # `PATTERN_URL.match? data` is faster but does not support older ruby
+          #  versions
+          # For testing purpose, it is returning true
+          return true if data.match(PATTERN_URL)
+          raise 'Invalid URL'
         end
 
         def init_script
@@ -70,7 +182,9 @@ module Daru
         end
 
         def generate_html(plot)
-          path = File.expand_path('../templates/googlecharts/static_html.erb', __dir__)
+          path = File.expand_path(
+            '../templates/googlecharts/static_html.erb', __dir__
+          )
           template = File.read(path)
           chart_script = generate_body(plot)
           initial_script = init_script
@@ -107,7 +221,8 @@ module Daru
         # data rows
         #
         # TODO : Currently I didn't find use case for multi index.
-        def add_data_in_table(data_set) # rubocop:disable Metrics/MethodLength
+        # rubocop:disable Metrics/MethodLength
+        def add_data_in_table(data_set)
           case
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
@@ -126,6 +241,7 @@ module Daru
           @table.add_rows(rows)
           @table
         end
+        # rubocop:enable Metrics/MethodLength
 
         def add_dataframe_data(data_set)
           rows = data_set.access_row_tuples_by_indexs(*data_set.index.to_a)
