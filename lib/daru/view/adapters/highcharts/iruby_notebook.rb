@@ -1,3 +1,5 @@
+require 'daru/view/constants'
+
 module LazyHighCharts
   # generate initializing code
   def self.generate_init_code(dependent_js)
@@ -9,14 +11,16 @@ module LazyHighCharts
 
   # Enable to show plots on IRuby notebook
   def self.init_iruby(
-    dependent_js=['highstock.js', 'highcharts-more.js', 'modules/exporting.js',
-                  'highcharts-3d.js', 'modules/data.js']
+    dependent_js=HIGHCHARTS_DEPENDENCIES
   )
     # TODO: include highstock.js for highstock and modules/*.js files for
     # exporting and getting data from various source like csv files etc.
     #
     # Highstock.js includes the highcharts.js, so only one of them required.
     # see: https://www.highcharts.com/errors/16
+    #
+    # Using Highmaps as a plugin for HighCharts so using map.js instead of
+    # highmaps.js
     #
     # , 'modules/exporting.js' : for the exporting button
     # data.js for getting data as csv or html table.
