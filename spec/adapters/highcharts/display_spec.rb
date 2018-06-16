@@ -43,7 +43,8 @@ describe LazyHighCharts::HighChart do
         type: 'bar'
       },
       css: ['.highcharts-color-1 {fill: #90ed7d;stroke: #90ed7d;}',
-            '.highcharts-background {fill: #efefef;stroke: #a4edba;stroke-width: 2px;}'],
+            '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
+            'stroke-width: 2px;}'],
       title: {
         text: 'Bar chart'
       },
@@ -100,7 +101,8 @@ describe LazyHighCharts::HighChart do
       @opts = {
           chart_class: 'stock',
           css: [
-            '.highcharts-background {fill: #efefef;stroke: #a4edba;stroke-width: 2px;}'
+            '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
+            'stroke-width: 2px;}'
           ],
           chart: {
             type: 'arearange'
