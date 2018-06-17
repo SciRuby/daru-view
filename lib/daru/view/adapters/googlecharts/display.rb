@@ -124,7 +124,7 @@ module GoogleVisualr
     # @param id [String] The ID of the DIV element that the Google Chart
     #   should be rendered in
     # @return [String] Javascript of the table or chart
-    def set_chart_script(plot, id)
+    def set_chart_script(plot, id=nil)
       if plot.is_a?(Daru::View::Plot)
         plot.chart.show_script(id, script_tag: false)
       else

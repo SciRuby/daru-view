@@ -83,6 +83,57 @@ describe GoogleVisualr::Display do
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end
+    it "generates valid js of the combined charts" do
+      js = combined.chart.to_html
+      expect(js).to match(/google.visualization.Table/)
+      expect(js).to match(/google.visualization.AreaChart/)
+      expect(js).to match(/google.visualization.ColumnChart/)
+    end
+  end
+
+  describe "#extract_multiple_charts_id_script_path" do
+    it "returns correct path of the multiple_charts_div" do
+      id_script_path = combined.chart.extract_multiple_charts_id_script_path
+      expect(id_script_path[2]).to match(
+        /templates\/googlecharts\/multiple_charts_div.erb/
+      )
+    end
+    it "returns correct scripts of the multiple charts" do
+      id_script_path = combined.chart.extract_multiple_charts_id_script_path
+      expect(id_script_path[1][0]).to match(/google.visualization.Table/)
+      expect(id_script_path[1][1]).to match(/google.visualization.AreaChart/)
+      expect(id_script_path[1][2]).to match(/google.visualization.ColumnChart/)
+    end
+  end
+
+  describe "#extract_chart_id_script_path" do
+    it "returns correct path of the chart_div" do
+      id_script_path = area_chart_chart.chart.extract_chart_id_script_path
+      expect(id_script_path[2]).to match(
+        /templates\/googlecharts\/chart_div.erb/
+      )
+    end
+    it "returns correct script of the chart" do
+      id_script_path = area_chart_chart.chart.extract_chart_id_script_path
+      expect(id_script_path[1]).to match(
+        /google.visualization.AreaChart/
+      )
+    end
+    it "returns correct id of the chart" do
+      id_script_path = area_chart_chart.chart.extract_chart_id_script_path('id')
+      expect(id_script_path[0]).to eq('id')
+    end
+  end
+
+  describe "#set_chart_script" do
+    it "sets correct script of the data_table" do
+      js = data_table.table.set_chart_script(data_table, 'id')
+      expect(js).to match(/google.visualization.Table/)
+    end
+    it "sets correct script of the chart" do
+      js = area_chart_chart.chart.set_chart_script(area_chart_chart, 'id')
+      expect(js).to match(/google.visualization.AreaChart/)
+    end
   end
 
   describe "#show_script" do
