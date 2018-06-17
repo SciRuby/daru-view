@@ -219,6 +219,29 @@ describe GoogleVisualr::Display do
       expect(table_script).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end
+    it "should generate valid script with script tag of chartwrapper" do
+      js = area_chart_wrapper.chart.show_script_with_script_tag('id')
+      expect(js).to match(/script/)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback: draw_id/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
+    it "should generate the valid JS of datatable chartwrapper" do
+      js = table_chart_wrapper.table.show_script_with_script_tag('id')
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
   end
 
   describe "#get_html" do
@@ -249,32 +272,6 @@ describe GoogleVisualr::Display do
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
       )
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
-    end
-  end
-
-  describe "#show_script_with_script_tag" do
-    it "should generate valid script with script tag of chartwrapper" do
-      js = area_chart_wrapper.chart.show_script_with_script_tag('id')
-      expect(js).to match(/script/)
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback: draw_id/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'AreaChart'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: {}/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: ''/)
-    end
-    it "should generate the valid JS of datatable chartwrapper" do
-      js = table_chart_wrapper.table.show_script_with_script_tag('id')
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'Table'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: {}/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: ''/)
     end
   end
 end

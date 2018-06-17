@@ -2,10 +2,11 @@ require 'securerandom'
 require 'erb'
 require_relative 'data_table_iruby'
 require_relative 'base_chart'
+require 'daru/view/constants'
 
 module GoogleVisualr
   def self.init_script(
-    dependent_js=['google_visualr.js', 'loader.js']
+    dependent_js=GOOGLECHARTS_DEPENDENCIES
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
@@ -38,16 +39,12 @@ module GoogleVisualr
     # @return [String] js code to render the chart with script tag
     def show_script_with_script_tag(dom=SecureRandom.uuid)
       # if it is data table
-      if is_a?(GoogleVisualr::DataTable) && class_chart == 'Chartwrapper'
-        to_js_full_script_chart_wrapper(data, dom)
-      elsif is_a?(GoogleVisualr::DataTable) && data.is_a?(String)
-        to_js_full_script_spreadsheet(data, dom)
-      elsif is_a?(GoogleVisualr::DataTable)
-        to_js_full_script(dom)
-      elsif class_chart == 'Chartwrapper'
+      if class_chart == 'Chartwrapper'
         to_js_chart_wrapper(data, dom)
       elsif data.is_a?(String)
         to_js_spreadsheet(data, dom)
+      elsif is_a?(GoogleVisualr::DataTable)
+        to_js_full_script(dom)
       else
         to_js(dom)
       end
@@ -77,6 +74,7 @@ module GoogleVisualr
       html << load_js(dom)
       html << draw_js_spreadsheet(data, dom)
       html
+    end
 
     def get_html_chart_wrapper(data, dom)
       html = ''

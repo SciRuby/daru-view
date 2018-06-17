@@ -65,7 +65,7 @@ module GoogleVisualr
     #   Chart DataTable should be rendered in
     # @return [String] Javascript code to render the Google Chart DataTable
     #   when data is given as the URL of the google spreadsheet
-    def to_js_full_script_spreadsheet(data, element_id=SecureRandom.uuid)
+    def to_js_spreadsheet(data, element_id=SecureRandom.uuid)
       js =  ''
       js << '\n<script type=\'text/javascript\'>'
       js << load_js(element_id)
@@ -82,7 +82,7 @@ module GoogleVisualr
     # @param element_id [String] The ID of the DIV element that the Google
     #   Chartwrapper should be rendered in
     # @return [String] Javascript code to render the Google Chartwrapper
-    def to_js_full_script_chart_wrapper(data, element_id=SecureRandom.uuid)
+    def to_js_chart_wrapper(data, element_id=SecureRandom.uuid)
       js =  ''
       js << "\n<script type='text/javascript'>"
       js << load_js(element_id)

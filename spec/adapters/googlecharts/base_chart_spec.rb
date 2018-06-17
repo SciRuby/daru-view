@@ -113,7 +113,7 @@ describe GoogleVisualr::BaseChart do
 
   describe "#draw_js_chart_wrapper" do
     it "draws valid JS of the ChartWrapper" do
-      js = area_chart.chart.draw_js_chart_wrapper(@data, 'id')
+      js = area_chart.chart.draw_js_chart_wrapper(data, 'id')
       expect(js).to match(/new google.visualization.DataTable/)
       expect(js).to match(/new google.visualization.ChartWrapper/)
       expect(js).to match(/chartType: 'AreaChart'/)

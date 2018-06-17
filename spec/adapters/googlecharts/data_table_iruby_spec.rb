@@ -18,16 +18,16 @@ describe GoogleVisualr::DataTable do
     )
   }
   let(:data_table) {Daru::View::Table.new(data)}
-      data_spreadsheet, {width: 800},
-    )
-  }
-  let(:data_table) {Daru::View::Table.new(data)}
   let (:table_spreadsheet_chartwrapper) {
     Daru::View::Table.new(
-      data_spreadsheet, {width: 800, view: {columns: [0, 1]}}, chart_class: 'ChartWrapper'
+      data_spreadsheet,
+      {width: 800, view: {columns: [0, 1]}},
+      chart_class: 'ChartWrapper'
     )
   }
-  let(:table_chartwrapper) {Daru::View::Table.new(data, {}, chart_class: 'ChartWrapper')}
+  let(:table_chartwrapper) {
+    Daru::View::Table.new(data, {}, chart_class: 'ChartWrapper')
+  }
 
   describe "#to_js_full_script" do
   	it "generates valid JS of the table" do
@@ -45,11 +45,10 @@ describe GoogleVisualr::DataTable do
   	end
   end
 
-  describe "#to_js_full_script_spreadsheet" do
+  describe "#to_js_spreadsheet" do
   	it "generates valid JS of the table when "\
        "data is imported from google spreadsheets" do
-      js = table_spreadsheet.table.
-      to_js_full_script_spreadsheet(data_spreadsheet, 'id')
+      js = table_spreadsheet.table.to_js_spreadsheet(data_spreadsheet, 'id')
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(/google.load\(/i)
       expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
@@ -72,7 +71,7 @@ describe GoogleVisualr::DataTable do
 
   describe "#to_js_chart_wrapper" do
     it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
-      js = table_spreadsheet_chartwrapper.table.to_js_full_script_chart_wrapper(
+      js = table_spreadsheet_chartwrapper.table.to_js_chart_wrapper(
         data_spreadsheet,
         'id'
       )

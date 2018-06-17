@@ -136,8 +136,10 @@ module Daru
           @table
         end
 
-        # @param user_options [Hash] Extra options provided by the user like class_chart
-        # @return [String] The class of the chart (Chart, Charteditor or Chartwrapper)
+        # @param user_options [Hash] Extra options provided by the user like
+        #   class_chart
+        # @return [String] The class of the chart (Chart, Charteditor or
+        #   Chartwrapper)
         def get_class_chart(user_options={})
           return 'Chart' if user_options[:chart_class].nil?
           user_options.delete(:chart_class).to_s.capitalize
