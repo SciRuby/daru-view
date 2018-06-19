@@ -54,7 +54,11 @@ module GoogleVisualr
     def get_html(dom)
       html = ''
       html << load_js(dom)
-      html << draw_js(dom)
+      html << if is_a?(GoogleVisualr::DataTable)
+                draw_js(dom)
+              else
+                draw_chart_js(dom)
+              end
       html
     end
 
@@ -87,6 +91,37 @@ module GoogleVisualr
 
     def show_in_iruby(dom=SecureRandom.uuid)
       IRuby.html(to_html(dom))
+    end
+
+    def export(export_type='png', file_name='chart')
+      id = SecureRandom.uuid
+      js = ''
+      add_listener('ready', "exportChart_#{id.tr('-', '_')}") if
+      export_type == 'png'
+      js << to_html(id)
+      js << extract_export_code(export_type, file_name)
+      js
+    end
+
+    def export_iruby(export_type='png', file_name='chart')
+      IRuby.html(export(export_type, file_name))
+    end
+
+    def extract_export_code(export_type='png', file_name='chart')
+      case export_type
+      when 'png'
+        js = ''
+        js << "\n <script>"
+        js << "\n function exportChart_#{@html_id.tr('-', '_')}() {"
+        js << "\n \tvar a = document.createElement('a');"
+        js << "\n \ta.href = chart.getImageURI();"
+        js << "\n \ta.download = '#{file_name}.png';"
+        js << "\n \tdocument.body.appendChild(a);"
+        js << "\n \ta.click();"
+        js << "\n \tdocument.body.removeChild(a);"
+        js << "\n \t}"
+        js << "\n </script>"
+      end
     end
   end
 

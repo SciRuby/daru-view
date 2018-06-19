@@ -181,6 +181,12 @@ module Daru
           plot.show_in_iruby
         end
 
+        def export(plot, export_type='png', file_name='chart')
+          plot.export_iruby(export_type, file_name) if defined? IRuby
+        rescue NameError
+          plot.export(export_type, file_name)
+        end
+
         def generate_html(plot)
           path = File.expand_path(
             '../templates/googlecharts/static_html.erb', __dir__
