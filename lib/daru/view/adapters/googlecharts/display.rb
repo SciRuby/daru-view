@@ -93,6 +93,7 @@ module GoogleVisualr
       IRuby.html(to_html(dom))
     end
 
+    # @see #Daru::View::Plot.export
     def export(export_type='png', file_name='chart')
       id = SecureRandom.uuid
       js = ''
@@ -102,10 +103,21 @@ module GoogleVisualr
       js
     end
 
+    # Exports chart to different formats in IRuby notebook
+    #
+    # @param type [String] format to which chart has to be exported
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [void] loads the js code of chart along with the code to export
+    #   in IRuby notebook
     def export_iruby(export_type='png', file_name='chart')
       IRuby.html(export(export_type, file_name))
     end
 
+    # Returns the script to export the chart in different formats
+    #
+    # @param type [String] format to which chart has to be exported
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [String] the script to export the chart
     def extract_export_code(export_type='png', file_name='chart')
       js = ''
       js << "\n <script>"
@@ -121,6 +133,8 @@ module GoogleVisualr
       js
     end
 
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [String] the script to export the chart in png format
     def extract_export_png_code(file_name)
       js = ''
       js << "\n \tvar a = document.createElement('a');"
@@ -132,6 +146,8 @@ module GoogleVisualr
       js
     end
 
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [String] the script to export the chart in pdf format
     def extract_export_pdf_code(file_name)
       js = ''
       js << "\n \tvar doc = new jsPDF();"

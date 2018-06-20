@@ -181,6 +181,12 @@ module Daru
           plot.show_in_iruby
         end
 
+        # Exporting a googlchart to pdf is not working in IRuby notebook because
+        #   the dependency of jspdf is not properly loaded in IRuby notebook.
+        #   TODO: Need to find some other way to export the chart to pdf in
+        #     IRuby notebook.
+        #
+        # @see #Daru::View::Plot.export
         def export(plot, export_type='png', file_name='chart')
           plot.export_iruby(export_type, file_name) if defined? IRuby
         rescue NameError

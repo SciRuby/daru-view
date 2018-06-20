@@ -57,8 +57,12 @@ module GoogleVisualr
     end
 
     # Taken from `draw_js` in googlevisualr. To export the chart in png format,
-    #   `ready` listener should be implemented. So, chart variable needs to be
+    #   `ready` listener should be implemented. So, `chart` variable needs to be
     #   defined global.
+    #
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
+    # @return [String] JavaScript function for rendering the chart
     def draw_chart_js(element_id)
       js = ''
       js << "\n  var chart = null;"

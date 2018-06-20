@@ -12,6 +12,15 @@ describe GoogleVisualr::BaseChart do
       {type: :column, width: 800}
     )
   }
+  let(:data) do
+    [
+      ['Year'],
+      ['2013'],
+    ]
+  end
+  let(:column_chart) {
+    Daru::View::Plot.new(data, type: :column)
+  }
 
   describe "#query_response_function_name" do
     it "should generate unique function name to handle query response" do
@@ -49,6 +58,27 @@ describe GoogleVisualr::BaseChart do
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
       )
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
+    end
+  end
+
+  describe "#draw_chart_js" do
+    subject(:js) { column_chart.chart.draw_chart_js('id') }
+    it "adds correct data" do
+      expect(js).to match(/var chart = null;/)
+      expect(js).to match(
+        /data_table.addColumn\({"type":"string","label":"Year"}\)/
+      )
+      expect(js).to match(/data_table.addRow\(\[{v: "2013"}\]\)/)
+    end
+    it "adds correct listener" do
+      column_chart.chart.add_listener('ready', "callback")
+      expect(js).to match(
+        /google.visualization.events.addListener\(chart, 'ready', callback\)/)
+    end
+    it "generates the valid chart script" do
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ColumnChart/)
+      expect(js).to match(/chart.draw\(data_table, {}\)/)
     end
   end
 end

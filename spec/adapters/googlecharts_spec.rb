@@ -269,6 +269,24 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
   end
 
+  describe "#export" do
+    it "generates valid script to export a chart to png" do
+      js = area_chart_chart.adapter.export(area_chart_chart.chart)
+      expect(js).to match(/google.visualization.DataTable\(\);/)
+      expect(js).to match(/google.visualization.AreaChart/)
+      expect(js).to match(/a.href = chart.getImageURI()/)
+      expect(js).to match(/a.download = 'chart.png'/)
+    end
+    it "generates valid script to export a chart to pdf" do
+      js = area_chart_chart.adapter.export(area_chart_chart.chart, 'pdf')
+      expect(js).to match(/google.visualization.DataTable\(\);/)
+      expect(js).to match(/google.visualization.AreaChart/)
+      expect(js).to match(/var doc = new jsPDF()/)
+      expect(js).to match(/doc.addImage\(chart.getImageURI\(\), 0, 0\)/)
+      expect(js).to match(/doc.save\('chart.pdf'\)/)
+    end
+  end
+
   describe "#export_html_file" do
     it "writes valid html code of the Area Chart to the file" do
       area_chart_chart.export_html_file('./plot.html')

@@ -194,4 +194,61 @@ describe GoogleVisualr::Display do
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
   end
+
+  describe "#export" do
+    it "adds ready listener" do
+      area_chart_chart.export
+      expect(area_chart_chart.chart.listeners[0][:event]). to eq('ready')
+    end
+    it "generates correct code of the chart" do
+      js = area_chart_chart.export
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/)
+      expect(js).to match(/google.visualization.AreaChart/i)
+      expect(js).to match(
+        /google.visualization.events.addListener\(chart, 'ready'/)
+      expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates correct png code" do
+      js = area_chart_chart.export
+      expect(js).to match(/document.createElement\('a'\);/)
+      expect(js).to match(/a.href = chart.getImageURI()/)
+      expect(js).to match(/a.download = 'chart.png'/)
+    end
+    it "generates correct pdf code" do
+      js = area_chart_chart.export('pdf')
+      expect(js).to match(/var doc = new jsPDF()/)
+      expect(js).to match(/doc.addImage\(chart.getImageURI\(\), 0, 0\)/)
+      expect(js).to match(/doc.save\('chart.pdf'\)/)
+    end
+  end
+
+  describe "#extract_export_code" do
+    it "generates a script and export fuction" do
+      area_chart_chart.chart.html_id = 'id'
+      js = area_chart_chart.chart.extract_export_code
+      expect(js).to match(/script/)
+      expect(js).to match(/function exportChart_id/)
+    end
+    it "extracts correct png code" do
+      area_chart_chart.chart.html_id = 'id'
+      js = area_chart_chart.chart.extract_export_code('png', 'daru')
+      expect(js).to match(/document.createElement\('a'\);/)
+      expect(js).to match(/a.href = chart.getImageURI()/)
+      expect(js).to match(/a.download = 'daru.png'/)
+      expect(js).to match(/document.body.appendChild\(a\)/)
+      expect(js).to match(/a.click\(\)/)
+      expect(js).to match(/document.body.removeChild\(a\)/)
+    end
+    it "extracts correct pdf code" do
+      area_chart_chart.chart.html_id = 'id'
+      js = area_chart_chart.chart.extract_export_code('pdf', 'daru')
+      expect(js).to match(/var doc = new jsPDF()/)
+      expect(js).to match(/doc.addImage\(chart.getImageURI\(\), 0, 0\)/)
+      expect(js).to match(/doc.save\('daru.pdf'\)/)
+    end
+  end
 end
