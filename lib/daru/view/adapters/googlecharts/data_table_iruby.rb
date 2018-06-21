@@ -10,8 +10,7 @@ module GoogleVisualr
     attr_accessor :data
     # options will enable us to give some styling for table.
     # E.g. pagination, row numbers, etc
-    attr_accessor :options
-
+    attr_accessor :options, :listeners
     # included to use `js_parameters` method
     include GoogleVisualr::ParamHelpers
 
@@ -23,6 +22,7 @@ module GoogleVisualr
     def initialize(options={})
       @cols = []
       @rows = []
+      @listeners = []
       @options = options
       return if options.empty?
 
@@ -33,6 +33,15 @@ module GoogleVisualr
       rows.each do |row|
         add_row(row[:c])
       end
+    end
+
+    # Adds a listener to the array of listeners
+    #
+    # @param event [String] name of the event tha will be fired
+    # @param callback [String] callback function name for the event
+    # @return [Array] array of listeners
+    def add_listener(event, callback)
+      @listeners << {event: event.to_s, callback: callback}
     end
 
     # Generates JavaScript and renders the Google Chart DataTable in the
@@ -114,6 +123,10 @@ module GoogleVisualr
       js << "\n    #{to_js}"
       js << "\n    var table = new google.visualization.Table("
       js << "\n    document.getElementById('#{element_id}'));"
+      @listeners.each do |listener|
+        js << "\n    google.visualization.events.addListener("
+        js << "table, '#{listener[:event]}', #{listener[:callback]});"
+      end
       js << "\n    table.draw(data_table, #{js_parameters(@options)}); "
       js << "\n  };"
       js

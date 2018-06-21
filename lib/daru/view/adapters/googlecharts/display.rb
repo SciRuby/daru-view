@@ -5,7 +5,8 @@ require_relative 'base_chart'
 
 module GoogleVisualr
   def self.init_script(
-    dependent_js=['google_visualr.js', 'loader.js', 'jspdf.min.js']
+    dependent_js=['google_visualr.js', 'loader.js', 'jspdf.min.js',
+                  'jquery.min.js', 'xepOnline.jqPlugin.js']
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
@@ -85,12 +86,29 @@ module GoogleVisualr
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id
-      chart_script = show_script(id, script_tag: false)
+      chart_script = ''
+      add_listener('ready', "addNamespace_#{id.tr('-', '_')}") unless
+      defined?(IRuby)
+      chart_script << show_script(id, script_tag: false)
+      chart_script << add_namespace(id) unless defined?(IRuby)
       ERB.new(template).result(binding)
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
       IRuby.html(to_html(dom))
+    end
+
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
+    # @return [String] js function to add namespace on the generated svg
+    def add_namespace(id=SecureRandom.uuid)
+      js = ''
+      js << "\n  function addNamespace_#{id.tr('-', '_')}(){"
+      js << "\n    var svg = jQuery('##{id} svg');"
+      js << "\n    svg.attr('xmlns', 'http://www.w3.org/2000/svg');"
+      js << "\n    svg.css('overflow','visible');"
+      js << "\n  }"
+      js
     end
 
     # @see #Daru::View::Plot.export
