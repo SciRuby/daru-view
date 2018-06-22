@@ -1,3 +1,6 @@
+<% if class_chart == 'Charteditor' %>
+<input id="loadcharteditor_<%= id %>" value="Edit" onclick="loadEditor_<%= id.tr('-', '_') %>()" type="submit">
+<% end %>
 <div id='<%= id %>'></div>
 <script>
 <%= chart_script %>

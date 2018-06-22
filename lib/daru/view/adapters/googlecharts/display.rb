@@ -80,14 +80,9 @@ module GoogleVisualr
     end
 
     def to_html(id=nil, options={})
-      path =
-        if class_chart == 'Charteditor'
-          File.expand_path(
-            '../../templates/googlecharts/chart_editor_div.erb', __dir__
-          )
-        else
-          File.expand_path('../../templates/googlecharts/chart_div.erb', __dir__)
-        end
+      path = File.expand_path(
+        '../../templates/googlecharts/chart_div.erb', __dir__
+      )
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id
