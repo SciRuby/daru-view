@@ -90,7 +90,7 @@ module LazyHighCharts
     # @return [String] css code of the chart
     def high_chart_css(placeholder)
       # contains the css provided by the user as a String array
-      css_data = options[:css].nil? ? '' : option.delete(:css)
+      css_data = options[:css].nil? ? '' : options.delete(:css)
       script = ''
       if css_data != ''
         script << '<style>'
