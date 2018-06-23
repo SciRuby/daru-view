@@ -1,8 +1,17 @@
-<!-- See usage: http://www.cloudformatter.com/CSS2Pdf.APIDoc.Usage -->
+<!-- See usage: http://www.cloudformatter.com/CSS2Pdf.APIDoc.Usage
+TODO: Improve the UI of buttons. Also, there is some distortion in bar charts 
+and column charts, need to fix it. Check out the examples 
+here: http://www.cloudformatter.com/GoogleCharts -->
 <% unless defined?(IRuby) %>
-<button id="pdf_<%= id %>" onclick="xepOnline.Formatter.Format('<%= id %>', {render: 'download', filename: 'chart'});">PDF</button>
-<button id="png_<%= id %>" onclick="xepOnline.Formatter.Format('<%= id %>', {render:'newwin', mimeType:'image/png'});">PNG</button>
-<button id="jpg_<%= id %>" onclick="xepOnline.Formatter.Format('<%= id %>', {render:'newwin', mimeType:'image/jpg'});">JPEG</button>
+<button id="pdf_<%= id %>" onclick="xepOnline.Formatter.Format(
+  '<%= id %>', {render: 'download', filename: 'chart'}
+);">PDF</button>
+<button id="png_<%= id %>" onclick="xepOnline.Formatter.Format(
+  '<%= id %>', {render:'newwin', mimeType:'image/png'}
+);">PNG</button>
+<button id="jpg_<%= id %>" onclick="xepOnline.Formatter.Format(
+  '<%= id %>', {render:'newwin', mimeType:'image/jpg'}
+);">JPEG</button>
 <% end %>
 <div id='<%= id %>'></div>
 <script>
