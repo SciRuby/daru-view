@@ -30,7 +30,7 @@ describe GoogleVisualr::Display do
   let(:column_chart_chart) {Daru::View::Plot.
   new(data_table.table, column_chart_options)}
   let(:combined) {
-    Daru::View::Plot.new([data_table, area_chart_chart, column_chart_chart])
+    Daru::View::PlotList.new([data_table, area_chart_chart, column_chart_chart])
   }
 
   describe "#to_html" do
@@ -84,7 +84,7 @@ describe GoogleVisualr::Display do
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end
     it "generates valid js of the combined charts" do
-      js = combined.chart.to_html
+      js = combined.charts.to_html
       expect(js).to match(/google.visualization.Table/)
       expect(js).to match(/google.visualization.AreaChart/)
       expect(js).to match(/google.visualization.ColumnChart/)
@@ -93,13 +93,13 @@ describe GoogleVisualr::Display do
 
   describe "#extract_multiple_charts_id_script_path" do
     it "returns correct path of the multiple_charts_div" do
-      id_script_path = combined.chart.extract_multiple_charts_id_script_path
+      id_script_path = combined.charts.extract_multiple_charts_id_script_path
       expect(id_script_path[2]).to match(
         /templates\/googlecharts\/multiple_charts_div.erb/
       )
     end
     it "returns correct scripts of the multiple charts" do
-      id_script_path = combined.chart.extract_multiple_charts_id_script_path
+      id_script_path = combined.charts.extract_multiple_charts_id_script_path
       expect(id_script_path[1][0]).to match(/google.visualization.Table/)
       expect(id_script_path[1][1]).to match(/google.visualization.AreaChart/)
       expect(id_script_path[1][2]).to match(/google.visualization.ColumnChart/)

@@ -68,7 +68,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   let(:column_chart_chart) {Daru::View::Plot.
   new(data_table.table, column_chart_options)}
   let(:combined) {
-    Daru::View::Plot.new([data_table, area_chart_chart, column_chart_chart])
+    Daru::View::PlotList.new([data_table, area_chart_chart, column_chart_chart])
   }
 
   describe "initialization Charts" do
@@ -211,7 +211,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
     it "generates valid js of the combined charts" do
-      js = combined.adapter.generate_body(combined.chart)
+      js = combined.adapter.generate_body(combined.charts)
       expect(js).to match(/google.visualization.Table/)
       expect(js).to match(/google.visualization.AreaChart/)
       expect(js).to match(/google.visualization.ColumnChart/)
