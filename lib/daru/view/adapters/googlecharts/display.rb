@@ -5,8 +5,7 @@ require_relative 'base_chart'
 
 module GoogleVisualr
   def self.init_script(
-    dependent_js=['google_visualr.js', 'loader.js', 'jspdf.min.js',
-                  'jquery.min.js', 'xepOnline.jqPlugin.js']
+    dependent_js=['google_visualr.js', 'loader.js']
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
@@ -86,29 +85,12 @@ module GoogleVisualr
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id
-      chart_script = ''
-      add_listener('ready', "addNamespace_#{id.tr('-', '_')}") unless
-      defined?(IRuby)
-      chart_script << show_script(id, script_tag: false)
-      chart_script << add_namespace(id) unless defined?(IRuby)
+      chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
       IRuby.html(to_html(dom))
-    end
-
-    # @param element_id [String] The ID of the DIV element that the Google
-    #   Chart should be rendered in
-    # @return [String] js function to add namespace on the generated svg
-    def add_namespace(id=SecureRandom.uuid)
-      js = ''
-      js << "\n  function addNamespace_#{id.tr('-', '_')}(){"
-      js << "\n    var svg = jQuery('##{id} svg');"
-      js << "\n    svg.attr('xmlns', 'http://www.w3.org/2000/svg');"
-      js << "\n    svg.css('overflow','visible');"
-      js << "\n  }"
-      js
     end
 
     # @see #Daru::View::Plot.export
@@ -143,8 +125,6 @@ module GoogleVisualr
       case export_type
       when 'png'
         js << extract_export_png_code(file_name)
-      when 'pdf'
-        js << extract_export_pdf_code(file_name)
       end
       js << "\n }"
       js << "\n </script>"
@@ -161,16 +141,6 @@ module GoogleVisualr
       js << "\n \tdocument.body.appendChild(a);"
       js << "\n \ta.click();"
       js << "\n \tdocument.body.removeChild(a);"
-      js
-    end
-
-    # @param file_name [String] The name of the file after exporting the chart
-    # @return [String] the script to export the chart in pdf format
-    def extract_export_pdf_code(file_name)
-      js = ''
-      js << "\n \tvar doc = new jsPDF();"
-      js << "\n \tdoc.addImage(chart.getImageURI(), 0, 0);"
-      js << "\n \tdoc.save('#{file_name}.pdf');"
       js
     end
   end

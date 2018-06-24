@@ -138,13 +138,5 @@ describe Daru::View::Plot, 'Chart plotting with Googlecharts library' do
       expect(js).to match(/a.href = chart.getImageURI()/)
       expect(js).to match(/a.download = 'daru.png'/)
     end
-    it "generates valid script to export a chart to pdf" do
-      js = plot_dv.export('pdf', 'daru')
-      expect(js).to match(/google.visualization.DataTable\(\);/)
-      expect(js).to match(/google.visualization.LineChart/)
-      expect(js).to match(/var doc = new jsPDF()/)
-      expect(js).to match(/doc.addImage\(chart.getImageURI\(\), 0, 0\)/)
-      expect(js).to match(/doc.save\('daru.pdf'\)/)
-    end
   end
 end

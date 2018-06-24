@@ -41,9 +41,6 @@ describe GoogleVisualr::Display do
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.AreaChart/i)
-      expect(js).to match(
-        /google.visualization.events.addListener\(chart, 'ready', addNamespace_id/
-      )
       expect(js).to match(/chart.draw\(data_table, \{\}/i)
     end
     it "generates valid JS of the Column Chart" do
@@ -82,38 +79,6 @@ describe GoogleVisualr::Display do
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
-    end
-    context "when IRuby is not defined" do
-      it "adds namespace for Googlecharts" do
-        js = column_chart_chart.chart.to_html("id")
-        expect(js).to match(/function addNamespace_id/)
-        expect(js).to match(/var svg = jQuery\('#id svg'\);/)
-        expect(js).to match(
-          /svg.attr\('xmlns', 'http:\/\/www.w3.org\/2000\/svg'\);/)
-        expect(js).to match(/svg.css\('overflow','visible'\);/)
-      end
-      it "adds namespace for Google datatables" do
-        js = data_table.table.to_html("id")
-        expect(js).to match(/function addNamespace_id/)
-        expect(js).to match(/var svg = jQuery\('#id svg'\);/)
-        expect(js).to match(
-          /svg.attr\('xmlns', 'http:\/\/www.w3.org\/2000\/svg'\);/)
-        expect(js).to match(/svg.css\('overflow','visible'\);/)
-      end
-      it "adds ready listener for GoogleCharts" do
-        area_chart_chart.chart.to_html('id')
-        expect(area_chart_chart.chart.listeners[0][:event]).to eq('ready')
-        expect(area_chart_chart.chart.listeners[0][:callback]).to eq(
-          'addNamespace_id'
-        )
-      end
-      it "adds ready listener for Google datatables" do
-        data_table.table.to_html('id')
-        expect(data_table.table.listeners[0][:event]).to eq('ready')
-        expect(data_table.table.listeners[0][:callback]).to eq(
-          'addNamespace_id'
-        )
-      end
     end
   end
 
@@ -253,12 +218,6 @@ describe GoogleVisualr::Display do
       expect(js).to match(/a.href = chart.getImageURI()/)
       expect(js).to match(/a.download = 'chart.png'/)
     end
-    it "generates correct pdf code" do
-      js = area_chart_chart.chart.export('pdf')
-      expect(js).to match(/var doc = new jsPDF()/)
-      expect(js).to match(/doc.addImage\(chart.getImageURI\(\), 0, 0\)/)
-      expect(js).to match(/doc.save\('chart.pdf'\)/)
-    end
   end
 
   describe "#extract_export_code" do
@@ -277,13 +236,6 @@ describe GoogleVisualr::Display do
       expect(js).to match(/document.body.appendChild\(a\)/)
       expect(js).to match(/a.click\(\)/)
       expect(js).to match(/document.body.removeChild\(a\)/)
-    end
-    it "extracts correct pdf code" do
-      area_chart_chart.chart.html_id = 'id'
-      js = area_chart_chart.chart.extract_export_code('pdf', 'daru')
-      expect(js).to match(/var doc = new jsPDF()/)
-      expect(js).to match(/doc.addImage\(chart.getImageURI\(\), 0, 0\)/)
-      expect(js).to match(/doc.save\('daru.pdf'\)/)
     end
   end
 end
