@@ -65,7 +65,7 @@ module Daru
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
           ).new(@table, options)
-          @chart.class_chart = get_class_chart(user_options)
+          @chart.user_options = user_options
           @chart.data = data
           @chart
         end
@@ -126,7 +126,7 @@ module Daru
           # then directly DataTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
           @table.data = data
-          @table.class_chart = get_class_chart(user_options)
+          @table.user_options = user_options
           # When data is the URL of the spreadsheet then plot.table will
           #   contain the empty table as the DataTable is generated in query
           #   response in js and we can not retrieve the data from google
@@ -134,15 +134,6 @@ module Daru
           add_data_in_table(data) unless data.is_a?(String)
           validate_url(data) if data.is_a?(String)
           @table
-        end
-
-        # @param user_options [Hash] Extra options provided by the user like
-        #   class_chart
-        # @return [String] The class of the chart (Chart, Charteditor or
-        #   Chartwrapper)
-        def get_class_chart(user_options={})
-          return 'Chart' if user_options[:chart_class].nil?
-          user_options.delete(:chart_class).to_s.capitalize
         end
 
         # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table]

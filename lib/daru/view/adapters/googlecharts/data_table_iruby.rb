@@ -11,10 +11,9 @@ module GoogleVisualr
     # options will enable us to give some styling for table.
     # E.g. pagination, row numbers, etc
     attr_accessor :options
-    # Provided by user and can take three values ('Chart', 'Chartwrapper'
-    #   or 'Charteditor').
-    # @return [String] Used to specify the class of the chart
-    attr_accessor :class_chart
+    # @return [Hash] Various options created to facilitate more features.
+    #   These will be provided by the user
+    attr_accessor :user_options
 
     # included to use `js_parameters` method
     include GoogleVisualr::ParamHelpers
@@ -130,7 +129,8 @@ module GoogleVisualr
     #
     # @return [String] Returns string to draw the Chartwrapper and '' otherwise
     def draw_wrapper
-      return "\n    wrapper.draw();" if class_chart == 'Chartwrapper'
+      return "\n    wrapper.draw();" if
+      user_options[:chart_class].to_s.capitalize == 'Chartwrapper'
       ''
     end
 

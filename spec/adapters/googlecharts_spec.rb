@@ -76,6 +76,9 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   let(:table_chart_wrapper) {Daru::View::Table.new(
     data, {}, user_options)
   }
+  let(:table_wrapper_spreadsheet) {Daru::View::Table.new(
+    data_spreadsheet, {}, user_options)
+  }
 
 
   describe "initialization Charts" do
@@ -102,6 +105,11 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(plot_spreadsheet.options).to eq 'width'=> 800
     end
     # TODO: all other kinds of charts
+    it "sets correct user_options and data" do
+      expect(area_chart_chart.chart.user_options).to be_empty
+      expect(area_chart_wrapper.chart.user_options).to eq user_options
+      expect(area_chart_chart.chart.data).to eq data_table.table
+    end
   end
 
   describe "initialization Tables" do
@@ -140,6 +148,12 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     it "Raise error when data objects are none of the above" do
       expect{Daru::View::Table.new(1234)}.to raise_error(ArgumentError)
     end
+    it "sets correct user_options and data of the DataTable" do
+      expect(data_table.table.user_options).to be_empty
+      expect(table_wrapper_spreadsheet.table.user_options).to eq user_options
+      expect(data_table.table.data).to eq data
+      expect(table_wrapper_spreadsheet.table.data).to eq data_spreadsheet
+    end
   end
 
   describe "#validate_url" do
@@ -157,18 +171,6 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       .to eq(true)
       expect(chart.validate_url('http://google.com'))
       .to eq(true)
-    end
-  end
-
-  describe "#get_class_chart" do
-    it "should return valid class of the chart" do
-      expect(area_chart_chart.adapter.get_class_chart(
-        {chart_class: 'ChartWrapper'})
-      ).to eq('Chartwrapper')
-    end
-    it "should return valid class of the chart" do
-      expect(area_chart_chart.adapter.get_class_chart()
-      ).to eq('Chart')
     end
   end
 
