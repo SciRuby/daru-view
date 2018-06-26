@@ -71,9 +71,11 @@ describe GoogleVisualr::BaseChart do
       expect(js).to match(/data_table.addRow\(\[{v: "2013"}\]\)/)
     end
     it "adds correct listener" do
-      column_chart.chart.add_listener('ready', "callback")
+      column_chart.chart.add_listener('ready', "alert('hi');")
       expect(js).to match(
-        /google.visualization.events.addListener\(chart, 'ready', callback\)/)
+        /google.visualization.events.addListener\(chart, 'ready', function \(e\) {/
+      )
+      expect(js).to match(/alert\('hi'\);/)
     end
     it "generates the valid chart script" do
       expect(js).to match(/new google.visualization.DataTable/)

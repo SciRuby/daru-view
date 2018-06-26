@@ -95,11 +95,8 @@ module GoogleVisualr
 
     # @see #Daru::View::Plot.export
     def export(export_type='png', file_name='chart')
-      id = SecureRandom.uuid
-      js = ''
-      add_listener('ready', "exportChart_#{id.tr('-', '_')}")
-      js << to_html(id)
-      js << extract_export_code(export_type, file_name)
+      add_listener('ready', extract_export_code(export_type, file_name))
+      js = to_html
       js
     end
 
@@ -119,15 +116,10 @@ module GoogleVisualr
     # @param file_name [String] The name of the file after exporting the chart
     # @return [String] the script to export the chart
     def extract_export_code(export_type='png', file_name='chart')
-      js = ''
-      js << "\n <script>"
-      js << "\n function exportChart_#{@html_id.tr('-', '_')}() {"
       case export_type
       when 'png'
-        js << extract_export_png_code(file_name)
+        js = extract_export_png_code(file_name)
       end
-      js << "\n }"
-      js << "\n </script>"
       js
     end
 

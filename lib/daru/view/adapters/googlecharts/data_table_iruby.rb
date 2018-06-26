@@ -98,6 +98,18 @@ module GoogleVisualr
       'table'
     end
 
+    # @return [String] js function to add the listener to the chart
+    def add_listeners_js
+      js = ''
+      @listeners.each do |listener|
+        js << "\n    google.visualization.events.addListener("
+        js << "table, '#{listener[:event]}', function (e) {"
+        js << "\n      #{listener[:callback]}"
+        js << "\n    });"
+      end
+      js
+    end
+
     # Generates JavaScript for loading the appropriate Google Visualization
     #   package, with callback to render chart.
     #
@@ -123,10 +135,7 @@ module GoogleVisualr
       js << "\n    #{to_js}"
       js << "\n    var table = new google.visualization.Table("
       js << "\n    document.getElementById('#{element_id}'));"
-      @listeners.each do |listener|
-        js << "\n    google.visualization.events.addListener("
-        js << "table, '#{listener[:event]}', #{listener[:callback]});"
-      end
+      js << add_listeners_js
       js << "\n    table.draw(data_table, #{js_parameters(@options)}); "
       js << "\n  };"
       js

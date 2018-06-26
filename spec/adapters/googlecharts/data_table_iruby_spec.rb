@@ -90,10 +90,12 @@ describe GoogleVisualr::DataTable do
       expect(js).to match(/table.draw\(data_table, \{\}/i)
   	end
     it "adds correct listener" do
-      data_table.table.add_listener('ready', "callback")
+      data_table.table.add_listener('ready', "alert('hi');")
       js = data_table.table.draw_js('id')
       expect(js).to match(
-        /google.visualization.events.addListener\(table, 'ready', callback\)/)
+        /google.visualization.events.addListener\(table, 'ready', function \(e\) {/
+      )
+      expect(js).to match(/alert\('hi'\);/)
     end
   end
 

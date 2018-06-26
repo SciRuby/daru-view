@@ -14,6 +14,18 @@ module GoogleVisualr
       "handleQueryResponse_#{element_id.tr('-', '_')}"
     end
 
+    # @return [String] js function to add the listener to the chart
+    def add_listeners_js
+      js = ''
+      @listeners.each do |listener|
+        js << "\n    google.visualization.events.addListener("
+        js << "chart, '#{listener[:event]}', function (e) {"
+        js << "\n      #{listener[:callback]}"
+        js << "\n    });"
+      end
+      js
+    end
+
     # Generates JavaScript when data is imported from spreadsheet and renders
     #   the Google Chart in the final HTML output when data is URL of the
     #   google spreadsheet
@@ -70,10 +82,7 @@ module GoogleVisualr
       js << "\n    #{@data_table.to_js}"
       js << "\n    chart = new google.#{chart_class}.#{chart_name}"
       js << "(document.getElementById('#{element_id}'));"
-      @listeners.each do |listener|
-        js << "\n    google.visualization.events.addListener("
-        js << "chart, '#{listener[:event]}', #{listener[:callback]});"
-      end
+      js << add_listeners_js
       js << "\n    chart.draw(data_table, #{js_parameters(@options)});"
       js << "\n  };"
       js

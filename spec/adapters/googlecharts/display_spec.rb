@@ -221,12 +221,6 @@ describe GoogleVisualr::Display do
   end
 
   describe "#extract_export_code" do
-    it "generates a script and export fuction" do
-      area_chart_chart.chart.html_id = 'id'
-      js = area_chart_chart.chart.extract_export_code
-      expect(js).to match(/script/)
-      expect(js).to match(/function exportChart_id/)
-    end
     it "extracts correct png code" do
       area_chart_chart.chart.html_id = 'id'
       js = area_chart_chart.chart.extract_export_code('png', 'daru')
