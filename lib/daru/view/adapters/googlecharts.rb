@@ -57,7 +57,7 @@ module Daru
         #   data << query
         #   options = {type: :area}
         #   chart = Daru::View::Plot.new(data, options)
-        def init(data=[], options={})
+        def init(data=[], options={}, user_options={})
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data) unless data.is_a?(String)
           validate_url(data) if data.is_a?(String)
@@ -65,6 +65,7 @@ module Daru
           @chart = GoogleVisualr::Interactive.const_get(
             @chart_type
           ).new(@table, options)
+          @chart.user_options = user_options
           @chart.data = data
           @chart
         end
@@ -109,7 +110,7 @@ module Daru
         #   query = 'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'
         #   data << query
         #   chart = Daru::View::Table.new(data)
-        def init_table(data=[], options={})
+        def init_table(data=[], options={}, user_options={})
           # if `options` is something like this :
           # {
           #   cols: [{id: 'task', label: 'Employee Name', type: 'string'},
@@ -125,6 +126,7 @@ module Daru
           # then directly DataTable is created using options. Use data=[] or nil
           @table = GoogleVisualr::DataTable.new(options)
           @table.data = data
+          @table.user_options = user_options
           # When data is the URL of the spreadsheet then plot.table will
           #   contain the empty table as the DataTable is generated in query
           #   response in js and we can not retrieve the data from google

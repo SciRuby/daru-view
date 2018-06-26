@@ -5,7 +5,7 @@ require_relative 'base_chart'
 
 module GoogleVisualr
   def self.init_script(
-    dependent_js=['google_visualr.js', 'loader.js']
+    dependent_js=['google_visualr.js', 'loader.js', 'jspdf.min.js']
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
@@ -54,7 +54,11 @@ module GoogleVisualr
     def get_html(dom)
       html = ''
       html << load_js(dom)
-      html << draw_js(dom)
+      html << if is_a?(GoogleVisualr::DataTable)
+                draw_js(dom)
+              else
+                draw_chart_js(dom)
+              end
       html
     end
 
@@ -81,12 +85,20 @@ module GoogleVisualr
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id
+      add_listener_to_chart
       chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
       IRuby.html(to_html(dom))
+    end
+
+    def add_listener_to_chart
+      return if user_options[:listeners].nil?
+      user_options[:listeners].each do |event, callback|
+        add_listener(event.to_s.downcase, callback)
+      end
     end
   end
 

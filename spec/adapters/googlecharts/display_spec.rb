@@ -18,17 +18,25 @@ describe GoogleVisualr::Display do
       {type: :column, width: 800}
     )
   }
-  let(:data_table) {Daru::View::Table.new(data)}
   let(:area_chart_options) {{
       type: :area
     }}
   let(:column_chart_options) {{
       type: :column
     }}
-  let(:area_chart_chart) {Daru::View::Plot.
+  let(:user_options) {{
+    listeners: {
+      select: "alert('A table row was selected');"
+    }
+  }}
+  let(:data_table) {Daru::View::Table.new(data, {}, user_options)}
+  let(:area_chart_chart) { Daru::View::Plot.
     new(data_table.table, area_chart_options)}
-  let(:column_chart_chart) {Daru::View::Plot.
-  new(data_table.table, column_chart_options)}
+  let(:column_chart_chart) { Daru::View::Plot.new(
+    data_table.table,
+    column_chart_options,
+    user_options)
+  }
 
   describe "#to_html" do
     it "generates valid JS of the Area Chart" do
@@ -54,6 +62,12 @@ describe GoogleVisualr::Display do
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.ColumnChart/i)
       expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "adds the listener to the chart from user_options" do
+      js = column_chart_chart.chart.to_html("id")
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/chart, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
     end
     it "generates valid JS of the google chart when data is imported " \
        "from google spreadsheet" do
@@ -192,6 +206,23 @@ describe GoogleVisualr::Display do
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
       )
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
+    end
+  end
+
+  describe "#add_listener_to_chart" do
+    it "adds the listener mentioned in user_options to the chart" do
+      column_chart_chart.chart.add_listener_to_chart
+      expect(column_chart_chart.chart.listeners[0][:event]).to eq('select')
+      expect(column_chart_chart.chart.listeners[0][:callback]).to eq(
+        "alert('A table row was selected');"
+      )
+    end
+    it "adds the listener mentioned in user_options to the datatable" do
+      data_table.table.add_listener_to_chart
+      expect(data_table.table.listeners[0][:event]).to eq('select')
+      expect(data_table.table.listeners[0][:callback]).to eq(
+        "alert('A table row was selected');"
+      )
     end
   end
 end

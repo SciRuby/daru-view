@@ -20,23 +20,23 @@ describe GoogleVisualr::DataTable do
   let(:data_table) {Daru::View::Table.new(data)}
 
   describe "#to_js_full_script" do
-  	it "generates valid JS of the table" do
-  	  js = data_table.table.to_js_full_script('id')
+    it "generates valid JS of the table" do
+      js = data_table.table.to_js_full_script('id')
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(/google.load\(/i)
       expect(js).to match(/google.visualization.DataTable\(\)/i)
-  	  expect(js).to match(
+      expect(js).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
       )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
       expect(js).to match(/table.draw\(data_table, \{\}/i)
-  	end
+    end
   end
 
   describe "#to_js_full_script_spreadsheet" do
-  	it "generates valid JS of the table when "\
+    it "generates valid JS of the table when "\
        "data is imported from google spreadsheets" do
       js = table_spreadsheet.table.
       to_js_full_script_spreadsheet(data_spreadsheet, 'id')
@@ -60,27 +60,37 @@ describe GoogleVisualr::DataTable do
     end
   end
 
+  describe "#add_listeners_js" do
+    it "appends the js to add the listener" do
+      data_table.table.add_listener('select', "alert('A table row was selected');")
+      js = data_table.table.add_listeners_js
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/table, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
+    end
+  end
+
   describe "#load_js" do
-  	it "loads valid packages" do
-    js = data_table.table.load_js('id')
-  	expect(js).to match(/google.load\('visualization', 1.0,/i)
-  	expect(js).to match(/\{packages: \['table'\], callback:/i)
-    expect(js).to match(/draw_id\}\)/i)
-  	end
+    it "loads valid packages" do
+      js = data_table.table.load_js('id')
+      expect(js).to match(/google.load\('visualization', 1.0,/i)
+      expect(js).to match(/\{packages: \['table'\], callback:/i)
+      expect(js).to match(/draw_id\}\)/i)
+    end
   end
 
   describe "#draw_js" do
-  	it "draws valid JS of the table" do
-  	  js = data_table.table.draw_js('id')
-  	  expect(js).to match(/google.visualization.DataTable\(\)/i)
-  	  expect(js).to match(
+    it "draws valid JS of the table" do
+      js = data_table.table.draw_js('id')
+      expect(js).to match(/google.visualization.DataTable\(\)/i)
+      expect(js).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
       )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
       expect(js).to match(/table.draw\(data_table, \{\}/i)
-  	end
+    end
   end
 
   describe "#draw_js_spreadsheet" do

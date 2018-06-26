@@ -8,6 +8,9 @@ module GoogleVisualr
     # @return [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
     #   Data of GoogleVisualr Chart
     attr_accessor :data
+    # @return [Hash] Various options created to facilitate more features.
+    #   These will be provided by the user
+    attr_accessor :user_options
 
     # @see #GoogleVisualr::DataTable.query_response_function_name
     def query_response_function_name(element_id)
@@ -35,6 +38,17 @@ module GoogleVisualr
       js
     end
 
+    def add_listeners_js
+      js = ''
+      @listeners.each do |listener|
+        js << "\n    google.visualization.events.addListener("
+        js << "chart, '#{listener[:event]}', function (e) {"
+        js << "\n      #{listener[:callback]}"
+        js << "\n    });"
+      end
+      js
+    end
+
     # Generates JavaScript function for rendering the chart when data is URL of
     #   the google spreadsheet
     #
@@ -51,8 +65,22 @@ module GoogleVisualr
       js << "\n 	var data_table = response.getDataTable();"
       js << "\n 	var chart = new google.#{chart_class}.#{chart_name}"\
             "(document.getElementById('#{element_id}'));"
+      js << add_listeners_js
       js << "\n 	chart.draw(data_table, #{js_parameters(@options)});"
       js << "\n };"
+      js
+    end
+
+    def draw_chart_js(element_id)
+      js = ''
+      js << "\n  var chart = null;"
+      js << "\n  function #{chart_function_name(element_id)}() {"
+      js << "\n    #{@data_table.to_js}"
+      js << "\n    chart = new google.#{chart_class}.#{chart_name}"
+      js << "(document.getElementById('#{element_id}'));"
+      js << add_listeners_js
+      js << "\n    chart.draw(data_table, #{js_parameters(@options)});"
+      js << "\n  };"
       js
     end
   end

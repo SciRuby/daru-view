@@ -12,11 +12,31 @@ describe GoogleVisualr::BaseChart do
       {type: :column, width: 800}
     )
   }
+  let(:user_options) {{
+    listeners: {
+      select: "alert('A table row was selected');"
+    }
+  }}
+  let(:column_chart) { Daru::View::Plot.new(
+    data_spreadsheet,
+    { type: :column },
+    user_options)
+  }
 
   describe "#query_response_function_name" do
     it "should generate unique function name to handle query response" do
       func = plot_spreadsheet.chart.query_response_function_name('i-d')
       expect(func).to eq('handleQueryResponse_i_d')
+    end
+  end
+
+  describe "#add_listeners_js" do
+    it "appends the js to add the listener" do
+      plot_spreadsheet.chart.add_listener('select', "alert('A table row was selected');")
+      js = plot_spreadsheet.chart.add_listeners_js
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/chart, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
     end
   end
 
