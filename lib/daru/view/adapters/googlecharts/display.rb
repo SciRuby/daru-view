@@ -94,6 +94,8 @@ module GoogleVisualr
       IRuby.html(to_html(dom))
     end
 
+    # @return [void] Adds listener to the chart from the
+    #   user_options[:listeners]
     def add_listener_to_chart
       return if user_options[:listeners].nil?
       user_options[:listeners].each do |event, callback|

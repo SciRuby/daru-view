@@ -116,6 +116,8 @@ module GoogleVisualr
       js
     end
 
+    # TODO: Add listener for chartwrapper when it gets merged.
+    # @return [String] js function to add the listener to the chart
     def add_listeners_js
       js = ''
       @listeners.each do |listener|
