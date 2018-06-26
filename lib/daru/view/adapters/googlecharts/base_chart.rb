@@ -42,10 +42,10 @@ module GoogleVisualr
 
     # @see #GooleVisualr::DataTable.draw_wrapper
     def draw_wrapper(element_id)
-      return "\n    wrapper_#{element_id.tr('-', '_')}.draw();" if
+      return "\n    wrapper.draw();" if
       class_chart == 'Chartwrapper'
       js = ''
-      js << "\n    wrapper_#{element_id.tr('-', '_')}.draw();"
+      js << "\n    wrapper.draw();"
       js << "\n    chartEditor_#{element_id.tr('-', '_')} = "\
             'new google.visualization.ChartEditor();'
       js << "\n    google.visualization.events.addListener("\
@@ -121,11 +121,10 @@ module GoogleVisualr
     # @return [String] JS function to render the chartwrapper
     def draw_js_chart_wrapper(data, element_id)
       js = ''
-      js << "\n  var wrapper_#{element_id.tr('-', '_')} = null;"
+      js << "\n  var wrapper = null;"
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n    #{@data_table.to_js}"
-      js << "\n    wrapper_#{element_id.tr('-', '_')} = "\
-            'new google.visualization.ChartWrapper({'
+      js << "\n    wrapper = new google.visualization.ChartWrapper({"
       js << extract_chart_wrapper_options(data, element_id)
       js << "\n    });"
       js << draw_wrapper(element_id)
@@ -148,7 +147,7 @@ module GoogleVisualr
       js << "\n  }"
       js << "\n  function loadEditor_#{element_id.tr('-', '_')}(){"
       js << "\n    chartEditor_#{element_id.tr('-', '_')}.openDialog("\
-            "wrapper_#{element_id.tr('-', '_')}, {});"
+            'wrapper, {});'
       js << "\n  }"
       js
     end

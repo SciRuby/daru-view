@@ -89,12 +89,12 @@ describe GoogleVisualr::DataTable do
     it "should draw the chartwrapper only when class_chart is"\
        " set to Chartwrapper" do
       js = table_chartwrapper.table.draw_wrapper('id')
-      expect(js).to match(/wrapper_id.draw\(\);/)
+      expect(js).to match(/wrapper.draw\(\);/)
     end
     it "should draw the chartwrapper only when class_chart is"\
        " set to Chartwrapper" do
       js = table_charteditor.table.draw_wrapper('id')
-      expect(js).to match(/wrapper_id.draw\(\);/)
+      expect(js).to match(/wrapper.draw\(\);/)
       expect(js).to match(/new google.visualization.ChartEditor()/)
       expect(js).to match(/google.visualization.events.addListener/)
       expect(js).to match(/chartEditor_id, 'ok', saveChart_id/)
@@ -180,7 +180,7 @@ describe GoogleVisualr::DataTable do
       expect(js).to match(/options: {}/)
       expect(js).to match(/containerId: 'id'/)
       expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
-      expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+      expect(js).to match(/chartEditor_id.openDialog\(wrapper, {}\)/)
       expect(js).to match(/containerId: 'id'/)
     end
     it "draws valid JS of the ChartEditor when URL of spreadsheet is provided" do
@@ -193,7 +193,7 @@ describe GoogleVisualr::DataTable do
       expect(js).to match(/options: {width: 800/)
       expect(js).to match(/containerId: 'id'/)
       expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
-      expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+      expect(js).to match(/chartEditor_id.openDialog\(wrapper, {}\)/)
       expect(js).to match(/containerId: 'id'/)
     end
   end
