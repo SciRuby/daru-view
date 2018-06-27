@@ -192,6 +192,12 @@ module Daru
           ERB.new(template).result(binding)
         end
 
+        def export(plot, export_type='png', file_name='chart')
+          plot.export_iruby(export_type, file_name) if defined? IRuby
+        rescue NameError
+          plot.export(export_type, file_name)
+        end
+
         def init_iruby
           GoogleVisualr.init_iruby
         end
