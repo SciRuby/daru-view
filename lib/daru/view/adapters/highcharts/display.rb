@@ -38,6 +38,16 @@ module LazyHighCharts
     css
   end
 
+  # Loads the dependent code required in styled mode
+  #
+  # @return [String] code of the dependent css and js file(s)
+  def self.init_code
+    init_code = ''
+    init_code << init_css
+    init_code << init_script
+    init_code
+  end
+
   class HighChart
     # @example
     #
@@ -91,17 +101,17 @@ module LazyHighCharts
     def high_chart_css(placeholder)
       # contains the css provided by the user as a String array
       css_data = options[:css].nil? ? '' : options.delete(:css)
-      script = ''
+      css_script = ''
       if css_data != ''
-        script << '<style>'
+        css_script << "\n<style>"
         # Applying the css to chart div
         css_data.each do |css|
-          script << '#' + placeholder + ' '
-          script << css
+          css_script << "\n  #" + placeholder + ' '
+          css_script << css
         end
-        script << '</style>'
+        css_script << "\n</style>"
       end
-      script
+      css_script
     end
 
     # Loads the dependent mapdata and dependent modules of the chart

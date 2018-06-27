@@ -33,6 +33,24 @@ describe LazyHighCharts do
       expect(css).to match(/END highcharts.css/i)
     end
   end
+
+  describe "#init_code" do
+    it "generates valid initial css and js" do
+      code = LazyHighCharts.init_code
+      expect(code).to match(/BEGIN highcharts.css/i)
+      expect(code).to match(/END highcharts.css/i)
+      expect(code).to match(/BEGIN js\/highstock.js/i)
+      expect(code).to match(/BEGIN js\/map.js/i)
+      expect(code).to match(/END js\/map.js/i)
+      expect(code).to match(/END js\/highstock.js/i)
+      expect(code).to match(/BEGIN modules\/exporting.js/i)
+      expect(code).to match(/END modules\/exporting.js/i)
+      expect(code).to match(/BEGIN highcharts-3d.js/i)
+      expect(code).to match(/END highcharts-3d.js/i)
+      expect(code).to match(/BEGIN modules\/data.js/i)
+      expect(code).to match(/END modules\/data.js/i)
+    end
+  end
 end
 
 describe LazyHighCharts::HighChart do
