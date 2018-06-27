@@ -52,19 +52,6 @@ module Daru
         @adapter.show_in_iruby @charts
       end
 
-      # dependent js file, to include in head tag using the plot object.
-      # @example:
-      # plot_obj.init_script
-      #
-      # Note :
-      # User can directly put the dependent script file into the head tag
-      # using `Daru::View.dependent_script(:highcharts), by default it loads
-      # Nyaplot JS files.
-      #
-      def init_script
-        @adapter.init_script
-      end
-
       # generat html code, to include in body tag
       def div
         @adapter.generate_body(@charts)
@@ -73,13 +60,6 @@ module Daru
       # generat html file
       def export_html_file(path='./plot.html')
         @adapter.export_html_file(@charts, path)
-      end
-
-      # load the corresponding JS files in IRuby notebook.
-      # This is done automatically when plotting library is set using
-      # Daru::View.plotting_library = :new_library
-      def init_iruby
-        @adapter.init_iruby
       end
 
       private

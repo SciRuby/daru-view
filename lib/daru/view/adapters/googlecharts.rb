@@ -59,9 +59,9 @@ module Daru
         #   chart = Daru::View::Plot.new(data, options)
         #
         # @example Multiple Charts in a row
-        #   Draw the Daru::View::Plot object with the data as an array of
+        #   Draw the Daru::View::PlotList object with the data as an array of
         #   Daru::View::Plots(s) or Daru::View::Table(s) or both
-        #     combined = Daru::View::Plot([line_chart, bar_chart])
+        #     combined = Daru::View::PlotList([line_chart, bar_chart])
         def init(data=[], options={})
           # When multiple charts are shown in a row, @chart will contain the
           #   instance of GoogleVisular::BaseChart so that its data can contain
