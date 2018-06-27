@@ -5,7 +5,8 @@ require_relative 'base_chart'
 
 module GoogleVisualr
   def self.init_script(
-    dependent_js=['google_visualr.js', 'loader.js']
+    dependent_js=['google_visualr.js', 'loader.js', 'jspdf.min.js',
+                  'jquery.min.js', 'xepOnline.jqPlugin.js']
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
@@ -54,7 +55,11 @@ module GoogleVisualr
     def get_html(dom)
       html = ''
       html << load_js(dom)
-      html << draw_js(dom)
+      html << if is_a?(GoogleVisualr::DataTable)
+                draw_js(dom)
+              else
+                draw_chart_js(dom)
+              end
       html
     end
 
@@ -81,12 +86,77 @@ module GoogleVisualr
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id
+      add_listener('ready', add_namespace(id)) unless
+      defined?(IRuby)
       chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
       IRuby.html(to_html(dom))
+    end
+
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
+    # @return [String] js function to add namespace on the generated svg
+    def add_namespace(id=SecureRandom.uuid)
+      js = ''
+      js << "\n  var svg = jQuery('##{id} svg');"
+      js << "\n  svg.attr('xmlns', 'http://www.w3.org/2000/svg');"
+      js << "\n  svg.css('overflow','visible');"
+      js
+    end
+
+    def export(export_type='png', file_name='chart')
+      add_listener('ready', extract_export_code(export_type, file_name))
+      js = to_html
+      js
+    end
+
+    # Exports chart to different formats in IRuby notebook
+    #
+    # @param type [String] format to which chart has to be exported
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [void] loads the js code of chart along with the code to export
+    #   in IRuby notebook
+    def export_iruby(export_type='png', file_name='chart')
+      IRuby.html(export(export_type, file_name))
+    end
+
+    # Returns the script to export the chart in different formats
+    #
+    # @param type [String] format to which chart has to be exported
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [String] the script to export the chart
+    def extract_export_code(export_type='png', file_name='chart')
+      case export_type
+      when 'png'
+        js = extract_export_png_code(file_name)
+      when 'pdf'
+        js = extract_export_pdf_code(file_name)
+      end
+      js
+    end
+
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [String] the script to export the chart in png format
+    def extract_export_png_code(file_name)
+      js = ''
+      js << "\n \tvar a = document.createElement('a');"
+      js << "\n \ta.href = chart.getImageURI();"
+      js << "\n \ta.download = '#{file_name}.png';"
+      js << "\n \tdocument.body.appendChild(a);"
+      js << "\n \ta.click();"
+      js << "\n \tdocument.body.removeChild(a);"
+      js
+    end
+
+    def extract_export_pdf_code(file_name)
+      js = ''
+      js << "\n \tvar doc = new jsPDF();"
+      js << "\n \tdoc.addImage(chart.getImageURI(), 0, 0);"
+      js << "\n \tdoc.save('#{file_name}.pdf');"
+      js
     end
   end
 

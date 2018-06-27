@@ -77,6 +77,10 @@ module Daru
         @adapter.export_html_file(@chart, path)
       end
 
+      def export(export_type='png', file_name='chart')
+        @adapter.export(@chart, export_type, file_name)
+      end
+
       # load the corresponding JS files in IRuby notebook.
       # This is done automatically when plotting library is set using
       # Daru::View.plotting_library = :new_library
