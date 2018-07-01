@@ -112,7 +112,7 @@ module Daru
         when :nyaplot
           Nyaplot.init_script
         when :highcharts
-          LazyHighCharts.init_code
+          LazyHighCharts.init_script
         when :googlecharts
           GoogleVisualr.init_script
         when :datatables

@@ -7,7 +7,7 @@ module LazyHighCharts
   #
   # @param [Array] dependent js files required
   # @return [String] js code of the dependent files
-  def self.init_script(
+  def self.init_javascript(
     dependent_js=HIGHCHARTS_DEPENDENCIES_WEB
   )
     # Highstock is based on Highcharts, meaning it has all the core
@@ -41,10 +41,10 @@ module LazyHighCharts
   # Loads the dependent code required in styled mode
   #
   # @return [String] code of the dependent css and js file(s)
-  def self.init_code
+  def self.init_script
     init_code = ''
     init_code << init_css
-    init_code << init_script
+    init_code << init_javascript
     init_code
   end
 
@@ -125,7 +125,7 @@ module LazyHighCharts
       if type == 'iruby'
         LazyHighCharts.init_iruby(dep_js) unless dep_js.nil?
       elsif type == 'web_frameworks'
-        dep_js.nil? ? '' : LazyHighCharts.init_script(dep_js)
+        dep_js.nil? ? '' : LazyHighCharts.init_javascript(dep_js)
       end
     end
 

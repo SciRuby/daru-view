@@ -2,9 +2,9 @@ require 'spec_helper.rb'
 
 describe LazyHighCharts do
   before { Daru::View.plotting_library = :highcharts }
-  describe "#init_script" do
+  describe "#init_javascript" do
     it "generates valid initial script" do
-      js = LazyHighCharts.init_script
+      js = LazyHighCharts.init_javascript
       expect(js).to match(/BEGIN js\/highstock.js/i)
       expect(js).to match(/Highstock JS/i)
       expect(js).to match(/BEGIN js\/map.js/i)
@@ -34,9 +34,9 @@ describe LazyHighCharts do
     end
   end
 
-  describe "#init_code" do
+  describe "#init_script" do
     it "generates valid initial css and js" do
-      code = LazyHighCharts.init_code
+      code = LazyHighCharts.init_script
       expect(code).to match(/BEGIN highcharts.css/i)
       expect(code).to match(/END highcharts.css/i)
       expect(code).to match(/BEGIN js\/highstock.js/i)

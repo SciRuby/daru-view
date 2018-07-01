@@ -57,7 +57,7 @@ module Daru
         end
 
         def init_script
-          LazyHighCharts.init_code
+          LazyHighCharts.init_script
         end
 
         def generate_body(plot)
