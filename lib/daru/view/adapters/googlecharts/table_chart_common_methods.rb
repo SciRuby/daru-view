@@ -3,14 +3,14 @@ require 'google_visualr'
 module GoogleVisualr
   module HelperMethods
     # @param element_id [String] The ID of the DIV element that the Google
-    #   Chart DataTable should be rendered in
+    #   Chart/DataTable should be rendered in
     # @return [String] unique function name to handle query response
     def query_response_function_name(element_id)
       "handleQueryResponse_#{element_id.tr('-', '_')}"
     end
 
-    # @param data [Array, Daru::DataFrame, Daru::Vector, String] Data
-    #   of GoogleVisualr DataTable
+    # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
+    #   Data of GoogleVisualr DataTable/Chart
     # @return [String] Data option (dataSourceUrl or dataTable) required to
     #   draw the Chartwrapper based upon the data provided.
     def append_data(data)
@@ -31,7 +31,7 @@ module GoogleVisualr
     #   final HTML output.
     #
     # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
-    #   Data of GoogleVisualr Chart
+    #   Data of GoogleVisualr Chart/DataTable
     # @param element_id [String] The ID of the DIV element that the Google
     #   Chartwrapper should be rendered in
     # @return [String] Javascript code to render the Google Chartwrapper
@@ -45,7 +45,7 @@ module GoogleVisualr
     end
 
     # Generates JavaScript when data is imported from spreadsheet and renders
-    #   the Google Chart in the final HTML output when data is URL of the
+    #   the Google Chart/Table in the final HTML output when data is URL of the
     #   google spreadsheet
     #
     # @param data [String] URL of the google spreadsheet in the specified
@@ -53,9 +53,9 @@ module GoogleVisualr
     #   /spreadsheets
     #   Query string can be appended to retrieve the data accordingly
     # @param element_id [String] The ID of the DIV element that the Google
-    #   Chart should be rendered in
-    # @return [String] Javascript code to render the Google Chart when data is
-    #   given as the URL of the google spreadsheet
+    #   Chart/Table should be rendered in
+    # @return [String] Javascript code to render the Google Chart/Table when
+    #   data is given as the URL of the google spreadsheet
     def to_js_spreadsheet(data, element_id=SecureRandom.uuid)
       js =  ''
       js << "\n<script type='text/javascript'>"
