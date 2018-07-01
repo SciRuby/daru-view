@@ -1,5 +1,6 @@
 require 'securerandom'
 require 'erb'
+require_relative 'table_chart_common_methods'
 require_relative 'data_table_iruby'
 require_relative 'base_chart'
 require 'daru/view/constants'
