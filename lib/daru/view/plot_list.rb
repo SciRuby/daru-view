@@ -1,25 +1,9 @@
+require 'erb'
+
 module Daru
   module View
     class PlotList
-      attr_reader :charts, :data
-      attr_accessor :adapter
-      class << self
-        # class method
-        #
-        # @example
-        #
-        # Daru::View::PlotList.adapter = :googlecharts
-        #
-        # Plotting libraries are nyaplot, highcharts, googlecharts
-        def adapter=(adapter)
-          require "daru/view/adapters/#{adapter}"
-          # rubocop:disable Style/ClassVars
-          @@adapter = Daru::View::Adapter.const_get(
-            adapter.to_s.capitalize + 'Adapter'
-          )
-          # rubocop:enable Style/ClassVars
-        end
-      end
+      attr_reader :data
 
       # @example
       #
@@ -35,40 +19,48 @@ module Daru
       # plots = Daru::View::PlotList.new([plot1, plot2])
       #
       def initialize(data=[])
+        raise ArgumentError unless data.is_a?(Array) &&
+                                   (data[0].is_a?(Daru::View::Plot) ||
+                                   data[0].is_a?(Daru::View::Table))
         @data = data
-        @charts = plot_data(data)
-      end
-
-      # instance method
-      def adapter=(adapter)
-        require "daru/view/adapters/#{adapter}"
-        @adapter = Daru::View::Adapter.const_get(
-          adapter.to_s.capitalize + 'Adapter'
-        )
       end
 
       # display in IRuby notebook
       def show_in_iruby
-        @adapter.show_in_iruby @charts
+        IRuby.html(div)
       end
 
       # generat html code, to include in body tag
       def div
-        @adapter.generate_body(@charts)
+        path = File.expand_path('templates/multiple_charts_div.erb', __dir__)
+        template = File.read(path)
+        id = []
+        charts_script = extract_charts_script(id)
+        ERB.new(template).result(binding)
       end
 
-      # generat html file
+      # generate html file
       def export_html_file(path='./plot.html')
-        @adapter.export_html_file(@charts, path)
+        # TODO
       end
 
       private
 
-      def plot_data(data)
-        # class variable @@aapter is used in instance variable @adapter.
-        # so in each object `adapter` variable can be accessed.
-        @adapter ||= @@adapter
-        @adapter.init(data)
+      def extract_charts_script(id=[])
+        charts_script = ''
+        @data.each_with_index do |plot, index|
+          id[index] = ('a'..'z').to_a.shuffle.take(11).join
+          # TODO: Implement this for nyplot and datatables too
+          # if defined?(IRuby) && plot.is_a?(Daru::View::Plot) &&
+          #    plot.chart.is_a?(LazyHighCharts::HighChart)
+          #   chart_script = plot.chart.to_html_iruby(id[index])
+          # else
+            chart_script = plot.div(id[index])
+          # end
+          chart_script.sub!(%r{<div(.*?)<\/div>}ixm, '')
+          charts_script << chart_script
+        end
+        charts_script
       end
     end
   end

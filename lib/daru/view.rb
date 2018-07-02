@@ -19,7 +19,6 @@ module Daru
     # default Nyaplot library is used.
     @plotting_library = :nyaplot
     Daru::View::Plot.adapter = @plotting_library
-    Daru::View::PlotList.adapter = @plotting_library
 
     class << self
       attr_reader :plotting_library, :table_library
@@ -30,7 +29,7 @@ module Daru
         when :nyaplot, :highcharts, :googlecharts
           # plot charts
           @plotting_library = lib
-          Daru::View::Plot.adapter = Daru::View::PlotList.adapter = lib
+          Daru::View::Plot.adapter = lib
           if lib == :googlecharts
             # plot table drawing
             Daru::View::Table.adapter = lib
@@ -55,7 +54,6 @@ module Daru
           # plot chart and table drawing
           @plotting_library = @table_library = lib
           Daru::View::Plot.adapter = Daru::View::Table.adapter = lib
-          Daru::View::PlotList.adapter = lib
         when :datatables
           # only for table drawing
           @table_library = Daru::View::Table.adapter = lib

@@ -63,22 +63,13 @@ module Daru
         #   Daru::View::Plots(s) or Daru::View::Table(s) or both
         #     combined = Daru::View::PlotList([line_chart, bar_chart])
         def init(data=[], options={})
-          # When multiple charts are shown in a row, @chart will contain the
-          #   instance of GoogleVisular::BaseChart so that its data can contain
-          #   the array of plots (this will be used in display.rb). Further,
-          #   @chart will be used to call show_in_iruby and to_html.
-          if data.is_a?(Array) &&
-             (data[0].is_a?(Daru::View::Plot) || data[0].is_a?(Daru::View::Table))
-            @chart = GoogleVisualr::BaseChart.new(GoogleVisualr::DataTable.new)
-          else
-            @table = GoogleVisualr::DataTable.new
-            @table = get_table(data) unless data.is_a?(String)
-            validate_url(data) if data.is_a?(String)
-            @chart_type = extract_chart_type(options)
-            @chart = GoogleVisualr::Interactive.const_get(
-              @chart_type
-            ).new(@table, options)
-          end
+          @table = GoogleVisualr::DataTable.new
+          @table = get_table(data) unless data.is_a?(String)
+          validate_url(data) if data.is_a?(String)
+          @chart_type = extract_chart_type(options)
+          @chart = GoogleVisualr::Interactive.const_get(
+            @chart_type
+          ).new(@table, options)
           @chart.data = data
           @chart
         end
@@ -181,8 +172,8 @@ module Daru
           GoogleVisualr.init_script
         end
 
-        def generate_body(plot)
-          plot.to_html
+        def generate_body(plot, id=random_canvas_id)
+          plot.to_html(id)
         end
 
         def export_html_file(plot, path='./plot.html')
@@ -316,6 +307,12 @@ module Daru
           when data.is_a?(Date)
             return 'date'
           end
+        end
+
+        def random_canvas_id
+          canvas_id_length = 11
+          # Don't use SecureRandom.urlsafe_base64; it gives invalid characters.
+          ('a'..'z').to_a.shuffle.take(canvas_id_length).join
         end
       end
     end

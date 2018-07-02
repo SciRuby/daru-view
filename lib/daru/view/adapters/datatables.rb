@@ -35,7 +35,7 @@ module Daru
           Daru::DataTables.init_script
         end
 
-        def generate_body(table)
+        def generate_body(table, _id=nil)
           table_opts = {
             class: 'display',
             cellspacing: '0',

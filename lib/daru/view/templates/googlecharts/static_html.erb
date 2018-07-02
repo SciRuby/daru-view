@@ -1,12 +1,7 @@
 <html lang='en'>
   <head>
     <!-- TODO: extend and display with table and chart both in html table -->
-    <% if plot.data.is_a?(Array) && (plot.data[0].is_a?(Daru::View::Plot) ||
-          plot.data[0].is_a?(Daru::View::Table)) %>
-    <title>Multiple Charts</title>
-    <% else %>
     <title>Chart_<%= id %>_<%= @chart_type%></title>
-    <% end %>
     <%= initial_script %>
   </head>
   <body>

@@ -60,8 +60,8 @@ module Daru
           LazyHighCharts.init_script
         end
 
-        def generate_body(plot)
-          plot.to_html
+        def generate_body(plot, id=random_canvas_id)
+          plot.to_html(id)
         end
 
         def export_html_file(plot, path='./plot.html')
@@ -113,6 +113,12 @@ module Daru
             # TODO: error msg
             raise ArgumentError
           end
+        end
+
+        def random_canvas_id
+          canvas_id_length = 11
+          # Don't use SecureRandom.urlsafe_base64; it gives invalid characters.
+          ('a'..'z').to_a.shuffle.take(canvas_id_length).join
         end
       end
     end
