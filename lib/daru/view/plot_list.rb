@@ -1,5 +1,10 @@
 require 'erb'
 
+# Otherwise Daru::IRuby module was used and IRuby.html method was not working.
+# rubocop:disable Style/MixinUsage
+include IRuby::Utils if defined?(IRuby)
+# rubocop:enable Style/MixinUsage
+
 module Daru
   module View
     class PlotList
@@ -20,8 +25,10 @@ module Daru
       #
       def initialize(data=[])
         raise ArgumentError unless data.is_a?(Array) &&
-                                   (data[0].is_a?(Daru::View::Plot) ||
-                                   data[0].is_a?(Daru::View::Table))
+                                   data.all? { |plot|
+                                     plot.is_a?(Daru::View::Plot) ||
+                                     plot.is_a?(Daru::View::Table)
+                                   }
         @data = data
       end
 
@@ -30,7 +37,7 @@ module Daru
         IRuby.html(div)
       end
 
-      # generat html code, to include in body tag
+      # generate html code, to include in body tag
       def div
         path = File.expand_path('templates/multiple_charts_div.erb', __dir__)
         template = File.read(path)
@@ -50,17 +57,24 @@ module Daru
         charts_script = ''
         @data.each_with_index do |plot, index|
           id[index] = ('a'..'z').to_a.shuffle.take(11).join
-          # TODO: Implement this for nyplot and datatables too
-          # if defined?(IRuby) && plot.is_a?(Daru::View::Plot) &&
-          #    plot.chart.is_a?(LazyHighCharts::HighChart)
-          #   chart_script = plot.chart.to_html_iruby(id[index])
-          # else
-            chart_script = plot.div(id[index])
-          # end
+          chart_script = extract_chart_script(id, plot, index)
           chart_script.sub!(%r{<div(.*?)<\/div>}ixm, '')
           charts_script << chart_script
         end
         charts_script
+      end
+
+      def extract_chart_script(id, plot, index)
+        # TODO: Implement this for nyplot and datatables too
+        if defined?(IRuby.html) && plot.is_a?(Daru::View::Plot) &&
+           plot.chart.is_a?(LazyHighCharts::HighChart)
+          chart_script = plot.chart.to_html_iruby(id[index])
+        elsif plot.is_a?(Daru::View::Plot) && plot.chart.is_a?(Nyaplot::Plot)
+          raise NotImplementedError, 'Not yet implemented'
+        else
+          chart_script = plot.div(id[index])
+        end
+        chart_script
       end
     end
   end
