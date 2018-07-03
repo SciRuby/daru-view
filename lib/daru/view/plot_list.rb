@@ -44,8 +44,8 @@ module Daru
       def div
         path = File.expand_path('templates/multiple_charts_div.erb', __dir__)
         template = File.read(path)
-        id = []
-        charts_script = extract_charts_script(id)
+        charts_div_tag = []
+        charts_script = extract_charts_script(charts_div_tag)
         ERB.new(template).result(binding)
       end
 
@@ -58,28 +58,23 @@ module Daru
 
       private
 
-      def extract_charts_script(id=[])
+      def extract_charts_script(charts_div_tag=[])
         charts_script = ''
-        @data.each_with_index do |plot, index|
-          id[index] = ('a'..'z').to_a.shuffle.take(11).join
-          chart_script = extract_chart_script(id, plot, index)
+        @data.each do |plot|
+          chart_script = extract_chart_script(plot)
+          charts_div_tag << chart_script.partition(%r{<div(.*?)<\/div>}ixm)[1]
           chart_script.sub!(%r{<div(.*?)<\/div>}ixm, '')
           charts_script << chart_script
         end
         charts_script
       end
 
-      def extract_chart_script(id, plot, index)
-        # TODO: Implement this for nyplot and datatables too
-        if defined?(IRuby.html) && plot.is_a?(Daru::View::Plot) &&
-           plot.chart.is_a?(LazyHighCharts::HighChart)
-          chart_script = plot.chart.to_html_iruby(id[index])
-        elsif plot.is_a?(Daru::View::Plot) && plot.chart.is_a?(Nyaplot::Plot)
-          raise NotImplementedError, 'Not yet implemented'
-        else
-          chart_script = plot.div(id[index])
-        end
-        chart_script
+      def extract_chart_script(plot)
+        # TODO: Implement this for datatables too
+        return plot.div unless defined?(IRuby.html) &&
+                               plot.is_a?(Daru::View::Plot) &&
+                               plot.chart.is_a?(LazyHighCharts::HighChart)
+        plot.chart.to_html_iruby
       end
 
       def generate_html

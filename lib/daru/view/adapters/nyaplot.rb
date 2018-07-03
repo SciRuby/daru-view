@@ -24,7 +24,7 @@ module Daru
           Nyaplot.init_script
         end
 
-        def generate_body(plot, _id=nil)
+        def generate_body(plot)
           plot.to_iruby[1]
         end
 

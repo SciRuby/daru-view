@@ -68,8 +68,8 @@ module Daru
       end
 
       # generat html code, to include in body tag
-      def div(element_id=random_canvas_id)
-        @adapter.generate_body(@chart, element_id)
+      def div
+        @adapter.generate_body(@chart)
       end
 
       # generat html file
@@ -100,12 +100,6 @@ module Daru
         # so in each object `adapter` variable can be accessed.
         @adapter ||= @@adapter
         @adapter.init(data, options)
-      end
-
-      def random_canvas_id
-        canvas_id_length = 11
-        # Don't use SecureRandom.urlsafe_base64; it gives invalid characters.
-        ('a'..'z').to_a.shuffle.take(canvas_id_length).join
       end
     end
   end

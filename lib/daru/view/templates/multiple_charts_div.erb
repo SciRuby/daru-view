@@ -1,7 +1,7 @@
 <table class='columns'>
   <tr>
-    <% id.each do |div_id| %>  
-      <td><div id='<%= div_id %>'></div></td>
+    <% charts_div_tag.each do |chart_div_tag| %>  
+      <td><%= chart_div_tag %></td>
     <% end %>
   </tr>
 </table>

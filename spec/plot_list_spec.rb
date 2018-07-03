@@ -1,6 +1,4 @@
-describe Daru::View::PlotList, 'Charts plotting with Googlecharts library' do
-  before { Daru::View.plotting_library = :googlecharts }
-  let(:options) {{width: 800, height: 720}}
+describe Daru::View::PlotList do
   let(:df) do
     Daru::DataFrame.new(
       {
@@ -10,28 +8,50 @@ describe Daru::View::PlotList, 'Charts plotting with Googlecharts library' do
       }, index: 'a'..'f'
     )
   end
-  let(:dv) { Daru::Vector.new [1, 2, 3] }
-  # let(:plot_df) { Daru::View::Plot.new(df, options) }
-  let(:plot_dv) { Daru::View::Plot.new(dv, type: :bar) }
-  let(:table_array) { Daru::View::Table.new(
-    [['col1', 'col2', 'col3'],[1, 2, 3]], options) }
-  let(:plot_array) { [plot_dv, table_array] }
-  let(:combined) { Daru::View::PlotList.new(plot_array) }
-  context 'initialize with Googlecharts' do
+  let(:dv) { Daru::Vector.new [:a, :a, :a, :b, :b, :c], type: :category }
+  let(:array1) { [
+      ['Galaxy', 'Distance', 'Brightness'],
+      ['Canis Major Dwarf', 8000, 230.3],
+      ['Sagittarius Dwarf', 24000, 4000.5],
+      ['Ursa Major II Dwarf', 30000, 1412.3],
+      ['Lg. Magellanic Cloud', 50000, 120.9],
+      ['Bootes I', 60000, 1223.1]
+    ] }
+  let(:array2) { [[1, 15], [2, 30], [4, 40]] }
+  let(:options_gc) {{width: 800, height: 720, adapter: :googlecharts}}
+  let(:plot_gc) { Daru::View::Plot.new(array1, type: :bar, adapter: :googlecharts) }
+  let(:table_gc) { Daru::View::Table.new(array1, options_gc) }
+  let(:plot_hc) { Daru::View::Plot.new(
+    array2, chart: { type: 'line' }, adapter: :highcharts
+  ) }
+  let(:plot_nyaplot) { Daru::View::Plot.new(dv, type: :bar, adapter: :nyaplot) }
+  let(:plots_array) { [plot_gc, table_gc, plot_hc, plot_nyaplot] }
+  let(:combined) { Daru::View::PlotList.new(plots_array) }
+  context 'initialize PlotList' do
     it 'sets correct data' do
       expect(combined).to be_a Daru::View::PlotList
-      expect(combined.data).to eq plot_array
+      expect(combined.data).to eq plots_array
     end
   end
   describe '#div' do
     subject (:js) { combined.div }
-    it 'genrates a table in js' do
+    it 'generates a table in js' do
       expect(js).to match(/<table class='columns'>/)
       expect(js).to match(/<td><div id=/)
     end
-    it 'generates js of the plots' do
-      expect(js).to match(/google.visualization.BarChart/)
-      expect(js).to match(/google.visualization.Table/)
+    context 'when js of the plots is generated' do
+      it 'generates js of googlecharts' do
+        expect(js).to match(/google.visualization.BarChart/)
+        expect(js).to match(/google.visualization.Table/)
+      end
+      it 'generates js of highcharts' do
+        expect(js).to match(/\"chart\": { \"type\": \"line\"/)
+        expect(js).to match(/Highcharts.Chart/)
+      end
+      it 'generates js of nyaplot' do
+        expect(js).to match(/\"type\":\"bar\"/)
+        expect(js).to match(/window.addEventListener\('load_nyaplot', render/)
+      end
     end
   end
   describe '#export_html_file' do
@@ -41,13 +61,19 @@ describe Daru::View::PlotList, 'Charts plotting with Googlecharts library' do
       content = File.read(path)
       expect(content).to match(/html/i)
       expect(content).to match(/loader.js/i)
-      expect(content).to match(/google_visualr.js/i)
+      expect(content).to match(/google_visualr.js/)
+      expect(content).to match(/highstock.js/)
+      expect(content).to match(/require.min.js/)
       expect(content).to match(/<script>/i)
       expect(content).to match(/Multiple Charts/i)
       expect(content).to match(/google.visualization.DataTable\(\);/i)
       expect(content).to match(/google.visualization.BarChart/)
       expect(content).to match(/google.visualization.Table/)
       expect(content).to match(/chart.draw\(data_table, \{\}/i)
+      expect(content).to match(/\"chart\": { \"type\": \"line\"/)
+      expect(content).to match(/Highcharts.Chart/)
+      expect(content).to match(/\"type\":\"bar\"/)
+      expect(content).to match(/window.addEventListener\('load_nyaplot', render/)
     end
   end
 end
