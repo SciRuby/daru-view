@@ -13,16 +13,16 @@ module Daru
     class PlotList
       attr_reader :data
 
+      # @param data [Daru::View::Plot, Daru::View::Table] data to visualize
+      # @return [void] initialize PlotList with data
       # @example
-      #
-      # Daru::View.plotting_library = :googlecharts
       #
       # df = Daru::DataFrame.new({a:['A', 'B', 'C', 'D', 'E'], b:[10,20,30,40,50]})
       # plot1 = Daru::View::Plot.new(
-      #   df, type: :bar, x: :a, y: :b
+      #   df, type: :bar, x: :a, y: :b, adapter: :googlecharts
       # )
       # plot2 = Daru::View::Plot.new(
-      #   df, type: :column, x: :a, y: :b
+      #   df, chart: { type: 'line' }, adapter: :highcharts
       # )
       # plots = Daru::View::PlotList.new([plot1, plot2])
       #
@@ -35,12 +35,12 @@ module Daru
         @data = data
       end
 
-      # display in IRuby notebook
+      # @return [void] display in IRuby notebook
       def show_in_iruby
         IRuby.html(div)
       end
 
-      # generate html code, to include in body tag
+      # @return [String] generates html code to include in body tag
       def div
         path = File.expand_path('templates/multiple_charts_div.erb', __dir__)
         template = File.read(path)
@@ -49,7 +49,7 @@ module Daru
         ERB.new(template).result(binding)
       end
 
-      # generate html file
+      # @return [void] writes a html file to disk
       def export_html_file(path='./plot.html')
         path = File.expand_path(path, Dir.pwd)
         str = generate_html
