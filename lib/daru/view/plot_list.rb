@@ -1,4 +1,7 @@
 require 'erb'
+require 'daru/view/adapters/highcharts/display'
+require 'daru/view/adapters/nyaplot/display'
+require 'daru/view/adapters/googlecharts/display'
 
 # Otherwise Daru::IRuby module was used and IRuby.html method was not working.
 # rubocop:disable Style/MixinUsage
@@ -48,7 +51,9 @@ module Daru
 
       # generate html file
       def export_html_file(path='./plot.html')
-        # TODO
+        path = File.expand_path(path, Dir.pwd)
+        str = generate_html
+        File.write(path, str)
       end
 
       private
@@ -75,6 +80,24 @@ module Daru
           chart_script = plot.div(id[index])
         end
         chart_script
+      end
+
+      def generate_html
+        path = File.expand_path(
+          'templates/static_html_multiple_charts.erb', __dir__
+        )
+        template = File.read(path)
+        charts_script = div
+        set_init_script = {}
+        initial_script = ''
+        @data.each do |plot|
+          adapter = plot.adapter
+          unless set_init_script[adapter]
+            set_init_script[adapter] = true
+            initial_script << plot.adapter.init_script
+          end
+        end
+        ERB.new(template).result(binding)
       end
     end
   end
