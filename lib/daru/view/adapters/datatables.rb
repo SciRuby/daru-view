@@ -14,18 +14,6 @@ module Daru
         #
         # TODO : this docs must be improved
         def init_table(data=[], options={})
-          # TODO : create data array from the df and vector data. So that
-          # we can directly use the array.(No need to create df or vector and
-          # generate the html table using to_html)
-          # if data.is_a?(Array)
-          #   data_name = 'series_data'+ SecureRandom.uuid
-          #   data =
-          #     if data.all? { |e| e.class==Array }
-          #       Daru::DataFrame.rows(data, name: data_name)
-          #     else
-          #       Daru::Vector.new(data, name: data_name)
-          #     end
-          # end
           options[:data] = to_data_array(data)
           row_number = 0
           options[:data].each do |array|
@@ -33,7 +21,7 @@ module Daru
             row_number += 1
           end
           @table = Daru::DataTables::DataTable.new(options)
-          @data = data
+          @table.data = data
           @table
         end
 
@@ -46,7 +34,7 @@ module Daru
             class: 'display',
             cellspacing: '0',
             width: '100%',
-            table_html: extract_table
+            table_html: extract_table(table)
           }
           html_options = {
             table_options: table_opts
@@ -102,8 +90,8 @@ module Daru
           end
         end
 
-        def extract_table
-          return @data.to_html_thead unless @data.is_a?(Array)
+        def extract_table(table)
+          return table.data.to_html_thead unless table.data.is_a?(Array)
           path = File.expand_path(
             '../templates/datatables/thead.erb', __dir__
           )
