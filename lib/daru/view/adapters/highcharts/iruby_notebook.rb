@@ -13,9 +13,20 @@ module LazyHighCharts
     ERB.new(template).result(binding)
   end
 
+  def self.generate_init_code_css(dependent_css)
+    css_dir = File.expand_path(
+      '../../../../assets/stylesheets/highcharts_css', __dir__
+    )
+    path = File.expand_path(
+      '../../templates/highcharts/init.inline.css.erb', __dir__
+    )
+    template = File.read(path)
+    ERB.new(template).result(binding)
+  end
+
   # Enable to show plots on IRuby notebook
   def self.init_iruby(
-    dependent_js=HIGHCHARTS_DEPENDENCIES
+    dependent_js=HIGHCHARTS_DEPENDENCIES_IRUBY
   )
     # TODO: include highstock.js for highstock and modules/*.js files for
     # exporting and getting data from various source like csv files etc.
