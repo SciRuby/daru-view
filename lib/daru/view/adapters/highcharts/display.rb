@@ -3,8 +3,12 @@ require_relative 'iruby_notebook'
 require 'daru/view/constants'
 
 module LazyHighCharts
-  def self.init_script(
-    dependent_js=HIGHCHARTS_DEPENDENCIES
+  # Loads the dependent javascript required
+  #
+  # @param [Array] dependent js files required
+  # @return [String] js code of the dependent files
+  def self.init_javascript(
+    dependent_js=HIGHCHARTS_DEPENDENCIES_WEB
   )
     # Highstock is based on Highcharts, meaning it has all the core
     # functionality of Highcharts, plus some additional features. So
@@ -13,11 +17,35 @@ module LazyHighCharts
     #
     # Note: Don't reorder the dependent_js elements. It must be loaded in
     # the same sequence. Otherwise some of the JS overlap and doesn't work.
-    js =  ''
+    js = ''
     js << "\n<script type='text/javascript'>"
     js << LazyHighCharts.generate_init_code(dependent_js)
     js << "\n</script>"
     js
+  end
+
+  # Loads the dependent css required in styled mode
+  #
+  # @param [Array] dependent css files required
+  # @return [String] CSS code of the dependent file(s)
+  def self.init_css(
+    dependent_css=HIGHCHARTS_DEPENDENCIES_CSS
+  )
+    css =  ''
+    css << "\n<style type='text/css'>"
+    css << LazyHighCharts.generate_init_code_css(dependent_css)
+    css << "\n</style>"
+    css
+  end
+
+  # Loads the dependent code required in styled mode
+  #
+  # @return [String] code of the dependent css and js file(s)
+  def self.init_script
+    init_code = ''
+    init_code << init_css
+    init_code << init_javascript
+    init_code
   end
 
   class HighChart
@@ -34,6 +62,7 @@ module LazyHighCharts
     def to_html(placeholder=random_canvas_id)
       chart_hash_must_be_present
       script = load_dependencies('web_frameworks')
+      script << high_chart_css(placeholder)
       # Helps to denote either of the three classes.
       chart_class = extract_chart_class
       # When user wants to plot a HighMap
@@ -61,7 +90,28 @@ module LazyHighCharts
     def to_html_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
       chart_hash_must_be_present
-      high_chart_iruby(extract_chart_class, placeholder, self)
+      script = high_chart_css(placeholder)
+      script << high_chart_iruby(extract_chart_class, placeholder, self)
+      script
+    end
+
+    # @param placeholder [String] ID of the div in which highchart has to
+    #   rendered
+    # @return [String] css code of the chart
+    def high_chart_css(placeholder)
+      # contains the css provided by the user as a String array
+      css_data = options[:css].nil? ? '' : options.delete(:css)
+      css_script = ''
+      if css_data != ''
+        css_script << "\n<style>"
+        # Applying the css to chart div
+        css_data.each do |css|
+          css_script << "\n  #" + placeholder + ' '
+          css_script << css
+        end
+        css_script << "\n</style>"
+      end
+      css_script
     end
 
     # Loads the dependent mapdata and dependent modules of the chart
@@ -75,7 +125,7 @@ module LazyHighCharts
       if type == 'iruby'
         LazyHighCharts.init_iruby(dep_js) unless dep_js.nil?
       elsif type == 'web_frameworks'
-        dep_js.nil? ? '' : LazyHighCharts.init_script(dep_js)
+        dep_js.nil? ? '' : LazyHighCharts.init_javascript(dep_js)
       end
     end
 

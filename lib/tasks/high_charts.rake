@@ -11,7 +11,7 @@ end
 
 namespace :highcharts do
   desc "Update highcharts.js from latest Builds on Highcharts codebase: http://code.highcharts.com/"
-  task :update => [:core, :stock, :map]
+  task :update => [:core, :stock, :map, :css]
   task :core do
     say "Grabbing Core from Highcharts codebase..." do
       sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/modules/"
@@ -53,8 +53,10 @@ namespace :highcharts do
 
       sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/stock/modules/"
       sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/stock/adapters/"
+      sh "mkdir -p lib/daru/view/adapters/js/highcharts_js/js/"
 
       sh "curl -# http://code.highcharts.com/stock/highstock.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/highstock.js"
+      sh "curl -# http://code.highcharts.com/stock/js/highstock.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/js/highstock.js"
       sh "curl -# http://code.highcharts.com/stock/highcharts-more.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/highcharts-more.js"
       sh "curl -# http://code.highcharts.com/stock/modules/exporting.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/modules/exporting.js"
       sh "curl -# http://code.highcharts.com/stock/modules/funnel.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/stock/modules/funnel.js"
@@ -111,7 +113,15 @@ namespace :highcharts do
 
       sh "curl -# http://code.highcharts.com/maps/modules/map.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/map.js"
       sh "curl -# http://code.highcharts.com/mapdata/countries/in/custom/in-all-andaman-and-nicobar.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/mapdata/countries/in/custom/in-all-andaman-and-nicobar.js"
+      sh "curl -# http://code.highcharts.com/maps/js/modules/map.js -L --compressed -o lib/daru/view/adapters/js/highcharts_js/js/map.js"
     end  
   end
 
+  task :css do
+    say "Grabbing CSS of HighCharts from Upstream..." do
+      sh "mkdir -p lib/daru/view/adapters/css/highcharts_css/"
+
+      sh "curl -# http://code.highcharts.com/css/highcharts.css -L --compressed -o lib/daru/view/adapters/css/highcharts_css/highcharts.css"
+    end
+  end
 end

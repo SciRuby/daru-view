@@ -1,0 +1,9 @@
+<%
+dependent_css.each{ |dep_css|
+  contents = File.read(File.join(css_dir,dep_css), mode: 'r:UTF-8')
+%>
+   /* BEGIN <%= dep_css %> */
+
+<%= contents %>
+  /* END <%= dep_css %>*/
+<% } %>
