@@ -3,11 +3,11 @@
     <th></th>
     <% column_number = 0 %>
     <% if table.data.sample.is_a?(Array)%>
-      <% columns = table.data.sample.length %>
+      <% columns = table.data.sample.length - 1 %>
     <% else %>
-      <% columns = 2 %>
+      <% columns = 1 %>
     <% end %>
-    <% (columns - 1).times do %>
+    <% columns.times do %>
       <th>Column: <%=column_number%></th>
       <% column_number += 1 %>
     <% end %>
