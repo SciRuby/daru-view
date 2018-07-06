@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/SciRuby/daru-view.svg?branch=master)](https://travis-ci.org/SciRuby/daru-view)
+
+[![Coverage Status](https://coveralls.io/repos/github/SciRuby/daru-view/badge.svg?branch=master)](https://coveralls.io/github/SciRuby/daru-view?branch=master)
+
+
 # Daru::View
 
 [Daru](https://github.com/sciruby/daru) (Data Analysis in RUby) is a library for analysis, manipulation and visualization of data. Daru-view is for easy and interactive plotting in web application & IRuby notebook. It can work in frameworks like Rails, Sinatra, Nanoc and hopefully in others too.
@@ -34,7 +39,7 @@ Or install it yourself as:
 
     $ gem install daru-view
 
-If above is not working or you want to install latest code: 
+If above is not working or you want to install latest code:
 
 ```
 gem install specific_install
