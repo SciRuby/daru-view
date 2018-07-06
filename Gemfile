@@ -11,3 +11,10 @@ gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
 
 gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
+
+group :test do
+  gem 'coveralls', require: false
+  gem 'rspec'
+  gem 'simplecov', require: false
+  gem 'simplecov-console', require: false
+end

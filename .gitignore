@@ -10,3 +10,4 @@
 *.gem
 *.lock
 *.ruby-version
+/lib/daru/view/adapters/js/
