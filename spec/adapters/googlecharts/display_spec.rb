@@ -18,6 +18,11 @@ describe GoogleVisualr::Display do
       {type: :column, width: 800}
     )
   }
+  let (:table_spreadsheet) {
+    Daru::View::Table.new(
+      data_spreadsheet, {width: 800}
+    )
+  }
   let(:user_options) {{chart_class: 'Chartwrapper'}}
   let(:data_table) {Daru::View::Table.new(data)}
   let(:area_chart_options) {{
@@ -34,6 +39,20 @@ describe GoogleVisualr::Display do
     data_table.table,
     area_chart_options,
     user_options)
+  }
+  let(:area_wrapper_spreadsheet) {
+    Daru::View::Plot.new(
+      data_spreadsheet,
+      {type: :area},
+      chart_class: 'ChartWrapper'
+    )
+  }
+  let (:table_spreadsheet_chartwrapper) {
+    Daru::View::Table.new(
+      data_spreadsheet,
+      {width: 800, view: {columns: [0, 1]}},
+      chart_class: 'ChartWrapper'
+    )
   }
   let(:table_chart_wrapper) {Daru::View::Table.new(
     data, {}, user_options)
@@ -272,6 +291,128 @@ describe GoogleVisualr::Display do
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
       )
       expect(chart_script).to match(/chart.draw\(data_table, \{width: 800\}/i)
+    end
+  end
+
+  describe "#query_response_function_name" do
+    it "should generate unique function name to handle query response" do
+      func = data_table.table.query_response_function_name('i-d')
+      expect(func).to eq('handleQueryResponse_i_d')
+    end
+  end
+
+  describe "#append_data" do
+    context 'when table is drawn' do
+      it "should return option dataSourceUrl if data is URL" do
+        js = table_spreadsheet_chartwrapper.table.append_data(data_spreadsheet)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+      end
+      it "should return option dataTable otherwise" do
+        js = table_chart_wrapper.table.append_data(data)
+        expect(js).to match(/dataTable: data_table/)
+      end
+    end
+    context 'when chart is drawn' do
+      it "should return option dataSourceUrl if data is URL" do
+        js = area_wrapper_spreadsheet.chart.append_data(data_spreadsheet)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+      end
+      it "should return option dataTable otherwise" do
+        js = area_chart_wrapper.chart.append_data(data)
+        expect(js).to match(/dataTable: data_table/)
+      end
+    end
+  end
+
+  describe "#draw_wrapper" do
+    context 'when table is drawn' do
+      it "should draw the chartwrapper only if chart_class is"\
+         " set to Chartwrapper" do
+        js = table_chart_wrapper.table.draw_wrapper
+        expect(js).to match(/wrapper.draw\(\);/)
+      end
+    end
+    context 'when chart is drawn' do
+      it "should draw the chartwrapper only if chart_class is"\
+         " set to Chartwrapper" do
+        js = area_chart_wrapper.chart.draw_wrapper
+        expect(js).to match(/wrapper.draw\(\);/)
+      end
+    end
+    it "should draw the chartwrapper only if chart_class is"\
+       " set to Chartwrapper" do
+      js = plot_spreadsheet.chart.draw_wrapper
+      expect(js).to eql("")
+    end
+  end
+
+  describe "#to_js_chart_wrapper" do
+    context 'when table is drawn' do
+      it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
+        js = table_spreadsheet_chartwrapper.table.to_js_chart_wrapper(
+          data_spreadsheet,
+          'id'
+        )
+        expect(js).to match(/google.load\('visualization'/)
+        expect(js).to match(/callback:\n draw_id/)
+        expect(js).to match(/new google.visualization.ChartWrapper/)
+        expect(js).to match(/chartType: 'Table'/)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+        expect(js).to match(/options: {width: 800/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/view: {columns: \[0,1\]}/)
+      end
+    end
+    context 'when chart is drawn' do
+      it "generates valid JS of the table when "\
+         "data is imported from google spreadsheets" do
+        js = table_spreadsheet_chartwrapper.table.to_js_spreadsheet(
+          data_spreadsheet, 'id'
+        )
+        expect(js).to match(/<script type='text\/javascript'>/i)
+        expect(js).to match(/google.load\(/i)
+        expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+        expect(js).to match(/gid=0&headers=1&tq=/i)
+        expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
+        expect(js).to match(/var data_table = response.getDataTable/i)
+        expect(js).to match(
+          /google.visualization.Table\(document.getElementById\(\'id\'\)/
+        )
+        expect(js).to match(/table.draw\(data_table, \{width: 800/i)
+      end
+    end
+  end
+
+  describe "#to_js_spreadsheet" do
+    context 'when table is drawn' do
+      it "draws valid JS of the table when "\
+         "data is imported from google spreadsheets" do
+        js = table_spreadsheet.table.draw_js_spreadsheet(data_spreadsheet, 'id')
+        expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+        expect(js).to match(/gid=0&headers=1&tq=/i)
+        expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
+        expect(js).to match(/var data_table = response.getDataTable/i)
+        expect(js).to match(
+          /google.visualization.Table\(document.getElementById\(\'id\'\)/
+        )
+        expect(js).to match(/table.draw\(data_table, \{width: 800\}/i)
+      end
+    end
+    context 'when chart is drawn' do
+      it "generates valid JS of the chart when "\
+         "data is imported from google spreadsheets" do
+        js = plot_spreadsheet.chart.to_js_spreadsheet(data_spreadsheet, 'id')
+        expect(js).to match(/<script type='text\/javascript'>/i)
+        expect(js).to match(/google.load\(/i)
+        expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+        expect(js).to match(/gid=0&headers=1&tq=/i)
+        expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
+        expect(js).to match(/var data_table = response.getDataTable/i)
+        expect(js).to match(
+          /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+        )
+        expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
+      end
     end
   end
 end

@@ -12,8 +12,6 @@ module GoogleVisualr
     #   These will be provided by the user
     attr_accessor :user_options
 
-    include GoogleVisualr::HelperMethods
-
     # @see #GooleVisualr::DataTable.extract_option_view
     def extract_option_view
       return js_parameters(@options.delete('view')) unless @options['view'].nil?

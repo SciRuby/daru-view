@@ -29,30 +29,12 @@ describe GoogleVisualr::BaseChart do
     )
   }
   let(:area_chart_spreadsheet) {
-    area_chart_spreadsheet = Daru::View::Plot.new(
+    Daru::View::Plot.new(
       data_spreadsheet,
       {type: :area},
       chart_class: 'ChartWrapper'
     )
   }
-
-  describe "#query_response_function_name" do
-    it "should generate unique function name to handle query response" do
-      func = plot_spreadsheet.chart.query_response_function_name('i-d')
-      expect(func).to eq('handleQueryResponse_i_d')
-    end
-  end
-
-  describe "#append_data" do
-    it "should return option dataSourceUrl if data is URL" do
-      js = area_chart_spreadsheet.chart.append_data(data_spreadsheet)
-      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
-    end
-    it "should return option dataTable otherwise" do
-      js = area_chart.chart.append_data(data)
-      expect(js).to match(/dataTable: data_table/)
-    end
-  end
 
   describe "#extract_option_view" do
     it "should return value of view option if view option is provided" do
@@ -62,36 +44,6 @@ describe GoogleVisualr::BaseChart do
     it "should return '' if view option is not provided" do
       js = area_chart_spreadsheet.chart.extract_option_view
       expect(js).to eq('\'\'')
-    end
-  end
-
-  describe "#draw_wrapper" do
-    it "should draw the chartwrapper only when class_chart is"\
-       " set to Chartwrapper" do
-      js = area_chart.chart.draw_wrapper
-      expect(js).to match(/wrapper.draw\(\);/)
-    end
-    it "should draw the chartwrapper only when class_chart is"\
-       " set to Chartwrapper" do
-      js = plot_spreadsheet.chart.draw_wrapper
-      expect(js).to eql("")
-    end
-  end
-
-  describe "#to_js_spreadsheet" do
-    it "generates valid JS of the chart when "\
-       "data is imported from google spreadsheets" do
-      js = plot_spreadsheet.chart.to_js_spreadsheet(data_spreadsheet, 'id')
-      expect(js).to match(/<script type='text\/javascript'>/i)
-      expect(js).to match(/google.load\(/i)
-      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
-      expect(js).to match(/gid=0&headers=1&tq=/i)
-      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
-      expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(
-        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
-      )
-      expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
   end
 

@@ -45,58 +45,6 @@ describe GoogleVisualr::DataTable do
   	end
   end
 
-  describe "#to_js_spreadsheet" do
-  	it "generates valid JS of the table when "\
-       "data is imported from google spreadsheets" do
-      js = table_spreadsheet.table.to_js_spreadsheet(data_spreadsheet, 'id')
-      expect(js).to match(/<script type='text\/javascript'>/i)
-      expect(js).to match(/google.load\(/i)
-      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
-      expect(js).to match(/gid=0&headers=1&tq=/i)
-      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
-      expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(
-        /google.visualization.Table\(document.getElementById\(\'id\'\)/
-      )
-      expect(js).to match(/table.draw\(data_table, \{width: 800\}/i)
-    end
-  end
-
-  describe "#query_response_function_name" do
-    it "should generate unique function name to handle query response" do
-      func = data_table.table.query_response_function_name('i-d')
-      expect(func).to eq('handleQueryResponse_i_d')
-    end
-  end
-
-  describe "#to_js_chart_wrapper" do
-    it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
-      js = table_spreadsheet_chartwrapper.table.to_js_chart_wrapper(
-        data_spreadsheet,
-        'id'
-      )
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'Table'/)
-      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
-      expect(js).to match(/options: {width: 800/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: {columns: \[0,1\]}/)
-    end
-  end
-
-  describe "#append_data" do
-    it "should return option dataSourceUrl if data is URL" do
-      js = table_spreadsheet_chartwrapper.table.append_data(data_spreadsheet)
-      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
-    end
-    it "should return option dataTable otherwise" do
-      js = table_chartwrapper.table.append_data(data)
-      expect(js).to match(/dataTable: data_table/)
-    end
-  end
-
   describe "#extract_option_view" do
     it "should return value of view option if view option is provided" do
       js = table_spreadsheet_chartwrapper.table.extract_option_view
@@ -105,19 +53,6 @@ describe GoogleVisualr::DataTable do
     it "should return '' if view option is not provided" do
       js = table_chartwrapper.table.extract_option_view
       expect(js).to eq('\'\'')
-    end
-  end
-
-  describe "#draw_wrapper" do
-    it "should draw the chartwrapper only when class_chart is"\
-       " set to Chartwrapper" do
-      js = table_chartwrapper.table.draw_wrapper
-      expect(js).to match(/wrapper.draw\(\);/)
-    end
-    it "should draw the chartwrapper only when class_chart is"\
-       " set to Chartwrapper" do
-      js = table_spreadsheet.table.draw_wrapper
-      expect(js).to eql("")
     end
   end
 

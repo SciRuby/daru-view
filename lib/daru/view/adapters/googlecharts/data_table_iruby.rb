@@ -17,7 +17,6 @@ module GoogleVisualr
 
     # included to use `js_parameters` method
     include GoogleVisualr::ParamHelpers
-    include GoogleVisualr::HelperMethods
 
     # overiding the current initialze method (of the google_visualr).
     # This might be not a good idea. But right now I need these lines in it :
