@@ -4,9 +4,8 @@ require 'daru/view/adapters/nyaplot/display'
 require 'daru/view/adapters/googlecharts/display'
 
 # Otherwise Daru::IRuby module was used and IRuby.html method was not working.
-# rubocop:disable Style/MixinUsage
+
 include IRuby::Utils if defined?(IRuby)
-# rubocop:enable Style/MixinUsage
 
 module Daru
   module View
