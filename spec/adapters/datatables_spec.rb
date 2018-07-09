@@ -35,4 +35,29 @@ describe Daru::View::Table, 'table using daru-data_tables' do
       expect(table_array.options).to eq options
     end
   end
+
+  describe "#export_html_file" do
+    it "writes valid html code of the DataTable to the file" do
+      @plot.export_html_file('./plot.html')
+      path = File.expand_path('../../plot.html', __dir__)
+      content = File.read(path)
+      expect(content).to match(/jquery-latest.min.js/)
+      expect(content).to match(/jquery.dataTables.js/)
+      expect(content).to match(/jquery.dataTables.css/)
+      expect(content).to match(/html/i)
+      expect(content).to match(/script/i)
+      expect(content).to match(
+        /data_array = \[\[0, 1, 15\], \[1, 2, 30\], \[2, 4, 40\]\]/
+      )
+      expect(content).to match(
+        /width: 800, height: 720, serverSide: true, ajax:/
+      )
+      expect(content).to match(
+        /function \( data, callback, settings \) {/)
+      expect(content).to match(/out.push\( data_array\[i\] \);/i)
+      expect(content).to match(/callback\( \{/i)
+      expect(content).to match(/<th>arr1<\/th>/i)
+      expect(content).to match(/<th>arr2<\/th>/i)
+    end
+  end
 end

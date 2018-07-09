@@ -39,11 +39,14 @@ module Daru
           html_options = {
             table_options: table_opts
           }
-          table.to_html('series_data'+ SecureRandom.uuid, html_options)
+          table.element_id ||= 'series_data'+ SecureRandom.uuid
+          table.to_html(table.element_id, html_options)
         end
 
         def export_html_file(table, path='./table.html')
-          # TODO
+          path = File.expand_path(path, Dir.pwd)
+          str = generate_html(table)
+          File.write(path, str)
         end
 
         def show_in_iruby(table)
@@ -51,7 +54,14 @@ module Daru
         end
 
         def generate_html(table)
-          # TODO
+          path = File.expand_path(
+            '../templates/datatables/static_html.erb', __dir__
+          )
+          template = File.read(path)
+          table_script = generate_body(table)
+          initial_script = init_script
+          id = table.element_id
+          ERB.new(template).result(binding)
         end
 
         def init_iruby
