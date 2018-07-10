@@ -4,7 +4,7 @@ require 'daru/view/adapters/nyaplot/display'
 require 'daru/view/adapters/googlecharts/display'
 
 # Otherwise Daru::IRuby module was used and IRuby.html method was not working.
-
+# Have disabled rubocop Style/Mixin for this in .rubocop.yml file
 include IRuby::Utils if defined?(IRuby)
 
 module Daru
@@ -26,11 +26,11 @@ module Daru
       # plots = Daru::View::PlotList.new([plot1, plot2])
       #
       def initialize(data=[])
-        raise ArgumentError unless data.is_a?(Array) &&
-                                   data.all? { |plot|
-                                     plot.is_a?(Daru::View::Plot) ||
-                                     plot.is_a?(Daru::View::Table)
-                                   }
+        raise ArgumentError, 'Invalid Argument Passed!' unless
+        data.is_a?(Array) && data.all? { |plot|
+          plot.is_a?(Daru::View::Plot) ||
+          plot.is_a?(Daru::View::Table)
+        }
         @data = data
       end
 
