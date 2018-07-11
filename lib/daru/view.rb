@@ -68,6 +68,17 @@ module Daru
         end
       end
 
+      # @param libraries [Array] Adapters whose JS files will be loaded
+      # @return [void] load the dependent JS files for the adapter
+      # @example
+      #   To load the dependent JS file for Nyaplot and GoogleCharts libraries
+      #   Daru::View.load_libs_in_iruby(['nyaplot','googlecharts'])
+      def load_libs_in_iruby(libraries=[])
+        libraries.each do |library|
+          load_lib_in_iruby(library.to_s)
+        end
+      end
+
       # Load the dependent JS files in IRuby notebook. Those JS will help in
       # plotting the charts in IRuby cell.
       #
