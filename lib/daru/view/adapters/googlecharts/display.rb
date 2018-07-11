@@ -25,7 +25,9 @@ module GoogleVisualr
       script_tag = options.fetch(:script_tag) { true }
       if script_tag
         show_script_with_script_tag(dom)
-      elsif user_options[:chart_class].to_s.capitalize == 'Chartwrapper'
+      # Without checking for user_options, data as hash was not working!
+      elsif user_options &&
+            user_options[:chart_class].to_s.capitalize == 'Chartwrapper'
         get_html_chart_wrapper(data, dom)
       elsif data.is_a?(String)
         get_html_spreadsheet(data, dom)
@@ -39,7 +41,8 @@ module GoogleVisualr
     # @return [String] js code to render the chart with script tag
     def show_script_with_script_tag(dom=SecureRandom.uuid)
       # if it is data table
-      if user_options[:chart_class].to_s.capitalize == 'Chartwrapper'
+      if user_options &&
+         user_options[:chart_class].to_s.capitalize == 'Chartwrapper'
         to_js_chart_wrapper(data, dom)
       elsif data.is_a?(String)
         to_js_spreadsheet(data, dom)
