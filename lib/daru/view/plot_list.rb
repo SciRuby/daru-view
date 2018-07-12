@@ -26,11 +26,15 @@ module Daru
       # plots = Daru::View::PlotList.new([plot1, plot2])
       #
       def initialize(data=[])
-        raise ArgumentError, 'Invalid Argument Passed!' unless
-        data.is_a?(Array) && data.all? { |plot|
-          plot.is_a?(Daru::View::Plot) ||
-          plot.is_a?(Daru::View::Table)
-        }
+        unless data.is_a?(Array) && data.all? { |plot|
+                 plot.is_a?(Daru::View::Plot) ||
+                 plot.is_a?(Daru::View::Table)
+               }
+          raise ArgumentError, 'Invalid Argument Passed! Valid Arguments '\
+                               'consists an Array of: Daru::View::Plot or '\
+                               'Daru::View::Table (Right now, it is not '\
+                               'implemented for DataTables)'
+        end
         @data = data
       end
 
@@ -43,8 +47,8 @@ module Daru
       def div
         path = File.expand_path('templates/multiple_charts_div.erb', __dir__)
         template = File.read(path)
-        charts_div_tag = []
-        charts_script = extract_charts_script(charts_div_tag)
+        charts_id_div_tag = []
+        charts_script = extract_charts_script(charts_id_div_tag)
         ERB.new(template).result(binding)
       end
 
@@ -57,11 +61,11 @@ module Daru
 
       private
 
-      def extract_charts_script(charts_div_tag=[])
+      def extract_charts_script(charts_id_div_tag=[])
         charts_script = ''
         @data.each do |plot|
           chart_script = extract_chart_script(plot)
-          charts_div_tag << chart_script.partition(%r{<div(.*?)<\/div>}ixm)[1]
+          charts_id_div_tag << chart_script.partition(%r{<div(.*?)<\/div>}ixm)[1]
           chart_script.sub!(%r{<div(.*?)<\/div>}ixm, '')
           charts_script << chart_script
         end

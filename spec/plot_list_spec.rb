@@ -8,7 +8,7 @@ describe Daru::View::PlotList do
       }, index: 'a'..'f'
     )
   end
-  let(:dv) { Daru::Vector.new [:a, :a, :a, :b, :b, :c], type: :category }
+  let(:dv) { Daru::Vector.new [:a, :a, :a, :b, :b], type: :category }
   let(:array1) { [
       ['Galaxy', 'Distance', 'Brightness'],
       ['Canis Major Dwarf', 8000, 230.3],
@@ -36,21 +36,37 @@ describe Daru::View::PlotList do
   describe '#div' do
     subject (:js) { combined.div }
     it 'generates a table in js' do
-      expect(js).to match(/<table class='columns'>/)
+      expect(js).to match(/<table>/)
       expect(js).to match(/<td><div id=/)
+      expect(js.scan(/<td><div id=/).size).to eq(4)
     end
     context 'when js of the plots is generated' do
       it 'generates js of googlecharts' do
         expect(js).to match(/google.visualization.BarChart/)
         expect(js).to match(/google.visualization.Table/)
+        expect(js).to match(
+          /data_table.addColumn\({"type":"string","label":"Galaxy"}\)/
+        )
+        expect(js).to match(/chart.draw\(data_table, {}\)/)
+        expect(js).to match(
+          /data_table.addColumn\({"type":"string","label":"Canis Major Dwarf"}\)/
+        )
+        expect(js).to match(
+          /table.draw\(data_table, {width: 800, height: 720}\)/
+        )
       end
       it 'generates js of highcharts' do
         expect(js).to match(/\"chart\": { \"type\": \"line\"/)
-        expect(js).to match(/Highcharts.Chart/)
+        expect(js).to match(/Highcharts.Chart\(options\)/)
+        expect(js).to match(/"data": \[ \[ 1,15 \],\[ 2,30 \],\[ 4,40 \] \]/)
       end
       it 'generates js of nyaplot' do
         expect(js).to match(/\"type\":\"bar\"/)
         expect(js).to match(/window.addEventListener\('load_nyaplot', render/)
+        expect(js).to match(/"options":{"x":"data0","y":"data1"}/)
+        expect(js).to match(
+          /\[{"data0":"a","data1":3},{"data0":"b","data1":2}\]/
+        )
       end
     end
   end
