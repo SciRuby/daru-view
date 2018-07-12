@@ -6,11 +6,11 @@ describe Daru::View::Table, 'table using daru-data_tables' do
     @data_vec1 = Daru::Vector.new([1 ,2, 4], name: :a)
     @data_vec2 = Daru::Vector.new([15 ,30, 40])
     @data_df = Daru::DataFrame.new(arr1: @data_vec1, arr2: @data_vec2)
-    @options = {width: 800, height: 720}
+    @options = {scrollX: true}
     
     @plot = Daru::View::Table.new(@data_df, @options)
   end
-  let(:options) {{width: 800, height: 720}}
+  let(:options) {{scrollX: true}}
   let(:string_array) {["daru", "view"]}
   let(:data_array) {[[1, 15], [2, 30], [4, 40]]}
   let(:table_string_array) { Daru::View::Table.new(string_array, options) }
@@ -52,7 +52,7 @@ describe Daru::View::Table, 'table using daru-data_tables' do
       it 'generates valid script and table' do
         expect(js).to match(/DataTable/)
         expect(js).to match(
-          /width: 800, height: 720, data: \[\[0,1,15\],\[1,2,30\],\[2,4,40\]\]/
+          /scrollX: true, data: \[\[0,1,15\],\[1,2,30\],\[2,4,40\]\]/
         )
         expect(js).to match(/<th><\/th>/i)
         expect(js).to match(/<th>arr1<\/th>/i)
@@ -66,7 +66,7 @@ describe Daru::View::Table, 'table using daru-data_tables' do
       it 'generates valid script and table' do
         expect(js).to match(/DataTable/)
         expect(js).to match(
-          /width: 800, height: 720, data: \[\[0,1\],\[1,2\],\[2,4\]\]/
+          /scrollX: true, data: \[\[0,1\],\[1,2\],\[2,4\]\]/
         )
         expect(js).to match(/<th> <\/th>/i)
         expect(js).to match(/<th>a<\/th>/i)
@@ -80,7 +80,7 @@ describe Daru::View::Table, 'table using daru-data_tables' do
       it 'generates valid script and table' do
         expect(js).to match(/DataTable/)
         expect(js).to match(
-          /width: 800, height: 720, data: \[\[0,"daru"\],\[1,"view"\]\]/
+          /scrollX: true, data: \[\[0,"daru"\],\[1,"view"\]\]/
         )
         expect(js).to match(/<th><\/th>/i)
         expect(js).to match(/<th>Column: 0<\/th>/i)
@@ -94,7 +94,7 @@ describe Daru::View::Table, 'table using daru-data_tables' do
       it 'generates valid script and table' do
         expect(js).to match(/DataTable/)
         expect(js).to match(
-          /width: 800, height: 720, data: \[\[0,"daru"\],\[1,"view"\]\]/
+          /scrollX: true, data: \[\[0,"daru"\],\[1,"view"\]\]/
         )
         expect(js).to match(/<th><\/th>/i)
         expect(js).to match(/<th>Column: 0<\/th>/i)
@@ -128,7 +128,7 @@ describe Daru::View::Table, 'table using daru-data_tables' do
           /data_array = \[\[0, 0\], \[1, 1\], \[2, 2\]/
         )
         expect(content).to match(
-          /width: 800, height: 720, serverSide: true, ajax:/
+          /scrollX: true, serverSide: true, ajax:/
         )
         expect(content).to match(
           /function \( data, callback, settings \) {/)
@@ -159,7 +159,7 @@ describe Daru::View::Table, 'table using daru-data_tables' do
       it "writes client side html code of the DataTable to the file" do
         expect(content).to match(/DataTable/)
         expect(content).to match(
-          /width: 800, height: 720, data: \[\[0,1,15\],\[1,2,30\],\[2,4,40\]\]/
+          /scrollX: true, data: \[\[0,1,15\],\[1,2,30\],\[2,4,40\]\]/
         )
       end
       it "generates a table" do
