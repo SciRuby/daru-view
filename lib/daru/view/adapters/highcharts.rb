@@ -70,7 +70,7 @@ module Daru
           File.write(path, str)
         end
 
-        # Expoting in web frameforks is completely offline. In IRuby notebook,
+        # Exporting in web frameworks is completely offline. In IRuby notebook,
         #   offline-export supports only the exporting to png, jpeg and svg format.
         #   Export to PDF is not working (not even through the exporting button in
         #   highchart). So, online exporting is done in IRuby notebook. There is a
