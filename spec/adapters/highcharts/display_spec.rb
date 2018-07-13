@@ -328,31 +328,6 @@ describe LazyHighCharts::HighChart do
     end
   end
 
-  describe "#to_html_iruby" do
-    it "should plot HighMap when chart_class is set to map" do
-      @hc.options[:chart_class] = "Map";
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Map/)
-    end
-    it "should plot HighStock when chart_class is set to stock" do
-      @hc.options[:chart_class] = "SToCk";
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
-    end
-    it "should plot HighChart otherwise" do
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Chart/)
-    end
-    it "should set css correctly" do
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/#placeholder .highcharts-background {fill/)
-    end
-  end
-
   describe "#extract_chart_class" do
     it "should return Map class when chart_class is set to map" do
       @hc.options[:chart_class] = "map";

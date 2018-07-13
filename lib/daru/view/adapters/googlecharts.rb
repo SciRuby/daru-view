@@ -57,6 +57,11 @@ module Daru
         #   data << query
         #   options = {type: :area}
         #   chart = Daru::View::Plot.new(data, options)
+        #
+        # @example Multiple Charts in a row
+        #   Draw the Daru::View::PlotList object with the data as an array of
+        #   Daru::View::Plots(s) or Daru::View::Table(s) or both
+        #     combined = Daru::View::PlotList([line_chart, bar_chart])
         def init(data=[], options={})
           @table = GoogleVisualr::DataTable.new
           @table = get_table(data) unless data.is_a?(String)

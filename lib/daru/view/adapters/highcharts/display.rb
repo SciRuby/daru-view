@@ -80,7 +80,6 @@ module LazyHighCharts
 
     def show_in_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
-      load_dependencies('iruby')
       IRuby.html to_html_iruby(placeholder)
     end
 
@@ -89,6 +88,7 @@ module LazyHighCharts
     # `high_chart_iruby` which doesn't use `onload` in chart script.
     def to_html_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
+      load_dependencies('iruby')
       chart_hash_must_be_present
       script = high_chart_css(placeholder)
       script << high_chart_iruby(extract_chart_class, placeholder, self)
