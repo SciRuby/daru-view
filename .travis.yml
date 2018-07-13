@@ -12,6 +12,9 @@ script:
   - bundle exec rspec
   - bundle exec rubocop
 
+after_script:
+  - bundle exec rake coveralls:push
+
 install:
   - gem install bundler
   - gem install rainbow -v '2.2.1'

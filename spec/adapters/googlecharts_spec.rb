@@ -80,7 +80,6 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     data_spreadsheet, {}, user_options)
   }
 
-
   describe "initialization Charts" do
     it "Default chart GoogleVisualr::Interactive::LineChart " do
       expect(Daru::View::Plot.new.chart)
