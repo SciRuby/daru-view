@@ -28,7 +28,7 @@ module Daru
         #
         # @param [Array/Daru::DataFrame/Daru::Vector] data
         #
-        def init(data=[], options={})
+        def init(data=[], options={}, _user_options={})
           # Alternate way is using `add_series` method.
           #
           # There are many options present in Highcharts so it is better to use

@@ -18,6 +18,9 @@ HIGHCHARTS_DEPENDENCIES_WEB = [HIGHSTOCK_CSS, MAP_CSS, EXPORTING,
 # HighCharts CSS dependencies
 HIGHCHARTS_DEPENDENCIES_CSS = ['highcharts.css'].freeze
 
+# Dependent GoogleCharts JS constants for web frameworks and IRuby notebook
+GOOGLECHARTS_DEPENDENCIES = ['google_visualr.js', 'loader.js'].freeze
+
 # Regex pattern to match a valid URL
 PATTERN_URL = Regexp.new(
   '^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$'
