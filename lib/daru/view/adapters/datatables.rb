@@ -58,7 +58,7 @@ module Daru
         #     table = Daru::View::Table.new(df_sale_exp, options1)
         #     table2 = Daru::View::Table.new(df_sale_exp, options2)
         #     table3 = Daru::View::Table.new(df_sale_exp)
-        def init_table(data=[], options={})
+        def init_table(data=[], options={}, _user_options={})
           @table = Daru::DataTables::DataTable.new(data, options)
           @table
         end

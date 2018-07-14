@@ -12,28 +12,67 @@ describe GoogleVisualr::BaseChart do
       {type: :column, width: 800}
     )
   }
+  let(:data) {
+    [
+      ['Year', 'Sales', 'Expenses'],
+      ['2013',  1000,      400],
+      ['2014',  1170,      460],
+      ['2015',  660,       1120],
+      ['2016',  1030,      540]
+    ]
+  }
+  let(:area_chart) {
+    Daru::View::Plot.new(
+      data,
+      {type: :area, width: 800, view: {columns: [0, 1]}},
+      chart_class: 'ChartWrapper'
+    )
+  }
+  let(:area_chart_spreadsheet) {
+    Daru::View::Plot.new(
+      data_spreadsheet,
+      {type: :area},
+      chart_class: 'ChartWrapper'
+    )
+  }
 
-  describe "#query_response_function_name" do
-    it "should generate unique function name to handle query response" do
-      func = plot_spreadsheet.chart.query_response_function_name('i-d')
-      expect(func).to eq('handleQueryResponse_i_d')
+  describe "#extract_option_view" do
+    it "should return value of view option if view option is provided" do
+      js = area_chart.chart.extract_option_view
+      expect(js).to eq('{columns: [0,1]}')
+    end
+    it "should return '' if view option is not provided" do
+      js = area_chart_spreadsheet.chart.extract_option_view
+      expect(js).to eq('\'\'')
     end
   end
 
-  describe "#to_js_spreadsheet" do
-    it "generates valid JS of the chart when "\
-       "data is imported from google spreadsheets" do
-      js = plot_spreadsheet.chart.to_js_spreadsheet(data_spreadsheet, 'id')
-      expect(js).to match(/<script type='text\/javascript'>/i)
-      expect(js).to match(/google.load\(/i)
-      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
-      expect(js).to match(/gid=0&headers=1&tq=/i)
-      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
-      expect(js).to match(/var data_table = response.getDataTable/i)
-      expect(js).to match(
-        /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
+  describe "#to_js_chart_wrapper" do
+    it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
+      js = area_chart_spreadsheet.chart.to_js_chart_wrapper(
+        data_spreadsheet,
+        'id'
       )
-      expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback: draw_id/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+    end
+  end
+
+  describe "#draw_js_chart_wrapper" do
+    it "draws valid JS of the ChartWrapper" do
+      js = area_chart.chart.draw_js_chart_wrapper(data, 'id')
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {width: 800/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: {columns: \[0,1\]}/)
     end
   end
 

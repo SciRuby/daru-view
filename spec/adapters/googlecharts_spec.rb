@@ -57,6 +57,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     )
   }
   let(:data_table) {Daru::View::Table.new(data)}
+  let(:user_options) {{chart_class: 'Chartwrapper'}}
   let(:area_chart_options) {{
       type: :area
     }}
@@ -67,6 +68,17 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     new(data_table.table, area_chart_options)}
   let(:column_chart_chart) {Daru::View::Plot.
   new(data_table.table, column_chart_options)}
+  let(:area_chart_wrapper) {Daru::View::Plot.new(
+    data_table.table,
+    area_chart_options,
+    user_options)
+  }
+  let(:table_chart_wrapper) {Daru::View::Table.new(
+    data, {}, user_options)
+  }
+  let(:table_wrapper_spreadsheet) {Daru::View::Table.new(
+    data_spreadsheet, {}, user_options)
+  }
 
   describe "initialization Charts" do
     it "Default chart GoogleVisualr::Interactive::LineChart " do
@@ -92,6 +104,11 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(plot_spreadsheet.options).to eq 'width'=> 800
     end
     # TODO: all other kinds of charts
+    it "sets correct user_options and data" do
+      expect(area_chart_chart.chart.user_options).to be_empty
+      expect(area_chart_wrapper.chart.user_options).to eq user_options
+      expect(area_chart_chart.chart.data).to eq data_table.table
+    end
   end
 
   describe "initialization Tables" do
@@ -129,6 +146,12 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
     it "Raise error when data objects are none of the above" do
       expect{Daru::View::Table.new(1234)}.to raise_error(ArgumentError)
+    end
+    it "sets correct user_options and data of the DataTable" do
+      expect(data_table.table.user_options).to be_empty
+      expect(table_wrapper_spreadsheet.table.user_options).to eq user_options
+      expect(data_table.table.data).to eq data
+      expect(table_wrapper_spreadsheet.table.data).to eq data_spreadsheet
     end
   end
 
@@ -206,6 +229,24 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/var data_table = response.getDataTable/i)
       expect(js).to match(/google.visualization.ColumnChart/)
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
+    end
+    it "should generate valid JS of the Chartwrapper" do
+      js = area_chart_wrapper.adapter.generate_body(area_chart_wrapper.chart)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+    end
+    it "should generate valid JS of the DataTable Chartwrapper" do
+      js = table_chart_wrapper.adapter.generate_body(table_chart_wrapper.table)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback:/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
     end
   end
 
