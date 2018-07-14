@@ -68,7 +68,6 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   let(:column_chart_chart) {Daru::View::Plot.
   new(data_table.table, column_chart_options)}
 
-
   describe "initialization Charts" do
     it "Default chart GoogleVisualr::Interactive::LineChart " do
       expect(Daru::View::Plot.new.chart)
