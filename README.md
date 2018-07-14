@@ -1,5 +1,10 @@
 # Daru::View
 
+[![Gem Version](https://badge.fury.io/rb/daru-view.svg)](https://badge.fury.io/rb/daru-view)
+[![Build Status](https://travis-ci.org/SciRuby/daru-view.svg?branch=master)](https://travis-ci.org/SciRuby/daru-view)
+[![Coverage Status](https://coveralls.io/repos/github/SciRuby/daru-view/badge.svg?branch=master)](https://coveralls.io/github/SciRuby/daru-view?branch=master)
+
+
 [Daru](https://github.com/sciruby/daru) (Data Analysis in RUby) is a library for analysis, manipulation and visualization of data. Daru-view is for easy and interactive plotting in web application & IRuby notebook. It can work in frameworks like Rails, Sinatra, Nanoc and hopefully in others too.
 
 It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/daru)) for visualisation of data
@@ -34,7 +39,7 @@ Or install it yourself as:
 
     $ gem install daru-view
 
-If above is not working or you want to install latest code: 
+If above is not working or you want to install latest code:
 
 ```
 gem install specific_install
@@ -266,6 +271,31 @@ For now, other applications (Rails/Sinatra) you need to run it locally.
 
 
 ## Update to latest js library. Additional command line
+
+### 1. Users
+
+  - To view command usage:
+
+  ```
+  daru-view
+  ```
+
+  - To update al the JS files:
+  ```
+  daru-view update
+  ```
+
+  - To update JS files for google charts:
+  ```
+  daru-view update -g (or) --googlecharts
+  ```
+
+  - To update JS files for highcharts:
+  ```
+  daru-view update -H (or) --highcharts
+  ```
+
+### 2. Developers
 
   To update to the current highcharts.js directly from http://code.highcharts.com/",  you can always run
 

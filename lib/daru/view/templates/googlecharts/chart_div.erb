@@ -1,4 +1,4 @@
-<% if class_chart == 'Charteditor' %>
+<% if user_options && user_options[:chart_class].to_s.capitalize == 'Charteditor' %>
 <input id="loadcharteditor_<%= id %>" value="Edit" onclick="loadEditor_<%= id.tr('-', '_') %>()" type="submit">
 <% end %>
 <div id='<%= id %>'></div>

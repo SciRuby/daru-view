@@ -2,14 +2,14 @@ require 'spec_helper.rb'
 
 describe LazyHighCharts do
   before { Daru::View.plotting_library = :highcharts }
-  describe "#init_script" do
+  describe "#init_javascript" do
     it "generates valid initial script" do
-      js = LazyHighCharts.init_script
-      expect(js).to match(/BEGIN highstock.js/i)
+      js = LazyHighCharts.init_javascript
+      expect(js).to match(/BEGIN js\/highstock.js/i)
       expect(js).to match(/Highstock JS/i)
-      expect(js).to match(/END highstock.js/i)
-      expect(js).to match(/BEGIN highcharts-more.js/i)
-      expect(js).to match(/END highcharts-more.js/i)
+      expect(js).to match(/BEGIN js\/map.js/i)
+      expect(js).to match(/END js\/map.js/i)
+      expect(js).to match(/END js\/highstock.js/i)
       expect(js).to match(/BEGIN modules\/exporting.js/i)
       expect(js).to match(/END modules\/exporting.js/i)
       expect(js).to match(/BEGIN highcharts-3d.js/i)
@@ -26,6 +26,31 @@ describe LazyHighCharts do
         /console.log\(\"Finish loading highchartsjs\"\)/i)
     end
   end
+  describe "#init_css" do
+    it "generates valid initial css" do
+      css = LazyHighCharts.init_css
+      expect(css).to match(/BEGIN highcharts.css/i)
+      expect(css).to match(/END highcharts.css/i)
+    end
+  end
+
+  describe "#init_script" do
+    it "generates valid initial css and js" do
+      code = LazyHighCharts.init_script
+      expect(code).to match(/BEGIN highcharts.css/i)
+      expect(code).to match(/END highcharts.css/i)
+      expect(code).to match(/BEGIN js\/highstock.js/i)
+      expect(code).to match(/BEGIN js\/map.js/i)
+      expect(code).to match(/END js\/map.js/i)
+      expect(code).to match(/END js\/highstock.js/i)
+      expect(code).to match(/BEGIN modules\/exporting.js/i)
+      expect(code).to match(/END modules\/exporting.js/i)
+      expect(code).to match(/BEGIN highcharts-3d.js/i)
+      expect(code).to match(/END highcharts-3d.js/i)
+      expect(code).to match(/BEGIN modules\/data.js/i)
+      expect(code).to match(/END modules\/data.js/i)
+    end
+  end
 end
 
 describe LazyHighCharts::HighChart do
@@ -35,6 +60,9 @@ describe LazyHighCharts::HighChart do
       chart: {
         type: 'bar'
       },
+      css: ['.highcharts-color-1 {fill: #90ed7d;stroke: #90ed7d;}',
+            '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
+            'stroke-width: 2px;}'],
       title: {
         text: 'Bar chart'
       },
@@ -55,14 +83,49 @@ describe LazyHighCharts::HighChart do
     @hc = Daru::View::Plot.new(@data_df, @opts)
     @placeholder = "placeholder"
   end
+  let(:opts_map) do
+  {
+    chart_class: 'map',
+    chart: {
+      map: 'custom/europe',
+      borderWidth: 1
+    },
+    title: {
+      text: 'Nordic countries'
+    },
+    subtitle: {
+      text: 'Demo of drawing all areas in the map, only highlighting partial data'
+    },
+    legend: {
+      enabled: false
+    }
+  }
+  end
+  let(:df) do
+    Daru::DataFrame.new(
+      {
+        countries: ['is', 'no', 'se', 'dk', 'fi'],
+        data: [1, 1, 1, 1, 1]
+      },
+        index: [:one, :two, :three, :four, :five]
+    )
+  end
+  let(:map) do
+    Daru::View::Plot.new(df, opts_map)
+  end
 
   describe "#to_html" do
     before(:each) do
       @opts = {
           chart_class: 'stock',
+          css: [
+            '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
+            'stroke-width: 2px;}'
+          ],
           chart: {
             type: 'arearange'
           },
+          modules: ['highcharts-more'],
           rangeSelector: {
               selected: 1
           },
@@ -117,7 +180,14 @@ describe LazyHighCharts::HighChart do
       @chart = Daru::View::Plot.new
       @chart.chart.options = @opts;
       @chart.chart.series_data = @series_dt
-  	end
+
+    end
+    it "should plot HighMap when chart_class is set to map" do
+      @hc.options[:chart_class] = "Map";
+      expect(@hc.chart.to_html(
+        @placeholder)
+      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Map/)
+    end
     it "should plot Highstock when chart_class is set to stock" do
       @hc.options[:chart_class] = "STock";
       expect(@hc.chart.to_html(
@@ -132,16 +202,50 @@ describe LazyHighCharts::HighChart do
     it "should return a div with an id of high_chart object" do
       expect(@chart.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
       expect(@hc.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
+      expect(map.chart.to_html(@placeholder)).to match(/<div id="placeholder">/)
     end
     it "should return a script" do
       expect(@chart.chart.to_html(@placeholder)).to match(/script/)
       expect(@hc.chart.to_html(@placeholder)).to match(/script/)
+      expect(map.chart.to_html(@placeholder)).to match(/script/)
     end
     it "should set variables `chart` `options`" do
       expect(@chart.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
       expect(@chart.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
       expect(@hc.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
       expect(@hc.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
+      expect(map.chart.to_html(@placeholder)).to match(/var\s+options\s+=/)
+      expect(map.chart.to_html(@placeholder)).to match(/window.chart_placeholder/)
+    end
+    it "should load the script of dependent modules" do
+      # After first call to #to_html, option `modules` get deleted so using
+      #   another example
+      expect(@chart.chart.to_html(
+        @placeholder)
+      ).to match(/BEGIN highcharts-more.js/)
+      expect(map.chart.to_html(
+        @placeholder)
+      ).to match(/BEGIN mapdata\/custom\/europe.js/)
+    end
+    it "should load the script of dependent modules" do
+      expect(@chart.chart.to_html(
+        @placeholder)
+      ).to match(/END highcharts-more.js/)
+      expect(map.chart.to_html(
+        @placeholder)
+      ).to match(/END mapdata\/custom\/europe.js/)
+    end
+    it "should return style tag if css option is given" do
+      expect(@chart.chart.to_html(@placeholder)).to match(/style/)
+      expect(@hc.chart.to_html(@placeholder)).to match(/style/)
+    end
+    it "should set css correctly" do
+      expect(@chart.chart.to_html(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-background {fill/)
+      expect(@hc.chart.to_html(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-color-1 {/)
     end
     it "should take a block setting attributes" do
       expect(@chart.chart.options[:rangeSelector][:selected]).to eq(1)
@@ -165,6 +269,7 @@ describe LazyHighCharts::HighChart do
       expect(@chart.chart.to_html(
         @placeholder)
       ).to match(/\"tooltip\": \{ \"valueDecimals\": 2/)
+
       expect(@hc.chart.to_html(
         @placeholder)
       ).to match(/\"chart\": \{ \"type\": \"bar\"/)
@@ -180,24 +285,131 @@ describe LazyHighCharts::HighChart do
       expect(@hc.chart.to_html(
         @placeholder)
       ).to match(/\"yAxis\": \{ \"min\": 0/)
+
+      expect(map.chart.to_html(
+        @placeholder)
+      ).to match(/\"chart\": { \"map\": \"custom\/europe\"/)
+      expect(map.chart.to_html(
+        @placeholder)
+      ).to match(/\"title\": { \"text\": \"Nordic countries\"/)
+      expect(map.chart.to_html(
+        @placeholder)
+      ).to match(/\"legend\": { \"enabled\": false }/)
+      expect(map.chart.to_html(
+        @placeholder)
+      ).to match(/\"data\": \[ \[ \"is\",1 \]/)
     end
   end
 
-  describe "#to_html_iruby" do
-    it "should plot Highstock when chart_class is set to stock" do
-      @hc.options[:chart_class] = "SToCk";
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
+  describe "#load_dependencies" do
+    it "should load correct dependencies of the chart" do
+      expect(map.chart.load_dependencies(
+        'web_frameworks')
+      ).to match(/BEGIN mapdata\/custom\/europe.js/)
     end
-    it "should plot HighChart otherwise" do
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Chart/)
+    it "should load correct dependencies of the chart" do
+      expect(map.chart.load_dependencies(
+        'web_frameworks')
+      ).to match(/END mapdata\/custom\/europe.js/)
+    end
+  end
+
+  describe "#extract_dependencies" do
+    it "should extract correct dependencies of the chart" do
+      expect(map.chart.extract_dependencies).to eq ['mapdata/custom/europe.js']
+    end
+  end
+
+  describe "#get_map_data_dependencies" do
+    dep_js = []
+    it "should return the correct map data" do
+      map.chart.get_map_data_dependencies(dep_js)
+      expect(dep_js).to eq ['mapdata/custom/europe.js']
+    end
+  end
+
+  describe "#export" do
+    it "should generate the valid script to export the chart in different"\
+       " formats" do
+      js = @hc.chart.export('jpg','daru')
+      expect(js).to match(/\s+new\s+Highcharts.Chart/)
+      expect(js).to match(/var\s+options\s+=/)
+      expect(js).to match(/window.chart_/)
+      expect(js).to match(/\"chart\": \{ \"type\": \"bar\"/)
+      expect(js).to match(/\"data\": \[ \[ 5,2,3 \],\[ 3,2,4 \],\[ 4,3,4 \]/)
+      expect(js).to match(/script/)
+      expect(js).to match(/image\/jpeg/)
+      expect(js).to match(/daru/)
+      expect(js).to match(/chart.exportChartLocal/)
+    end
+  end
+
+  describe "#extract_export_code" do
+    it "should generate the valid script to export the chart in different"\
+       " formats in web frameworks" do
+      js = @hc.chart.extract_export_code(@placeholder)
+      expect(js).to match(/script/)
+      expect(js).to match(/var onload = window.onload/)
+      expect(js).to match(/window.onload = function()/)
+      expect(js).to match(/typeof onload == 'function'/)
+      expect(js).to match(
+        /var chartDom = document.getElementById\('placeholder'\)/
+      )
+      expect(js).to match(
+        /Highcharts.charts\[Highcharts.attr\(chartDom, 'data-highcharts-chart'\)/
+      )
+      expect(js).to match(/image\/png/)
+      expect(js).to match(/chart.exportChartLocal/)
+    end
+  end
+
+  describe "#extract_export_code_iruby" do
+    it "should generate the valid script to export the chart in different"\
+       " formats in IRuby notebook" do
+      js = @hc.chart.extract_export_code_iruby(@placeholder, 'png', 'daru')
+      expect(js).to match(/script/)
+      expect(js).to match(
+        /var chartDom = document.getElementById\('placeholder'\)/
+      )
+      expect(js).to match(
+        /Highcharts.charts\[Highcharts.attr\(chartDom, 'data-highcharts-chart'\)/
+      )
+      expect(js).to match(/image\/png/)
+      expect(js).to match(/filename: 'daru'/)
+      expect(js).to match(/chart.exportChart/)
+    end
+  end
+
+  describe "#append_chart_type" do
+    it "should return correct code stating the type to which chart has"\
+        " to be exported" do
+      expect(@hc.chart.append_chart_type).to eq("type: 'image/png',")
+      expect(@hc.chart.append_chart_type(
+        'pdf')
+      ).to eq("type: 'application/pdf',")
+      expect(@hc.chart.append_chart_type(
+        'png')
+      ).to eq("type: 'image/png',")
+      expect(@hc.chart.append_chart_type(
+        'jpg')
+      ).to eq("type: 'image/jpeg',")
+      expect(@hc.chart.append_chart_type(
+        'jpeg')
+      ).to eq("type: 'image/jpeg',")
+      expect(@hc.chart.append_chart_type(
+        'svg')
+      ).to eq("type: 'image/svg+xml',")
+      expect{@hc.chart.append_chart_type(
+        'daru')
+      }.to raise_error(TypeError, 'Invalid format')
     end
   end
 
   describe "#extract_chart_class" do
+    it "should return Map class when chart_class is set to map" do
+      @hc.options[:chart_class] = "map";
+      expect(@hc.chart.extract_chart_class).to eq 'Map'
+    end
     it "should return StockChart class when chart_class is set to stock" do
       @hc.options[:chart_class] = "SToCk";
       expect(@hc.chart.extract_chart_class).to eq 'StockChart'
@@ -210,6 +422,21 @@ describe LazyHighCharts::HighChart do
       expect{@hc.chart.extract_chart_class}.to raise_error(
         'chart_class must be selected as either chart, stock or map'
       )
+    end
+  end
+
+  describe "#high_chart_css" do
+    it "return the correct css of the chart" do
+      # cannot check another value of css in array as `css` option
+      # got deleted as we check the first value
+      expect(@hc.chart.high_chart_css(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-background {fill/)
+    end
+    it "return the correct css of the chart" do
+      expect(@hc.chart.high_chart_css(
+        @placeholder)
+      ).to match(/#placeholder .highcharts-color-1 {/)
     end
   end
 

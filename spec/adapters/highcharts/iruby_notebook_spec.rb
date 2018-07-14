@@ -2,20 +2,12 @@ require 'spec_helper.rb'
 
 describe LazyHighCharts do
   before { Daru::View.plotting_library = :highcharts }
-  describe "#init_script" do
+  describe "#generate_init_code" do
     it "generates valid initial script" do
-      js = LazyHighCharts.init_script
+      js = LazyHighCharts.generate_init_code(["highstock.js"])
       expect(js).to match(/BEGIN highstock.js/i)
       expect(js).to match(/Highstock JS/i)
       expect(js).to match(/END highstock.js/i)
-      expect(js).to match(/BEGIN highcharts-more.js/i)
-      expect(js).to match(/END highcharts-more.js/i)
-      expect(js).to match(/BEGIN modules\/exporting.js/i)
-      expect(js).to match(/END modules\/exporting.js/i)
-      expect(js).to match(/BEGIN highcharts-3d.js/i)
-      expect(js).to match(/END highcharts-3d.js/i)
-      expect(js).to match(/BEGIN modules\/data.js/i)
-      expect(js).to match(/END modules\/data.js/i)
       expect(js).to match(
         /var event = document.createEvent\(\"HTMLEvents\"\)/i)
       expect(js).to match(
@@ -23,6 +15,13 @@ describe LazyHighCharts do
       expect(js).to match(/window.dispatchEvent\(event\)/i)
       expect(js).to match(
         /console.log\(\"Finish loading highchartsjs\"\)/i)
+    end
+  end
+  describe "#generate_init_code_css" do
+    it "generates valid initial css" do
+      js = LazyHighCharts.generate_init_code_css(["highcharts.css"])
+      expect(js).to match(/BEGIN highcharts.css/i)
+      expect(js).to match(/END highcharts.css/i)
     end
   end
 end

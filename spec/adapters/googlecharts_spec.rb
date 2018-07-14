@@ -41,8 +41,23 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       ['2013'],
     ]
   end
+  let(:query_string) {'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'}
+  let(:data_spreadsheet) {'https://docs.google.com/spreadsheets/d/1XWJLkAwch'\
+              '5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?gid=0&headers='\
+              '1&tq=' << query_string}
+  let (:plot_spreadsheet) {
+    Daru::View::Plot.new(
+      data_spreadsheet,
+      {type: :column, width: 800}
+    )
+  }
+  let (:table_spreadsheet) {
+    Daru::View::Table.new(
+      data_spreadsheet, {width: 800}
+    )
+  }
   let(:data_table) {Daru::View::Table.new(data)}
-  let(:user_options) {{class_chart: 'Chartwrapper'}}
+  let(:user_options) {{chart_class: 'Chartwrapper'}}
   let(:area_chart_options) {{
       type: :area
     }}
@@ -62,10 +77,13 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     data, {}, user_options)
   }
   let(:plot_charteditor) {Daru::View::Plot.new(
-    data_table.table, {}, class_chart: 'Charteditor')
+    data_table.table, {}, chart_class: 'Charteditor')
   }
   let(:table_charteditor) {Daru::View::Table.new(
-    data, {}, class_chart: 'Charteditor')
+    data, {}, chart_class: 'Charteditor')
+  }
+  let(:table_wrapper_spreadsheet) {Daru::View::Table.new(
+    data_spreadsheet, {}, user_options)
   }
 
   describe "initialization Charts" do
@@ -85,7 +103,18 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
         type: :column).chart
       ).to be_a GoogleVisualr::Interactive::ColumnChart
     end
+    it "Import data from spreadsheet" do
+      expect(plot_spreadsheet.chart)
+      .to be_a GoogleVisualr::Interactive::ColumnChart
+      expect(plot_spreadsheet.data).to eq data_spreadsheet
+      expect(plot_spreadsheet.options).to eq 'width'=> 800
+    end
     # TODO: all other kinds of charts
+    it "sets correct user_options and data" do
+      expect(area_chart_chart.chart.user_options).to be_empty
+      expect(area_chart_wrapper.chart.user_options).to eq user_options
+      expect(area_chart_chart.chart.data).to eq data_table.table
+    end
   end
 
   describe "initialization Tables" do
@@ -116,25 +145,37 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(@table_hash.options).to eq @options
       expect(@table_hash.data).to eq @data_hash
     end
+    it "Table class must be GoogleVisualr::DataTable when data objects are" \
+       " of class String" do
+      expect(Daru::View::Table.new(data_spreadsheet).table)
+      .to be_a GoogleVisualr::DataTable
+    end
     it "Raise error when data objects are none of the above" do
       expect{Daru::View::Table.new(1234)}.to raise_error(ArgumentError)
     end
+    it "sets correct user_options and data of the DataTable" do
+      expect(data_table.table.user_options).to be_empty
+      expect(table_wrapper_spreadsheet.table.user_options).to eq user_options
+      expect(data_table.table.data).to eq data
+      expect(table_wrapper_spreadsheet.table.data).to eq data_spreadsheet
+    end
   end
 
-  describe "#get_class_chart" do
-    it "should return valid class of the chart" do
-      expect(area_chart_chart.adapter.get_class_chart(
-        {class_chart: 'ChartEditor'})
-      ).to eq('Charteditor')
+  describe "#validate_url" do
+    subject(:chart) { area_chart_chart.adapter }
+    it "raises error for invalid URL" do
+      expect{chart.validate_url('http/hi.com')}
+      .to raise_error('Invalid URL')
+      expect{chart.validate_url('daru')}
+      .to raise_error('Invalid URL')
     end
-    it "should return valid class of the chart" do
-      expect(area_chart_chart.adapter.get_class_chart(
-        {class_chart: 'ChartWrapper'})
-      ).to eq('Chartwrapper')
-    end
-    it "should return valid class of the chart" do
-      expect(area_chart_chart.adapter.get_class_chart()
-      ).to eq('Chart')
+    it "returns true for valid URL" do
+      expect(chart.validate_url(data_spreadsheet))
+      .to eq(true)
+      expect(chart.validate_url('https://docs.google.com'))
+      .to eq(true)
+      expect(chart.validate_url('http://google.com'))
+      .to eq(true)
     end
   end
 
@@ -144,7 +185,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.AreaChart/i)
@@ -155,7 +197,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.ColumnChart/i)
@@ -166,9 +209,32 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
+    end
+    it "generates valid JS of the DataTable when data as google spreadsheet" do
+      js = table_spreadsheet.adapter.generate_body(table_spreadsheet.table)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.load\(/i)
+      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(js).to match(/gid=0&headers=1&tq=/i)
+      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
+      expect(js).to match(/var data_table = response.getDataTable/i)
+      expect(js).to match(/google.visualization.Table/)
+      expect(js).to match(/table.draw\(data_table, \{width: 800\}/i)
+    end
+    it "generates valid JS of the LineChart when data as google spreadsheet" do
+      js = plot_spreadsheet.adapter.generate_body(plot_spreadsheet.chart)
+      expect(js).to match(/<script>/i)
+      expect(js).to match(/google.load\(/i)
+      expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
+      expect(js).to match(/gid=0&headers=1&tq=/i)
+      expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
+      expect(js).to match(/var data_table = response.getDataTable/i)
+      expect(js).to match(/google.visualization.ColumnChart/)
+      expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
     end
     it "should generate valid JS of the Chartwrapper" do
       js = area_chart_wrapper.adapter.generate_body(area_chart_wrapper.chart)
@@ -219,7 +285,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.AreaChart/i)
@@ -233,7 +300,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.ColumnChart/i)
@@ -246,7 +314,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/<script>/i)
       expect(js).to match(/google.visualization.DataTable\(\);/i)
       expect(js).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end
@@ -275,7 +344,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(content).to match(/<script>/i)
       expect(content).to match(/google.visualization.DataTable\(\);/i)
       expect(content).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(content).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(content).to match(/google.visualization.AreaChart/i)
@@ -289,7 +359,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(content).to match(/<script>/i)
       expect(content).to match(/google.visualization.DataTable\(\);/i)
       expect(content).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(content).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(content).to match(/google.visualization.ColumnChart/i)
@@ -303,7 +374,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(content).to match(/<script>/i)
       expect(content).to match(/google.visualization.DataTable\(\);/i)
       expect(content).to match(
-        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/i)
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
+      )
       expect(content).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
     end

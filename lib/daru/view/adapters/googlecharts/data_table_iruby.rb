@@ -11,10 +11,9 @@ module GoogleVisualr
     # options will enable us to give some styling for table.
     # E.g. pagination, row numbers, etc
     attr_accessor :options
-    # Provided by user and can take three values ('Chart', 'Chartwrapper'
-    #   or 'Charteditor').
-    # @return [String] Used to specify the class of the chart
-    attr_accessor :class_chart
+    # @return [Hash] Various options created to facilitate more features.
+    #   These will be provided by the user
+    attr_accessor :user_options
 
     # included to use `js_parameters` method
     include GoogleVisualr::ParamHelpers
@@ -40,33 +39,17 @@ module GoogleVisualr
     end
 
     # Generates JavaScript and renders the Google Chart DataTable in the
-    # final HTML output.
+    #   final HTML output
     #
-    # Parameters:
-    #  *div_id            [Required] The ID of the DIV element that the Google Chart DataTable should be rendered in.
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] Javascript code to render the Google Chart DataTable
     def to_js_full_script(element_id=SecureRandom.uuid)
       js =  ''
       js << '\n<script type=\'text/javascript\'>'
       js << load_js(element_id)
       js << draw_js(element_id)
       js << '\n</script>'
-      js
-    end
-
-    # Generates JavaScript and renders the Google Chartwrapper in the
-    #   final HTML output.
-    #
-    # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table, String]
-    #   Data of GoogleVisualr Chart
-    # @param element_id [String] The ID of the DIV element that the Google
-    #   Chartwrapper should be rendered in
-    # @return [String] Javascript code to render the Google Chartwrapper
-    def to_js_full_script_chart_wrapper(data, element_id=SecureRandom.uuid)
-      js =  ''
-      js << "\n<script type='text/javascript'>"
-      js << load_js(element_id)
-      js << draw_js_chart_wrapper(data, element_id)
-      js << "\n</script>"
       js
     end
 
@@ -79,17 +62,9 @@ module GoogleVisualr
     end
 
     def package_name
-      return 'table' unless class_chart == 'Charteditor'
+      return 'table' unless
+      user_options && user_options[:chart_class].to_s.capitalize == 'Charteditor'
       'charteditor'
-    end
-
-    # @param data [Array, Daru::DataFrame, Daru::Vector, String] Data
-    #   of GoogleVisualr DataTable
-    # @return [String] Data option (dataSourceUrl or dataTable) required to
-    #   draw the Chartwrapper based upon the data provided.
-    def append_data(data)
-      return "\n       dataSourceUrl: '#{data}'," if data.is_a? String
-      "\n       dataTable: data_table,"
     end
 
     # @return [String] Returns value of the view option provided by the user
@@ -97,29 +72,6 @@ module GoogleVisualr
     def extract_option_view
       return js_parameters(@options.delete(:view)) unless @options[:view].nil?
       '\'\''
-    end
-
-    # @param element_id [String] The ID of the DIV element that the Google
-    #   Chart DataTable should be rendered in
-    # @return [String] unique function name to save the chart
-    def save_chart_function_name(element_id)
-      "saveChart_#{element_id.tr('-', '_')}"
-    end
-
-    # So that it can be used in ChartEditor also
-    #
-    # @return [String] Returns string to draw the Chartwrapper and '' otherwise
-    def draw_wrapper(element_id)
-      return "\n    wrapper.draw();" if
-      class_chart == 'Chartwrapper'
-      js = ''
-      js << "\n    wrapper.draw();"
-      js << "\n    chartEditor_#{element_id.tr('-', '_')} = "\
-            'new google.visualization.ChartEditor();'
-      js << "\n    google.visualization.events.addListener("\
-            "chartEditor_#{element_id.tr('-', '_')},"\
-            " 'ok', #{save_chart_function_name(element_id)});"
-      js
     end
 
     # @param (see #draw_js_chart_editor)
@@ -134,10 +86,12 @@ module GoogleVisualr
       js
     end
 
-    # Generates JavaScript for loading the appropriate Google Visualization package, with callback to render chart.
+    # Generates JavaScript for loading the appropriate Google Visualization
+    #   package, with callback to render chart.
     #
-    # Parameters:
-    #  *div_id            [Required] The ID of the DIV element that the Google Chart should be rendered in.
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] JS to load to appropriate Google Visualization package
     def load_js(element_id)
       js = ''
       js << "\n  google.load('visualization', #{google_table_version}, "
@@ -146,10 +100,11 @@ module GoogleVisualr
       js
     end
 
-    # Generates JavaScript function for rendering the chart.
+    # Generates JavaScript function for rendering the google chart table.
     #
-    # Parameters:
-    #  *div_id            [Required] The ID of the DIV element that the Google Chart should be rendered in.
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   Chart DataTable should be rendered in
+    # @return [String] JS function to render the google chart table
     def draw_js(element_id)
       js = ''
       js << "\n  function #{chart_function_name(element_id)}() {"
@@ -167,10 +122,11 @@ module GoogleVisualr
     # @return [String] JS function to render the chartwrapper
     def draw_js_chart_wrapper(data, element_id)
       js = ''
-      js << "\n  var wrapper = null;"
+      js << "\n  var wrapper_#{element_id.tr('-', '_')} = null;"
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n    #{to_js}"
-      js << "\n    wrapper = new google.visualization.ChartWrapper({"
+      js << "\n    wrapper_#{element_id.tr('-', '_')} = "\
+            'new google.visualization.ChartWrapper({'
       js << extract_chart_wrapper_options(data, element_id)
       js << "\n    });"
       js << draw_wrapper(element_id)
@@ -193,8 +149,29 @@ module GoogleVisualr
       js << "\n  }"
       js << "\n  function loadEditor_#{element_id.tr('-', '_')}(){"
       js << "\n    chartEditor_#{element_id.tr('-', '_')}.openDialog("
-      js << 'wrapper, {});'
+      js << "wrapper_#{element_id.tr('-', '_')}, {});"
       js << "\n  }"
+      js
+    end
+
+    # Generates JavaScript function for rendering the google chart table when
+    #   data is URL of the google spreadsheet
+    #
+    # @param (see #to_js_full_script_spreadsheet)
+    # @return [String] JS function to render the google chart table when data
+    #   is URL of the google spreadsheet
+    def draw_js_spreadsheet(data, element_id)
+      js = ''
+      js << "\n function #{chart_function_name(element_id)}() {"
+      js << "\n   var query = new google.visualization.Query('#{data}');"
+      js << "\n   query.send(#{query_response_function_name(element_id)});"
+      js << "\n }"
+      js << "\n function #{query_response_function_name(element_id)}(response) {"
+      js << "\n   var data_table = response.getDataTable();"
+      js << "\n   var table = new google.visualization.Table"\
+            "(document.getElementById('#{element_id}'));"
+      js << "\n   table.draw(data_table, #{js_parameters(@options)});"
+      js << "\n };"
       js
     end
   end

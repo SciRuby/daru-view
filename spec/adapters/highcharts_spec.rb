@@ -58,6 +58,7 @@ describe Daru::View::Plot, 'plotting with highcharts' do
     }]
     @chart_line = Daru::View::Plot.new(@data_vec1, @options_line)
     @chart_bar = Daru::View::Plot.new(@data_df, @options_bar)
+    @chart_multiple_series = Daru::View::Plot.new(@series_dt, @options_bar)
     @chart_column = Daru::View::Plot.new
     @chart_column.chart.options = @options_column
     @chart_column.chart.series_data = @data
@@ -229,9 +230,9 @@ describe Daru::View::Plot, 'plotting with highcharts' do
   describe "#init_script" do
     it "generates valid initial script" do
       js = @chart_bar.init_script
-      expect(js).to match(/BEGIN highstock.js/i)
+      expect(js).to match(/BEGIN js\/highstock.js/i)
       expect(js).to match(/Highstock JS/i)
-      expect(js).to match(/END highstock.js/i)
+      expect(js).to match(/END js\/highstock.js/i)
       expect(js).to match(/BEGIN modules\/exporting.js/i)
       expect(js).to match(/END modules\/exporting.js/i)
       expect(js).to match(/BEGIN highcharts-3d.js/i)
@@ -251,7 +252,7 @@ describe Daru::View::Plot, 'plotting with highcharts' do
 
   # called from #div in plot.rb as @chart_line.div
   describe "#generate_body" do
-    context "should generate valid script of Line Chart" do
+    context "when Line Chart is drawn" do
       it "should generate valid JS of the Line Chart" do
         js = @chart_line.adapter.generate_body(@chart_line.chart)
         expect(js).to match(/script/)
@@ -274,7 +275,7 @@ describe Daru::View::Plot, 'plotting with highcharts' do
         expect(js).to match(/\"data\": \[ 3,6,8,9,20 \]/)
       end
     end
-    context "should generate valid script of Bar Chart" do
+    context "when Bar Chart is drawn" do
       it "should generate valid JS of the Bar Chart" do
         js = @chart_bar.adapter.generate_body(@chart_bar.chart)
         expect(js).to match(/script/)
@@ -299,7 +300,7 @@ describe Daru::View::Plot, 'plotting with highcharts' do
         )
       end
     end
-    context "should generate valid script of Column Chart" do
+    context "when Column Chart is drawn" do
       it "should generate valid JS of the Column Chart" do
         js = @chart_column.adapter.generate_body(@chart_column.chart)
         expect(js).to match(/script/)
@@ -316,6 +317,30 @@ describe Daru::View::Plot, 'plotting with highcharts' do
         expect(js).to match(/series": \[\[ 1,15 \],\[ 2,30 \],\[ 4,40 \]\]/)
       end
     end
+    context "when multiple series is used as data" do
+      it "should generate valid JS of the Chart" do
+        js = @chart_multiple_series.adapter.generate_body(
+          @chart_multiple_series.chart
+        )
+        expect(js).to match(/script/)
+        expect(js).to match(/Highcharts.Chart\(options\)/)
+        expect(js).to match(/window.chart_/)
+      end
+      it "should set the correct options" do
+        js = @chart_multiple_series.adapter.generate_body(
+          @chart_multiple_series.chart
+        )
+        expect(js).to match(/\"chart\": { \"type\": \"bar\"/)
+        expect(js).to match(/\"title\": { \"text\": \"Demo Bar Chart\" }/)
+      end
+      it "should set correct data" do
+        js = @chart_multiple_series.adapter.generate_body(
+          @chart_multiple_series.chart
+        )
+        # indicates series contains array of hashes
+        expect(js).to match(/series": \[\{/)
+      end
+    end
   end
 
   describe "#generate_html" do
@@ -323,8 +348,8 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       html = @chart_line.adapter.generate_html(@chart_line.chart)
       expect(html).to match(/html/)
       expect(html).to match(/Chart/)
-      expect(html).to match(/BEGIN highstock.js/i)
-      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN js\/highstock.js/i)
+      expect(html).to match(/END js\/highstock.js/i)
       expect(html).to match(/BEGIN modules\/exporting.js/i)
       expect(html).to match(/END modules\/exporting.js/i)
       expect(html).to match(/BEGIN highcharts-3d.js/i)
@@ -341,8 +366,8 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       html = @chart_bar.adapter.generate_html(@chart_bar.chart)
       expect(html).to match(/html/)
       expect(html).to match(/Chart/)
-      expect(html).to match(/BEGIN highstock.js/i)
-      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN js\/highstock.js/i)
+      expect(html).to match(/END js\/highstock.js/i)
       expect(html).to match(/BEGIN modules\/exporting.js/i)
       expect(html).to match(/END modules\/exporting.js/i)
       expect(html).to match(/BEGIN highcharts-3d.js/i)
@@ -361,8 +386,8 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       html = @chart_column.adapter.generate_html(@chart_column.chart)
       expect(html).to match(/html/)
       expect(html).to match(/Chart/)
-      expect(html).to match(/BEGIN highstock.js/i)
-      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN js\/highstock.js/i)
+      expect(html).to match(/END js\/highstock.js/i)
       expect(html).to match(/BEGIN modules\/exporting.js/i)
       expect(html).to match(/END modules\/exporting.js/i)
       expect(html).to match(/BEGIN highcharts-3d.js/i)
@@ -384,8 +409,8 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       html = File.read(path)
       expect(html).to match(/html/)
       expect(html).to match(/Chart/)
-      expect(html).to match(/BEGIN highstock.js/i)
-      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN js\/highstock.js/i)
+      expect(html).to match(/END js\/highstock.js/i)
       expect(html).to match(/script/)
       expect(html).to match(/Highcharts.Chart\(options\)/)
       expect(html).to match(/\"chart\": { \"type\": \"line\"/)
@@ -397,8 +422,8 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       html = File.read(path)
       expect(html).to match(/html/)
       expect(html).to match(/Chart/)
-      expect(html).to match(/BEGIN highstock.js/i)
-      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN js\/highstock.js/i)
+      expect(html).to match(/END js\/highstock.js/i)
       expect(html).to match(/script/)
       expect(html).to match(/Highcharts.Chart\(options\)/)
       expect(html).to match(/\"chart\": { \"type\": \"bar\"/)
@@ -413,13 +438,26 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       html = File.read(path)
       expect(html).to match(/html/)
       expect(html).to match(/Chart/)
-      expect(html).to match(/BEGIN highstock.js/i)
-      expect(html).to match(/END highstock.js/i)
+      expect(html).to match(/BEGIN js\/highstock.js/i)
+      expect(html).to match(/END js\/highstock.js/i)
       expect(html).to match(/script/)
       expect(html).to match(/Highcharts.Chart\(options\)/)
       expect(html).to match(/\"chart\": { \"type\": \"column\"/)
       expect(html).to match(/\"title\": { \"text\": \"Demo Column Chart\" }/)
       expect(html).to match(/series": \[\[ 1,15 \],\[ 2,30 \],\[ 4,40 \]\]/)
+    end
+  end
+
+  describe "#export" do
+    it "should generate the valid script to export the chart" do
+      js = @chart_bar.adapter.export(@chart_bar.chart, 'png')
+      expect(js).to match(/\s+new\s+Highcharts.Chart/)
+      expect(js).to match(/var\s+options\s+=/)
+      expect(js).to match(/window.chart_/)
+      expect(js).to match(/\"chart\": \{ \"type\": \"bar\"/)
+      expect(js).to match(/script/)
+      expect(js).to match(/image\/png/)
+      expect(js).to match(/chart.exportChartLocal/)
     end
   end
 end

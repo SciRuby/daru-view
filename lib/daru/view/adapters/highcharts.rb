@@ -29,8 +29,6 @@ module Daru
         # @param [Array/Daru::DataFrame/Daru::Vector] data
         #
         def init(data=[], options={}, _user_options={})
-          data_new = guess_data(data)
-          # TODO : for multiple series need some modification
           # Alternate way is using `add_series` method.
           #
           # There are many options present in Highcharts so it is better to use
@@ -42,10 +40,18 @@ module Daru
             # all the options present in `options` and about the
             # series (means name, type, data) used in f.series(..)
             f.options = options.empty? ? LazyHighCharts::HighChart.new.defaults_options : options
-
-            series_type = options[:type] unless options[:type].nil?
-            series_name = options[:name] unless options[:name].nil?
-            f.series(type: series_type, name: series_name, data: data_new)
+            # For multiple series when data is in a series format as in
+            # HighCharts official examples
+            # TODO: Add support for multiple series when data as
+            #   Daru::DataFrame/Daru::Vector
+            if data.is_a?(Array) && data[0].is_a?(Hash)
+              f.series_data = data
+            else
+              data_new = guess_data(data)
+              series_type = options[:type] unless options[:type].nil?
+              series_name = options[:name] unless options[:name].nil?
+              f.series(type: series_type, name: series_name, data: data_new)
+            end
           end
           @chart
         end
@@ -62,6 +68,21 @@ module Daru
           path = File.expand_path(path, Dir.pwd)
           str = generate_html(plot)
           File.write(path, str)
+        end
+
+        # Exporting in web frameworks is completely offline. In IRuby notebook,
+        #   offline-export supports only the exporting to png, jpeg and svg format.
+        #   Export to PDF is not working (not even through the exporting button in
+        #   highchart). So, online exporting is done in IRuby notebook. There is a
+        #   problem in online exporting that if we run-all all the cells of IRuby
+        #   notebook then only the last chart will be exported. Individually,
+        #   running the cells works fine.
+        #
+        # @see #Daru::View::Plot.export
+        def export(plot, export_type='png', file_name='chart')
+          plot.export_iruby(export_type, file_name) if defined? IRuby
+        rescue NameError
+          plot.export(export_type, file_name)
         end
 
         def show_in_iruby(plot)

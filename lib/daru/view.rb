@@ -1,5 +1,6 @@
 require 'daru/view/version'
 require 'daru/view/plot'
+require 'daru/view/plot_list'
 require 'daru/view/adapters/highcharts/display'
 require 'daru/view/adapters/nyaplot/display'
 require 'daru/view/adapters/googlecharts/display'
