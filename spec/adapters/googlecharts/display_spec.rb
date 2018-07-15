@@ -401,23 +401,18 @@ describe GoogleVisualr::Display do
         expect(js).to match(/view: {columns: \[0,1\]}/)
       end
     end
-    context 'when chart is drawn' do
-      it "generates valid JS of the table when "\
-         "data is imported from google spreadsheets" do
-        js = table_spreadsheet_chartwrapper.table.to_js_spreadsheet(
-          data_spreadsheet, 'id'
-        )
-        expect(js).to match(/<script type='text\/javascript'>/i)
-        expect(js).to match(/google.load\(/i)
-        expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
-        expect(js).to match(/gid=0&headers=1&tq=/i)
-        expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
-        expect(js).to match(/var data_table = response.getDataTable/i)
-        expect(js).to match(
-          /google.visualization.Table\(document.getElementById\(\'id\'\)/
-        )
-        expect(js).to match(/table.draw\(data_table, \{width: 800/i)
-      end
+    it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
+      js = area_wrapper_spreadsheet.chart.to_js_chart_wrapper(
+        data_spreadsheet,
+        'id'
+      )
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/callback: draw_id/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
     end
   end
 
