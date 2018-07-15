@@ -74,18 +74,6 @@ module GoogleVisualr
       '\'\''
     end
 
-    # @param (see #draw_js_chart_editor)
-    # @return [String] options of the ChartWrapper
-    def extract_chart_wrapper_options(data, element_id)
-      js = ''
-      js << "\n      chartType: 'Table',"
-      js << append_data(data)
-      js << "\n      options: #{js_parameters(@options)},"
-      js << "\n      containerId: '#{element_id}',"
-      js << "\n      view: #{extract_option_view}"
-      js
-    end
-
     # Generates JavaScript for loading the appropriate Google Visualization
     #   package, with callback to render chart.
     #
@@ -95,8 +83,8 @@ module GoogleVisualr
     def load_js(element_id)
       js = ''
       js << "\n  google.load('visualization', #{google_table_version}, "
-      js << "\n {packages: ['#{package_name}'], callback:"
-      js << "\n #{chart_function_name(element_id)}});"
+      js << " {packages: ['#{package_name}'], callback:"
+      js << " #{chart_function_name(element_id)}});"
       js
     end
 
@@ -124,33 +112,13 @@ module GoogleVisualr
       js = ''
       js << "\n  var wrapper_#{element_id.tr('-', '_')} = null;"
       js << "\n  function #{chart_function_name(element_id)}() {"
-      js << "\n    #{to_js}"
-      js << "\n    wrapper_#{element_id.tr('-', '_')} = "\
+      js << "\n  \t#{to_js}"
+      js << "\n  \twrapper_#{element_id.tr('-', '_')} = "\
             'new google.visualization.ChartWrapper({'
       js << extract_chart_wrapper_options(data, element_id)
-      js << "\n    });"
+      js << "\n  \t});"
       js << draw_wrapper(element_id)
       js << "\n  };"
-      js
-    end
-
-    # @param data [Array, Daru::DataFrame, Daru::Vector, String]
-    #   Data of GoogleVisualr DataTable
-    # @param element_id [String] The ID of the DIV element that the Google
-    #   ChartEditor should be rendered in
-    # @return [String] JS function to render the ChartEditor
-    def draw_js_chart_editor(data, element_id)
-      js = ''
-      js << "\n  var chartEditor_#{element_id.tr('-', '_')} = null;"
-      js << draw_js_chart_wrapper(data, element_id)
-      js << "\n  function #{save_chart_function_name(element_id)}(){"
-      js << "\n    chartEditor_#{element_id.tr('-', '_')}.getChartWrapper()."
-      js << "draw(document.getElementById('#{element_id}'));"
-      js << "\n  }"
-      js << "\n  function loadEditor_#{element_id.tr('-', '_')}(){"
-      js << "\n    chartEditor_#{element_id.tr('-', '_')}.openDialog("
-      js << "wrapper_#{element_id.tr('-', '_')}, {});"
-      js << "\n  }"
       js
     end
 

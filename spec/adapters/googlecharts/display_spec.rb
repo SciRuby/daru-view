@@ -46,6 +46,18 @@ describe GoogleVisualr::Display do
   let(:plot_charteditor) {Daru::View::Plot.new(
     data, {}, chart_class: 'Charteditor')
   }
+  let (:plot_spreadsheet_charteditor) {
+    Daru::View::Plot.new(
+      data_spreadsheet,
+      {width: 800}, chart_class: 'Charteditor'
+    )
+  }
+  let (:table_spreadsheet_charteditor) {
+    Daru::View::Table.new(
+      data_spreadsheet,
+      {width: 800}, chart_class: 'Charteditor'
+    )
+  }
   let(:table_charteditor) {Daru::View::Table.new(
     data, {}, chart_class: 'Charteditor')
   }
@@ -129,7 +141,7 @@ describe GoogleVisualr::Display do
     it "should generate the valid JS of datatable chartwrapper" do
       js = table_chart_wrapper.table.to_html('id')
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartWrapper/)
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
@@ -141,7 +153,7 @@ describe GoogleVisualr::Display do
       js = plot_charteditor.chart.to_html('id')
       expect(js).to match(/<input id="loadcharteditor_id/)
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartEditor/)
       expect(js).to match(/chartType: 'LineChart'/)
       expect(js).to match(/dataTable: data_table/)
@@ -153,7 +165,7 @@ describe GoogleVisualr::Display do
       js = table_charteditor.table.to_html('id')
       expect(js).to match(/<input id="loadcharteditor_id/)
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartEditor/)
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
@@ -178,7 +190,7 @@ describe GoogleVisualr::Display do
     it "should generate the valid JS of datatable chartwrapper" do
       js = table_chart_wrapper.table.get_html_chart_wrapper(data, 'id')
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartWrapper/)
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
@@ -192,7 +204,7 @@ describe GoogleVisualr::Display do
     it "should generate the valid JS of charteditor" do
       js = plot_charteditor.chart.get_html_chart_editor(data, 'id')
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartEditor/)
       expect(js).to match(/chartType: 'LineChart'/)
       expect(js).to match(/dataTable: data_table/)
@@ -203,7 +215,7 @@ describe GoogleVisualr::Display do
     it "should generate the valid JS of datatable charteditor" do
       js = table_charteditor.table.get_html_chart_editor(data, 'id')
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartEditor/)
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
@@ -308,7 +320,7 @@ describe GoogleVisualr::Display do
     it "should generate the valid JS of datatable chartwrapper" do
       js = table_chart_wrapper.table.show_script_with_script_tag('id')
       expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
+      expect(js).to match(/callback: draw_id/)
       expect(js).to match(/new google.visualization.ChartWrapper/)
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
@@ -386,6 +398,49 @@ describe GoogleVisualr::Display do
     end
   end
 
+  describe "#extract_chart_wrapper_options" do
+    context 'when chart is drawn' do
+      it "should return correct options of chartwrapper" do
+        js = plot_charteditor.chart.extract_chart_wrapper_options(data, 'id')
+        expect(js).to match(/chartType: 'LineChart'/)
+        expect(js).to match(/dataTable: data_table/)
+        expect(js).to match(/options: \{\}/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/view: ''/)
+      end
+      it "should return correct options of chartwrapper when data is URL" do
+        js = plot_spreadsheet_charteditor.chart.extract_chart_wrapper_options(
+          data_spreadsheet, 'id'
+        )
+        expect(js).to match(/chartType: 'LineChart'/)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+        expect(js).to match(/options: {width: 800/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/view: ''/)
+      end
+    end
+    context 'when table is drawn' do
+      it "should return correct options of chartwrapper" do
+        js = table_charteditor.table.extract_chart_wrapper_options(data, 'id')
+        expect(js).to match(/chartType: 'Table'/)
+        expect(js).to match(/dataTable: data_table/)
+        expect(js).to match(/options: \{\}/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/view: ''/)
+      end
+      it "should return correct options of chartwrapper when data is URL" do
+        js = table_spreadsheet_charteditor.table.extract_chart_wrapper_options(
+          data_spreadsheet, 'id'
+        )
+        expect(js).to match(/chartType: 'Table'/)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+        expect(js).to match(/options: {width: 800/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/view: ''/)
+      end
+    end
+  end
+
   describe "#draw_wrapper" do
     context 'when chart_class is ChartEditor' do
       it "creates ChartEditor object and draws the chartwrapper" do
@@ -395,7 +450,7 @@ describe GoogleVisualr::Display do
         expect(js).to match(/google.visualization.events.addListener/)
         expect(js).to match(/chartEditor_id, 'ok', saveChart_id/)
       end
-      it "should draw the chartwrapper only when class_chart is"\
+      it "should draw the chartwrapper only when chart_class is"\
          " set to Chartwrapper" do
         js = table_charteditor.table.draw_wrapper('id')
         expect(js).to match(/wrapper_id.draw\(\);/)
@@ -424,7 +479,7 @@ describe GoogleVisualr::Display do
           'id'
         )
         expect(js).to match(/google.load\('visualization'/)
-        expect(js).to match(/callback:\n draw_id/)
+        expect(js).to match(/callback: draw_id/)
         expect(js).to match(/new google.visualization.ChartWrapper/)
         expect(js).to match(/chartType: 'Table'/)
         expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
@@ -436,19 +491,17 @@ describe GoogleVisualr::Display do
     context 'when chart is drawn' do
       it "generates valid JS of the table when "\
          "data is imported from google spreadsheets" do
-        js = table_spreadsheet_chartwrapper.table.to_js_spreadsheet(
+        js = area_wrapper_spreadsheet.chart.to_js_chart_wrapper(
           data_spreadsheet, 'id'
         )
-        expect(js).to match(/<script type='text\/javascript'>/i)
-        expect(js).to match(/google.load\(/i)
-        expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
-        expect(js).to match(/gid=0&headers=1&tq=/i)
-        expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
-        expect(js).to match(/var data_table = response.getDataTable/i)
-        expect(js).to match(
-          /google.visualization.Table\(document.getElementById\(\'id\'\)/
-        )
-        expect(js).to match(/table.draw\(data_table, \{width: 800/i)
+        expect(js).to match(/google.load\('visualization'/)
+        expect(js).to match(/callback: draw_id/)
+        expect(js).to match(/new google.visualization.ChartWrapper/)
+        expect(js).to match(/chartType: 'AreaChart'/)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+        expect(js).to match(/options: {}/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/view: ''/)
       end
     end
   end
@@ -457,7 +510,9 @@ describe GoogleVisualr::Display do
     context 'when table is drawn' do
       it "draws valid JS of the table when "\
          "data is imported from google spreadsheets" do
-        js = table_spreadsheet.table.draw_js_spreadsheet(data_spreadsheet, 'id')
+        js = table_spreadsheet.table.to_js_spreadsheet(data_spreadsheet, 'id')
+        expect(js).to match(/<script type='text\/javascript'>/i)
+        expect(js).to match(/google.load\(/i)
         expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
         expect(js).to match(/gid=0&headers=1&tq=/i)
         expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
@@ -486,29 +541,62 @@ describe GoogleVisualr::Display do
     end
   end
 
-  describe "#show_script_with_script_tag" do
-    it "should generate valid script with script tag of chartwrapper" do
-      js = area_chart_wrapper.chart.show_script_with_script_tag('id')
-      expect(js).to match(/script/)
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback: draw_id/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'AreaChart'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: {}/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: ''/)
+  describe "#draw_js_chart_editor" do
+    context 'when chart is drawn' do
+      it "draws valid JS of the ChartEditor" do
+        js = plot_charteditor.chart.draw_js_chart_editor(data, 'id')
+        expect(js).to match(/var chartEditor_id = null/)
+        expect(js).to match(/new google.visualization.DataTable/)
+        expect(js).to match(/new google.visualization.ChartWrapper/)
+        expect(js).to match(/chartType: 'LineChart'/)
+        expect(js).to match(/dataTable: data_table/)
+        expect(js).to match(/options: \{\}/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
+        expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+        expect(js).to match(/containerId: 'id'/)
+      end
+      it "draws valid JS of the ChartEditor when URL of spreadsheet is provided" do
+        js = plot_spreadsheet_charteditor.chart.draw_js_chart_editor(data_spreadsheet, 'id')
+        expect(js).to match(/var chartEditor_id = null/)
+        expect(js).to match(/new google.visualization.DataTable/)
+        expect(js).to match(/new google.visualization.ChartWrapper/)
+        expect(js).to match(/chartType: 'LineChart'/)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+        expect(js).to match(/options: {width: 800/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
+        expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+        expect(js).to match(/containerId: 'id'/)
+      end
     end
-    it "should generate the valid JS of datatable chartwrapper" do
-      js = table_chart_wrapper.table.show_script_with_script_tag('id')
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback:\n draw_id/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'Table'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: {}/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: ''/)
+    context 'when table is drawn' do
+      it "draws valid JS of the ChartEditor" do
+        js = table_charteditor.table.draw_js_chart_editor(data, 'id')
+        expect(js).to match(/var chartEditor_id = null/)
+        expect(js).to match(/new google.visualization.DataTable/)
+        expect(js).to match(/new google.visualization.ChartWrapper/)
+        expect(js).to match(/chartType: 'Table'/)
+        expect(js).to match(/dataTable: data_table/)
+        expect(js).to match(/options: {}/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
+        expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+        expect(js).to match(/containerId: 'id'/)
+      end
+      it "draws valid JS of the ChartEditor when URL of spreadsheet is provided" do
+        js = table_spreadsheet_charteditor.table.draw_js_chart_editor(data_spreadsheet, 'id')
+        expect(js).to match(/var chartEditor_id = null/)
+        expect(js).to match(/new google.visualization.DataTable/)
+        expect(js).to match(/new google.visualization.ChartWrapper/)
+        expect(js).to match(/chartType: 'Table'/)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+        expect(js).to match(/options: {width: 800/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/chartEditor_id.getChartWrapper\(\).draw\(/)
+        expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
+        expect(js).to match(/containerId: 'id'/)
+      end
     end
   end
 end
