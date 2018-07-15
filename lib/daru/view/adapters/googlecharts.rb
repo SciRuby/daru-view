@@ -184,6 +184,10 @@ module Daru
           File.write(path, str)
         end
 
+        def export(_plot, _export_type='png', _file_name='chart')
+          raise 'Not implemented yet'
+        end
+
         def show_in_iruby(plot)
           plot.show_in_iruby
         end

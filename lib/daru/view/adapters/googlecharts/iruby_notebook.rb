@@ -1,3 +1,5 @@
+require 'daru/view/constants'
+
 module GoogleVisualr
   # generate initializing code
   def self.generate_init_code(dependent_js)
@@ -8,7 +10,7 @@ module GoogleVisualr
   end
 
   # Enable to show plots on IRuby notebook
-  def self.init_iruby(dependent_js=['google_visualr.js', 'loader.js'])
+  def self.init_iruby(dependent_js=GOOGLECHARTS_DEPENDENCIES_IRUBY)
     js = generate_init_code(dependent_js)
     IRuby.display(IRuby.javascript(js))
   end

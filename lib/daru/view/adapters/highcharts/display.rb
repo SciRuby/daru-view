@@ -49,6 +49,10 @@ module LazyHighCharts
   end
 
   class HighChart
+    # Holds a value only when to_html or to_html_iruby method is invoked
+    # @return [String] The ID of the DIV element that the HighChart should
+    #   be rendered in
+    attr_accessor :div_id
     # @example
     #
     # To display the html code of the chart, use `to_html`. To see the same
@@ -62,6 +66,7 @@ module LazyHighCharts
     def to_html(placeholder=random_canvas_id)
       chart_hash_must_be_present
       script = load_dependencies('web_frameworks')
+      @div_id = placeholder
       script << high_chart_css(placeholder)
       # Helps to denote either of the three classes.
       chart_class = extract_chart_class
@@ -88,6 +93,7 @@ module LazyHighCharts
     # `high_chart_iruby` which doesn't use `onload` in chart script.
     def to_html_iruby(placeholder=random_canvas_id)
       # TODO : placeholder pass, in plot#div
+      @div_id = placeholder
       load_dependencies('iruby')
       chart_hash_must_be_present
       script = high_chart_css(placeholder)
@@ -157,6 +163,95 @@ module LazyHighCharts
          options[:chart] && options[:chart][:map]
         dep_js.push(options[:chart][:map].to_s)
         dep_js.map! { |js| "mapdata/#{js}.js" }
+      end
+    end
+
+    # @see #Daru::View::Plot.export
+    def export(export_type='png', file_name='chart')
+      js = ''
+      js << to_html
+      js << extract_export_code(@div_id, export_type, file_name)
+      js
+    end
+
+    # Exports chart to different formats in IRuby notebook
+    #
+    # @param type [String] format to which chart has to be exported
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [void] loads the js code of chart along with the code to export
+    #   in IRuby notebook
+    def export_iruby(export_type='png', file_name='chart')
+      js = ''
+      js << to_html_iruby
+      js << extract_export_code_iruby(@div_id, export_type, file_name)
+      IRuby.html js
+    end
+
+    # Returns the script to export the chart in different formats for
+    #   web frameworks
+    #
+    # @param file_name [String] The name of the file after exporting the chart
+    # @param placeholder [String] The ID of the DIV element that
+    #   the HighChart should be rendered in
+    # @param type [String] format to which chart has to be exported
+    # @return [String] the script to export the chart in web frameworks
+    def extract_export_code(
+      placeholder=random_canvas_id, export_type='png', file_name='chart'
+    )
+      js = ''
+      js << "\n <script>"
+      js << "\n (function() {"
+      js << "\n \tvar onload = window.onload;"
+      js << "\n \twindow.onload = function(){"
+      js << "\n \t\tif (typeof onload == 'function') onload();"
+      js << "\n \t\tvar chartDom = document.getElementById('#{placeholder}');"
+      js << "\n \t\tvar chart = Highcharts.charts[Highcharts.attr(chartDom,"
+      js << " 'data-highcharts-chart')]"
+      js << "\n \t\tchart.exportChartLocal({"
+      js << "\n \t\t\t" + append_chart_type(export_type)
+      js << "\n \t\t\tfilename: '#{file_name}'"
+      js << "\n \t\t});\n \t};\n })();"
+      js << "\n </script>"
+      js
+    end
+
+    # Returns the script to export the chart in different formats in
+    #   IRuby notebook
+    #
+    # @param (see #extract_export_code)
+    # @return [String] the script to export the chart in IRuby notebook
+    def extract_export_code_iruby(
+      placeholder=random_canvas_id, export_type='png', file_name='chart'
+    )
+      js = ''
+      js << "\n <script>"
+      js << "\n (function() {"
+      js << "\n \tvar chartDom = document.getElementById('#{placeholder}');"
+      js << "\n \tvar chart = Highcharts.charts[Highcharts.attr(chartDom,"
+      js << " 'data-highcharts-chart')]"
+      js << "\n \tchart.exportChart({"
+      js << "\n \t\t" + append_chart_type(export_type)
+      js << "\n \t\tfilename: '#{file_name}'"
+      js << "\n \t});"
+      js << "\n })();"
+      js << "\n </script>"
+      js
+    end
+
+    # @param type [String] format to which chart has to be exported
+    # @return [String] code stating the type to which chart has to be exported
+    def append_chart_type(export_type='png')
+      case export_type
+      when 'pdf'
+        "type: 'application/pdf',"
+      when 'png'
+        "type: 'image/png',"
+      when 'jpg', 'jpeg'
+        "type: 'image/jpeg',"
+      when 'svg'
+        "type: 'image/svg+xml',"
+      else
+        raise TypeError, 'Invalid format'
       end
     end
 
