@@ -135,6 +135,18 @@ module GoogleVisualr
       js
     end
 
+    # @return [String] js function to add the listener to the chart
+    def add_listeners_js(type)
+      js = ''
+      @listeners.each do |listener|
+        js << "\n    google.visualization.events.addListener("
+        js << "#{type}, '#{listener[:event]}', function (e) {"
+        js << "\n      #{listener[:callback]}"
+        js << "\n    });"
+      end
+      js
+    end
+
     # @param file_name [String] The name of the file after exporting the chart
     # @return [String] the script to export the chart in png format
     def extract_export_png_code(file_name)

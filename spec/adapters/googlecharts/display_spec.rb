@@ -413,6 +413,7 @@ describe GoogleVisualr::Display do
       expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
       expect(js).to match(/options: {}/)
       expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
     end
   end
 
@@ -420,7 +421,9 @@ describe GoogleVisualr::Display do
     context 'when table is drawn' do
       it "draws valid JS of the table when "\
          "data is imported from google spreadsheets" do
-        js = table_spreadsheet.table.draw_js_spreadsheet(data_spreadsheet, 'id')
+        js = table_spreadsheet.table.to_js_spreadsheet(data_spreadsheet, 'id')
+        expect(js).to match(/<script type='text\/javascript'>/i)
+        expect(js).to match(/google.load\(/i)
         expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
         expect(js).to match(/gid=0&headers=1&tq=/i)
         expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)

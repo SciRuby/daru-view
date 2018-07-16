@@ -75,18 +75,6 @@ module GoogleVisualr
       'table'
     end
 
-    # @return [String] js function to add the listener to the chart
-    def add_listeners_js
-      js = ''
-      @listeners.each do |listener|
-        js << "\n    google.visualization.events.addListener("
-        js << "table, '#{listener[:event]}', function (e) {"
-        js << "\n      #{listener[:callback]}"
-        js << "\n    });"
-      end
-      js
-    end
-
     # @return [String] Returns value of the view option provided by the user
     #   and '' otherwise
     def extract_option_view
@@ -119,7 +107,7 @@ module GoogleVisualr
       js << "\n    #{to_js}"
       js << "\n    var table = new google.visualization.Table("
       js << "\n    document.getElementById('#{element_id}'));"
-      js << add_listeners_js
+      js << add_listeners_js('table')
       js << "\n    table.draw(data_table, #{js_parameters(@options)}); "
       js << "\n  };"
       js
