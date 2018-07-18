@@ -56,16 +56,6 @@ describe GoogleVisualr::DataTable do
     end
   end
 
-  describe "#add_listeners_js" do
-    it "appends the js to add the listener" do
-      data_table.table.add_listener('select', "alert('A table row was selected');")
-      js = data_table.table.add_listeners_js
-      expect(js).to match(/google.visualization.events.addListener\(/)
-      expect(js).to match(/table, 'select', function \(e\) {/)
-      expect(js).to match(/alert\('A table row was selected'\);/)
-    end
-  end
-
   describe "#load_js" do
     it "loads valid packages" do
       js = data_table.table.load_js('id')

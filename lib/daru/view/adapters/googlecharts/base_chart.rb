@@ -27,27 +27,11 @@ module GoogleVisualr
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n  \t#{@data_table.to_js}"
       js << "\n  \tvar wrapper = new google.visualization.ChartWrapper({"
-      js << "\n  \t\tchartType: '#{chart_name}',"
-      js << append_data(data)
-      js << "\n  \t\toptions: #{js_parameters(@options)},"
-      js << "\n  \t\tcontainerId: '#{element_id}',"
-      js << "\n  \t\tview: #{extract_option_view}"
+      js << extract_chart_wrapper_options(data, element_id)
       js << "\n  \t});"
       js << draw_wrapper
+      js << add_listeners_js('wrapper')
       js << "\n  };"
-      js
-    end
-
-    # TODO: Add listener for chartwrapper when it gets merged.
-    # @return [String] js function to add the listener to the chart
-    def add_listeners_js
-      js = ''
-      @listeners.each do |listener|
-        js << "\n    google.visualization.events.addListener("
-        js << "chart, '#{listener[:event]}', function (e) {"
-        js << "\n      #{listener[:callback]}"
-        js << "\n    });"
-      end
       js
     end
 
@@ -67,7 +51,7 @@ module GoogleVisualr
       js << "\n 	var data_table = response.getDataTable();"
       js << "\n 	var chart = new google.#{chart_class}.#{chart_name}"\
             "(document.getElementById('#{element_id}'));"
-      js << add_listeners_js
+      js << add_listeners_js('chart')
       js << "\n 	chart.draw(data_table, #{js_parameters(@options)});"
       js << "\n };"
       js
@@ -80,7 +64,7 @@ module GoogleVisualr
       js << "\n    #{@data_table.to_js}"
       js << "\n    chart = new google.#{chart_class}.#{chart_name}"
       js << "(document.getElementById('#{element_id}'));"
-      js << add_listeners_js
+      js << add_listeners_js('chart')
       js << "\n    chart.draw(data_table, #{js_parameters(@options)});"
       js << "\n  };"
       js

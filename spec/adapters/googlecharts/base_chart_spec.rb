@@ -57,16 +57,6 @@ describe GoogleVisualr::BaseChart do
     end
   end
 
-  describe "#add_listeners_js" do
-    it "appends the js to add the listener" do
-      plot_spreadsheet.chart.add_listener('select', "alert('A table row was selected');")
-      js = plot_spreadsheet.chart.add_listeners_js
-      expect(js).to match(/google.visualization.events.addListener\(/)
-      expect(js).to match(/chart, 'select', function \(e\) {/)
-      expect(js).to match(/alert\('A table row was selected'\);/)
-    end
-  end
-
   describe "#draw_js_chart_wrapper" do
     it "draws valid JS of the ChartWrapper" do
       js = area_chart.chart.draw_js_chart_wrapper(data, 'id')

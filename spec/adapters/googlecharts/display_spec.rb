@@ -324,6 +324,23 @@ describe GoogleVisualr::Display do
     end
   end
 
+  describe "#add_listeners_js" do
+    it "appends the js to add the listener in google charts" do
+      plot_spreadsheet.chart.add_listener('select', "alert('A table row was selected');")
+      js = plot_spreadsheet.chart.add_listeners_js('chart')
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/chart, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
+    end
+    it "appends the js to add the listener in google datatables" do
+      data_table.table.add_listener('select', "alert('A table row was selected');")
+      js = data_table.table.add_listeners_js('table')
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/table, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
+    end
+  end
+
   describe "#query_response_function_name" do
     it "should generate unique function name to handle query response" do
       func = data_table.table.query_response_function_name('i-d')
@@ -394,21 +411,19 @@ describe GoogleVisualr::Display do
       end
     end
     context 'when chart is drawn' do
-      it "generates valid JS of the table when "\
-         "data is imported from google spreadsheets" do
-        js = table_spreadsheet_chartwrapper.table.to_js_spreadsheet(
-          data_spreadsheet, 'id'
+      it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
+        js = area_wrapper_spreadsheet.chart.to_js_chart_wrapper(
+          data_spreadsheet,
+          'id'
         )
-        expect(js).to match(/<script type='text\/javascript'>/i)
-        expect(js).to match(/google.load\(/i)
-        expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
-        expect(js).to match(/gid=0&headers=1&tq=/i)
-        expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)
-        expect(js).to match(/var data_table = response.getDataTable/i)
-        expect(js).to match(
-          /google.visualization.Table\(document.getElementById\(\'id\'\)/
-        )
-        expect(js).to match(/table.draw\(data_table, \{width: 800/i)
+        expect(js).to match(/google.load\('visualization'/)
+        expect(js).to match(/callback: draw_id/)
+        expect(js).to match(/new google.visualization.ChartWrapper/)
+        expect(js).to match(/chartType: 'AreaChart'/)
+        expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
+        expect(js).to match(/options: {}/)
+        expect(js).to match(/containerId: 'id'/)
+        expect(js).to match(/view: ''/)
       end
     end
   end
@@ -417,7 +432,9 @@ describe GoogleVisualr::Display do
     context 'when table is drawn' do
       it "draws valid JS of the table when "\
          "data is imported from google spreadsheets" do
-        js = table_spreadsheet.table.draw_js_spreadsheet(data_spreadsheet, 'id')
+        js = table_spreadsheet.table.to_js_spreadsheet(data_spreadsheet, 'id')
+        expect(js).to match(/<script type='text\/javascript'>/i)
+        expect(js).to match(/google.load\(/i)
         expect(js).to match(/https:\/\/docs.google.com\/spreadsheets/i)
         expect(js).to match(/gid=0&headers=1&tq=/i)
         expect(js).to match(/SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8/i)

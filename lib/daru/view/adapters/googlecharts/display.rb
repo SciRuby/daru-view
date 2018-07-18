@@ -106,6 +106,34 @@ module GoogleVisualr
       IRuby.html to_html(dom)
     end
 
+    # @return [String] js function to add the listener to the chart
+    def add_listeners_js(type)
+      js = ''
+      @listeners.each do |listener|
+        js << "\n    google.visualization.events.addListener("
+        js << "#{type}, '#{listener[:event]}', function (e) {"
+        js << "\n      #{listener[:callback]}"
+        js << "\n    });"
+      end
+      js
+    end
+
+    # @param (see #draw_js_chart_editor)
+    # @return [String] options of the ChartWrapper
+    def extract_chart_wrapper_options(data, element_id)
+      js = ''
+      js << if is_a?(GoogleVisualr::DataTable)
+              "\n  \t\tchartType: 'Table',"
+            else
+              "\n  \t\tchartType: '#{chart_name}',"
+            end
+      js << append_data(data)
+      js << "\n  \t\toptions: #{js_parameters(@options)},"
+      js << "\n  \t\tcontainerId: '#{element_id}',"
+      js << "\n  \t\tview: #{extract_option_view}"
+      js
+    end
+
     # @param element_id [String] The ID of the DIV element that the Google
     #   Chart/DataTable should be rendered in
     # @return [String] unique function name to handle query response

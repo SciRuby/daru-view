@@ -96,19 +96,6 @@ module GoogleVisualr
       js
     end
 
-    # TODO: Add listener for chartwrapper when it gets merged.
-    # @return [String] js function to add the listener to the chart
-    def add_listeners_js
-      js = ''
-      @listeners.each do |listener|
-        js << "\n    google.visualization.events.addListener("
-        js << "table, '#{listener[:event]}', function (e) {"
-        js << "\n      #{listener[:callback]}"
-        js << "\n    });"
-      end
-      js
-    end
-
     # Generates JavaScript function for rendering the google chart table.
     #
     # @param element_id [String] The ID of the DIV element that the Google
@@ -120,7 +107,7 @@ module GoogleVisualr
       js << "\n    #{to_js}"
       js << "\n    var table = new google.visualization.Table("
       js << "document.getElementById('#{element_id}'));"
-      js << add_listeners_js
+      js << add_listeners_js('table')
       js << "\n    table.draw(data_table, #{js_parameters(@options)}); "
       js << "\n  };"
       js
@@ -135,13 +122,10 @@ module GoogleVisualr
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n  \t#{to_js}"
       js << "\n  \tvar wrapper = new google.visualization.ChartWrapper({"
-      js << "\n  \t\tchartType: 'Table',"
-      js << append_data(data)
-      js << "\n  \t\toptions: #{js_parameters(@options)},"
-      js << "\n  \t\tcontainerId: '#{element_id}',"
-      js << "\n  \t\tview: #{extract_option_view}"
+      js << extract_chart_wrapper_options(data, element_id)
       js << "\n  \t});"
       js << draw_wrapper
+      js << add_listeners_js('wrapper')
       js << "\n  };"
       js
     end
@@ -162,7 +146,7 @@ module GoogleVisualr
       js << "\n   var data_table = response.getDataTable();"
       js << "\n   var table = new google.visualization.Table"\
             "(document.getElementById('#{element_id}'));"
-      js << add_listeners_js
+      js << add_listeners_js('table')
       js << "\n 	table.draw(data_table, #{js_parameters(@options)});"
       js << "\n };"
       js
