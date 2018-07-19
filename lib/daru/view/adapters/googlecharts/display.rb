@@ -23,6 +23,7 @@ module GoogleVisualr
 
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
+      apply_formatters if is_a?(GoogleVisualr::DataTable)
       if script_tag
         show_script_with_script_tag(dom)
       # Without checking for user_options, data as hash was not working!
@@ -50,6 +51,35 @@ module GoogleVisualr
         to_js_full_script(dom)
       else
         to_js(dom)
+      end
+    end
+
+    def apply_formatters
+      return unless user_options && user_options[:formatters]
+      @formatters = []
+      user_options[:formatters].each_value do |formatter|
+        case formatter[:type].to_s.capitalize
+        when 'Color'
+          formatter[:range] ||= []
+          formatter[:gradient_range] ||= []
+          frmttr = GoogleVisualr::ColorFormat.new
+          formatter[:range].each do |range|
+            # add_range parameters: (from, to, color, bgcolor)
+            frmttr.add_range(range[0], range[1], range[2], range[3])
+          end
+          formatter[:gradient_range].each do |gr|
+            # add_range parameters: (from, to, color, bgcolor)
+            frmttr.add_gradient_range(gr[0], gr[1], gr[2], gr[3], gr[4])
+          end
+        else
+          formatter[:options] ||= {}
+          formatter[:columns] ||= 0
+          frmttr = GoogleVisualr.const_get(
+            formatter[:type].to_s.capitalize + 'Format'
+          ).new(formatter[:options])
+        end
+        frmttr.columns(formatter[:columns])
+        @formatters << frmttr
       end
     end
 
