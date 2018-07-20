@@ -1,7 +1,7 @@
 module GoogleVisualr
   class PatternFormat < Formatter
     attr_accessor :des_col
-    def initialize(format_string)
+    def initialize(format_string='')
       @format_string = format_string
     end
 

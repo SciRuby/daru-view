@@ -131,6 +131,110 @@ describe GoogleVisualr::Display do
       expect(js).to match(/containerId: 'id'/)
       expect(js).to match(/view: ''/)
     end
+
+    context 'when formatters are applied in datatables' do
+      let(:data_tf) {
+        [
+          ['Galaxy', 'Distance', 'Brightness', 'Galaxy-Distance', 'Date of discovery'],
+          ['Canis Major Dwarf', 8000, 230.3, 0, Date.parse('1920-11-16')],
+          ['Sagittarius Dwarf', 24000, 4000.5, 0, Date.parse('1901-08-10')],
+          ['Ursa Major II Dwarf', 30000, 1412.3, 0, Date.parse('1960-02-27')],
+          ['Lg. Magellanic Cloud', 50000, 120.9, 0, Date.parse('1857-01-23')],
+          ['Bootes I', 60000, 1223.1, 0, Date.parse('1947-08-15')]
+        ]
+      }
+      let(:user_options_ftr) {{
+        formatters: {
+          formatter1: {
+            type: 'Arrow',
+            options: {
+              base: 30000
+            },
+            columns: 1
+          },
+          formatter2: {
+            type: 'Bar',
+            options: {
+              base: 1000,
+              width: 120
+            },
+            columns: 2
+          },
+          formatter3: {
+            type: 'Color',
+            range: [[1000, 30000, 'red', '#000000'],
+                    [40000, nil, 'green', 'pink']],
+            columns: [1,2]
+          },
+          formatter4: {
+            type: 'Pattern',
+            format_string: "{0} - {1}",
+            src_cols: [0, 1],
+            des_col: 3
+          },
+          formatter5: {
+            type: 'Number',
+            options: {prefix: '*', negativeParens: true},
+            columns: 2
+          },
+          formatter6: {
+            type: 'Date',
+            options: {
+              formatType: 'long'
+            },
+            columns: 4
+          }
+        }
+      }}
+      let(:tf) {
+        Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_ftr)
+      }
+      it "generates valid JS of the Arrow formatter" do
+        expect(tf.table.to_html).to match(
+          /formatter = new google.visualization.ArrowFormat\({base: 30000}\);/
+        )
+        expect(tf.table.to_html).to match(/formatter.format\(data_table, 1\);/)
+      end
+      it "generates valid JS of the Bar formatter" do
+        expect(tf.table.to_html).to match(
+          /formatter = new google.visualization.BarFormat\({base: 1000, width: 120}\)/
+        )
+        expect(tf.table.to_html).to match(/formatter.format\(data_table, 2\);/)
+      end
+      it "generates valid JS of the Color formatter" do
+        expect(tf.table.to_html).to match(
+          /formatter = new google.visualization.ColorFormat\(\);/
+        )
+        expect(tf.table.to_html).to match(
+          /formatter.addRange\(1000, 30000, "red", "#000000"\);/
+        )
+        expect(tf.table.to_html).to match(
+          /formatter.addRange\(40000, null, "green", "pink"\);/
+        )
+        expect(tf.table.to_html).to match(/formatter.format\(data_table, 1\);/)
+        expect(tf.table.to_html).to match(/formatter.format\(data_table, 2\);/)
+      end
+      it "generates valid JS of the Pattern formatter" do
+        expect(tf.table.to_html).to match(
+          /formatter = new google.visualization.PatternFormat\('\{0\} - \{1\}'\);/
+        )
+        expect(tf.table.to_html).to match(
+          /formatter.format\(data_table, \[0, 1\], 3\);/
+        )
+      end
+      it "generates valid JS of the Number formatter" do
+        expect(tf.table.to_html).to match(
+          /google.visualization.NumberFormat\({prefix: "\*", negativeParens: true}\);/
+        )
+        expect(tf.table.to_html).to match(/formatter.format\(data_table, 2\);/)
+      end
+      it "generates valid JS of the Date formatter" do
+        expect(tf.table.to_html).to match(
+          /google.visualization.DateFormat\({formatType: "long"}\);/
+        )
+        expect(tf.table.to_html).to match(/formatter.format\(data_table, 4\);/)
+      end
+    end
   end
 
   describe "#get_html_chart_wrapper" do

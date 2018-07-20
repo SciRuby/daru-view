@@ -55,63 +55,6 @@ module GoogleVisualr
       end
     end
 
-    def apply_formatters
-      return unless user_options && user_options[:formatters]
-      @formatters = []
-      user_options[:formatters].each_value do |formatter|
-        frmttr = case formatter[:type].to_s.capitalize
-                 when 'Color'
-                   apply_color_formatter(formatter)
-                 when 'Pattern'
-                   apply_pattern_formatter(formatter)
-                 else
-                   apply_remaining_formatter(formatter)
-                 end
-        @formatters << frmttr
-      end
-    end
-
-    def apply_color_formatter(formatter)
-      initialize_default_values(formatter)
-      frmttr = GoogleVisualr::ColorFormat.new
-      formatter[:range].each do |range|
-        # add_range parameters: (from, to, color, bgcolor)
-        frmttr.add_range(range[0], range[1], range[2], range[3])
-      end
-      formatter[:gradient_range].each do |gr|
-        # add_range parameters: (from, to, color, fromBgColor, toBgColor)
-        frmttr.add_gradient_range(gr[0], gr[1], gr[2], gr[3], gr[4])
-      end
-      frmttr.columns(formatter[:columns])
-      frmttr
-    end
-
-    def initialize_default_values(formatter)
-      formatter[:range] ||= []
-      formatter[:gradient_range] ||= []
-      formatter[:columns] ||= 0
-    end
-
-    def apply_pattern_formatter(formatter)
-      formatter[:format_string] ||= ''
-      formatter[:src_cols] ||= 0
-      formatter[:des_col] ||= 0
-      frmttr = GoogleVisualr::PatternFormat.new(formatter[:format_string].to_s)
-      frmttr.src_cols = formatter[:src_cols]
-      frmttr.des_col = formatter[:des_col]
-      frmttr
-    end
-
-    def apply_remaining_formatter(formatter)
-      formatter[:options] ||= {}
-      formatter[:columns] ||= 0
-      frmttr = GoogleVisualr.const_get(
-        formatter[:type].to_s.capitalize + 'Format'
-      ).new(formatter[:options])
-      frmttr.columns(formatter[:columns])
-      frmttr
-    end
-
     # @param dom [String] The ID of the DIV element that the Google
     #   Chart should be rendered in
     # @return [String] js code to render the chart
@@ -221,6 +164,65 @@ module GoogleVisualr
       js << draw_js_spreadsheet(data, element_id)
       js << "\n</script>"
       js
+    end
+
+    private
+
+    def apply_formatters
+      return unless user_options && user_options[:formatters]
+      @formatters = []
+      user_options[:formatters].each_value do |formatter|
+        frmttr = case formatter[:type].to_s.capitalize
+                 when 'Color'
+                   apply_color_formatter(formatter)
+                 when 'Pattern'
+                   apply_pattern_formatter(formatter)
+                 else
+                   apply_remaining_formatter(formatter)
+                 end
+        @formatters << frmttr
+      end
+    end
+
+    def apply_color_formatter(formatter)
+      initialize_default_values(formatter)
+      frmttr = GoogleVisualr::ColorFormat.new
+      formatter[:range].each do |range|
+        # add_range parameters: (from, to, color, bgcolor)
+        frmttr.add_range(range[0], range[1], range[2], range[3])
+      end
+      formatter[:gradient_range].each do |gr|
+        # add_range parameters: (from, to, color, fromBgColor, toBgColor)
+        frmttr.add_gradient_range(gr[0], gr[1], gr[2], gr[3], gr[4])
+      end
+      frmttr.columns(formatter[:columns])
+      frmttr
+    end
+
+    def initialize_default_values(formatter)
+      formatter[:range] ||= []
+      formatter[:gradient_range] ||= []
+      formatter[:columns] ||= 0
+    end
+
+    def apply_pattern_formatter(formatter)
+      formatter[:format_string] ||= ''
+      formatter[:src_cols] ||= 0
+      formatter[:des_col] ||= 0
+      frmttr = GoogleVisualr::PatternFormat.new(formatter[:format_string].to_s)
+      frmttr.src_cols = formatter[:src_cols]
+      frmttr.des_col = formatter[:des_col]
+      frmttr
+    end
+
+    def apply_remaining_formatter(formatter)
+      formatter[:options] ||= {}
+      formatter[:columns] ||= 0
+      frmttr = GoogleVisualr.const_get(
+        formatter[:type].to_s.capitalize + 'Format'
+      ).new(formatter[:options])
+      frmttr.columns(formatter[:columns])
+      frmttr
     end
   end
 
