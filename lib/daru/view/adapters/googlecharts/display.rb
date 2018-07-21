@@ -24,6 +24,8 @@ module GoogleVisualr
 
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
+      # To understand different formatters see:
+      # https://developers.google.com/chart/interactive/docs/reference#formatters
       apply_formatters if is_a?(GoogleVisualr::DataTable)
       if script_tag
         show_script_with_script_tag(dom)
