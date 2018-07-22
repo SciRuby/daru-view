@@ -37,10 +37,14 @@ describe GoogleVisualr::BaseChart do
   }
   let (:plot_spreadsheet_charteditor) {
     Daru::View::Plot.new(
-      data_spreadsheet, {width: 800, view: {columns: [0, 1]}}, chart_class: 'Charteditor'
+      data_spreadsheet,
+      {width: 800, view: {columns: [0, 1]}},
+      chart_class: 'Charteditor'
     )
   }
-  let(:plot_charteditor) {Daru::View::Plot.new(data, {}, chart_class: 'Charteditor')}
+  let(:plot_charteditor) {
+    Daru::View::Plot.new(data, {}, chart_class: 'Charteditor')
+  }
 
   describe "#extract_option_view" do
     it "should return value of view option if view option is provided" do

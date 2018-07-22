@@ -169,15 +169,15 @@ module GoogleVisualr
     #
     # @return [String] Returns string to draw the Chartwrapper and '' otherwise
     def draw_wrapper(element_id)
-      return "\n  \twrapper_#{element_id.tr('-', '_')}.draw();" if
-      user_options[:chart_class].to_s.capitalize == 'Chartwrapper'
       js = ''
       js << "\n  \twrapper_#{element_id.tr('-', '_')}.draw();"
-      js << "\n  \tchartEditor_#{element_id.tr('-', '_')} = "\
-            'new google.visualization.ChartEditor();'
-      js << "\n  \tgoogle.visualization.events.addListener("\
-            "chartEditor_#{element_id.tr('-', '_')},"\
-            " 'ok', #{save_chart_function_name(element_id)});"
+      unless user_options[:chart_class].to_s.capitalize == 'Chartwrapper'
+        js << "\n  \tchartEditor_#{element_id.tr('-', '_')} = "\
+              'new google.visualization.ChartEditor();'
+        js << "\n  \tgoogle.visualization.events.addListener("\
+              "chartEditor_#{element_id.tr('-', '_')},"\
+              " 'ok', #{save_chart_function_name(element_id)});"
+      end
       js
     end
 
@@ -216,6 +216,28 @@ module GoogleVisualr
       js << load_js(element_id)
       js << draw_js_spreadsheet(data, element_id)
       js << "\n</script>"
+      js
+    end
+
+    # Generates JavaScript function for rendering the chartwrapper
+    #
+    # @param (see #to_js_chart_wrapper)
+    # @return [String] JS function to render the chartwrapper
+    def draw_js_chart_wrapper(data, element_id)
+      js = ''
+      js << "\n  var wrapper_#{element_id.tr('-', '_')} = null;"
+      js << "\n  function #{chart_function_name(element_id)}() {"
+      js << if is_a?(GoogleVisualr::DataTable)
+              "\n  \t#{to_js}"
+            else
+              "\n  \t#{@data_table.to_js}"
+            end
+      js << "\n  \twrapper_#{element_id.tr('-', '_')} = "\
+            'new google.visualization.ChartWrapper({'
+      js << extract_chart_wrapper_options(data, element_id)
+      js << "\n  \t});"
+      js << draw_wrapper(element_id)
+      js << "\n  };"
       js
     end
 
