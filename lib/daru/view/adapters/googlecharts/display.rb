@@ -170,6 +170,8 @@ module GoogleVisualr
 
     private
 
+    # @return [void] applies formatters provided by the user in the
+    #   third parameter
     def apply_formatters
       return unless user_options && user_options[:formatters]
       @formatters = []
@@ -180,12 +182,39 @@ module GoogleVisualr
                  when 'Pattern'
                    apply_pattern_formatter(formatter)
                  else
-                   apply_remaining_formatter(formatter)
+                   apply_date_arrow_bar_number_formatter(formatter)
                  end
         @formatters << frmttr
       end
     end
 
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [GoogleVisualr::ColorFormat] adds the ColorFormat to
+    #   defined columns
+    # @example Color Formatter
+    #   df = Daru::DataFrame.new({b: [11,12,13,14,15], a: [1,2,3,4,5],
+    #     c: [11,22,33,44,55]},
+    #     order: [:a, :b, :c],
+    #     index: [:one, :two, :three, :four, :five])
+    #
+    #   user_options = {
+    #     formatters: {
+    #       formatter: {
+    #         type: 'Color',
+    #         range: [[1, 3, 'yellow', 'red'],
+    #                 [20, 50, 'green', 'pink']],
+    #         columns: [0,2]
+    #       },
+    #       formatter2: {
+    #         type: 'Color',
+    #         range: [[14, 15, 'blue', 'orange']],
+    #         columns: 1
+    #       }
+    #     }
+    #   }
+    #
+    #   # option `allowHtml: true` is necessary to make this work
+    #   table = Daru::View::Table.new(df, {allowHtml: true}, user_options)
     def apply_color_formatter(formatter)
       initialize_default_values(formatter)
       frmttr = GoogleVisualr::ColorFormat.new
@@ -201,12 +230,17 @@ module GoogleVisualr
       frmttr
     end
 
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [void] initializes default values for the color format
     def initialize_default_values(formatter)
       formatter[:range] ||= []
       formatter[:gradient_range] ||= []
       formatter[:columns] ||= 0
     end
 
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [GoogleVisualr::PatternFormat] adds the PatternFormat to
+    #   destined columns
     def apply_pattern_formatter(formatter)
       formatter[:format_string] ||= ''
       formatter[:src_cols] ||= 0
@@ -217,7 +251,28 @@ module GoogleVisualr
       frmttr
     end
 
-    def apply_remaining_formatter(formatter)
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [GoogleVisualr::DateFormat, GoogleVisualr::NumberFormat,
+    #   GoogleVisualr::BarFormat, GoogleVisualr::ArrowFormat] adds the required
+    #   format to the destined columns
+    # @example
+    #   df = Daru::DataFrame.new({b: [11,-12,13,14,-15], a: [-1,2,3,4,5],
+    #     c: [11,22,-33,-44,55]},
+    #     order: [:a, :b, :c],
+    #     index: [:one, :two, :three, :four, :five])
+    #
+    #   user_options = {
+    #     formatters: {
+    #       formatter: {
+    #         type: 'Number',
+    #         options: {negativeParens: true},
+    #         columns: [0,1,2]
+    #       }
+    #     }
+    #   }
+    #
+    #   table = Daru::View::Table.new(df, {}, user_options)
+    def apply_date_arrow_bar_number_formatter(formatter)
       formatter[:options] ||= {}
       formatter[:columns] ||= 0
       frmttr = GoogleVisualr.const_get(

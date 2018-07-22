@@ -10,7 +10,8 @@ module GoogleVisualr
     end
 
     def to_js
-      js = "\nvar formatter = new google.visualization.#{self.class.to_s.split('::').last}("
+      js = "\nvar formatter = "\
+           "new google.visualization.#{self.class.to_s.split('::').last}("
       js << "'#{@format_string}'"
       js << ');'
       js << "\nformatter.format(data_table, #{@src_cols}, #{@des_col});"
