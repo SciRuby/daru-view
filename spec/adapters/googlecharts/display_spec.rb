@@ -23,24 +23,26 @@ describe GoogleVisualr::Display do
       data_spreadsheet, {width: 800}
     )
   }
+  let(:user_options) {{chart_class: 'Chartwrapper'}}
+  let(:data_table) {Daru::View::Table.new(data)}
   let(:area_chart_options) {{
     type: :area
   }}
   let(:column_chart_options) {{
     type: :column
   }}
-  let(:user_options) {{
+  let(:user_options_listener) {{
     listeners: {
       select: "alert('A table row was selected');"
     }
   }}
-  let(:data_table) {Daru::View::Table.new(data, {}, user_options)}
+  let(:data_table) {Daru::View::Table.new(data, {}, user_options_listener)}
   let(:area_chart_chart) { Daru::View::Plot.
     new(data_table.table, area_chart_options)}
   let(:column_chart_chart) { Daru::View::Plot.new(
     data_table.table,
     column_chart_options,
-    user_options)
+    user_options_listener)
   }
   let(:area_chart_wrapper) {Daru::View::Plot.new(
     data_table.table,
@@ -51,7 +53,7 @@ describe GoogleVisualr::Display do
     Daru::View::Plot.new(
       data_spreadsheet,
       {type: :area},
-      chart_class: 'ChartWrapper'
+      user_options
     )
   }
   let (:table_spreadsheet_chartwrapper) {
@@ -62,7 +64,7 @@ describe GoogleVisualr::Display do
     )
   }
   let(:table_chart_wrapper) {Daru::View::Table.new(
-    data, {}, {chart_class: 'Chartwrapper'})
+    data, {}, user_options)
   }
 
   describe "#to_html" do

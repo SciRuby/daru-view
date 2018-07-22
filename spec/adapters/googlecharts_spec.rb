@@ -41,7 +41,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       ['2013'],
     ]
   end
-  let(:user_options) {{
+  let(:user_options_listener) {{
     listeners: {
       select: "alert('A table row was selected');"
     }
@@ -54,7 +54,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     Daru::View::Plot.new(
       data_spreadsheet,
       {type: :column, width: 800},
-      user_options
+      user_options_listener
     )
   }
   let (:table_spreadsheet) {
@@ -62,7 +62,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       data_spreadsheet, {width: 800}
     )
   }
-  let(:data_table) {Daru::View::Table.new(data, {}, user_options)}
+  let(:user_options) {{chart_class: 'Chartwrapper'}}
+  let(:data_table) {Daru::View::Table.new(data, {}, user_options_listener)}
   let(:area_chart_options) {{
       type: :area
   }}
@@ -72,17 +73,17 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   let(:area_chart_chart) {Daru::View::Plot.
     new(data_table.table, area_chart_options)}
   let(:column_chart_chart) {Daru::View::Plot.
-  new(data_table.table, column_chart_options, user_options)}
+  new(data_table.table, column_chart_options, user_options_listener)}
   let(:area_chart_wrapper) {Daru::View::Plot.new(
     data_table.table,
     area_chart_options,
-    {chart_class: 'Chartwrapper'})
+    user_options)
   }
   let(:table_chart_wrapper) {Daru::View::Table.new(
-    data, {}, {chart_class: 'Chartwrapper'})
+    data, {}, user_options)
   }
   let(:table_wrapper_spreadsheet) {Daru::View::Table.new(
-    data_spreadsheet, {}, {chart_class: 'Chartwrapper'})
+    data_spreadsheet, {}, user_options)
   }
 
   describe "initialization Charts" do
@@ -111,9 +112,7 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     # TODO: all other kinds of charts
     it "sets correct user_options and data" do
       expect(area_chart_chart.chart.user_options).to be_empty
-      expect(
-        area_chart_wrapper.chart.user_options
-      ).to eq :chart_class=> 'Chartwrapper'
+      expect(area_chart_wrapper.chart.user_options).to eq user_options
       expect(area_chart_chart.chart.data).to eq data_table.table
     end
   end
@@ -155,10 +154,8 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect{Daru::View::Table.new(1234)}.to raise_error(ArgumentError)
     end
     it "sets correct user_options and data of the DataTable" do
-      expect(data_table.table.user_options).to eq user_options
-      expect(
-        table_wrapper_spreadsheet.table.user_options
-      ).to eq :chart_class=> 'Chartwrapper'
+      expect(data_table.table.user_options).to eq user_options_listener
+      expect(table_wrapper_spreadsheet.table.user_options).to eq user_options
       expect(data_table.table.data).to eq data
       expect(table_wrapper_spreadsheet.table.data).to eq data_spreadsheet
     end
