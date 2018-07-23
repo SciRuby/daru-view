@@ -224,6 +224,34 @@ describe GoogleVisualr::Display do
       let(:table_pattern) {
         Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_pattern)
       }
+      it "generates ArrowFormat object" do
+        table_arrow.table.to_html
+        expect(table_arrow.table.formatters[0]).to be_a GoogleVisualr::ArrowFormat
+      end
+      it "generates BarFormat object" do
+        table_bar.table.to_html
+        expect(table_bar.table.formatters[0]).to be_a GoogleVisualr::BarFormat
+      end
+      it "generates ColorFormat object" do
+        table_color.table.to_html
+        expect(table_color.table.formatters[0]).to be_a GoogleVisualr::ColorFormat
+      end
+      it "generates DateFormat object" do
+        table_date.table.to_html
+        expect(table_date.table.formatters[0]).to be_a GoogleVisualr::DateFormat
+      end
+      it "generates NumberFormat object" do
+        table_number.table.to_html
+        expect(
+          table_number.table.formatters[0]
+        ).to be_a GoogleVisualr::NumberFormat
+      end
+      it "generates PatternFormat object" do
+        table_pattern.table.to_html
+        expect(
+          table_pattern.table.formatters[0]
+        ).to be_a GoogleVisualr::PatternFormat
+      end
       it "generates valid JS of the Arrow formatter" do
         expect(table_arrow.table.to_html).to match(
           /formatter = new google.visualization.ArrowFormat\({base: 30000}\);/

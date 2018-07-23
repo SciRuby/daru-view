@@ -21,6 +21,7 @@ module GoogleVisualr
     # @return [String] The ID of the DIV element that the Google Chart or
     #   Google DataTable should be rendered in
     attr_accessor :html_id
+    attr_accessor :formatters
 
     def show_script(dom=SecureRandom.uuid, options={})
       script_tag = options.fetch(:script_tag) { true }
