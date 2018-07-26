@@ -6,22 +6,32 @@ def extract_adapter_template_code(file_name, template_code_str)
   template_code_str << "\n        extend self # rubocop:disable Style/ModuleFunction"
   template_code_str << "\n        def init(data, options, _user_options={})"
   template_code_str << "\n          # TODO"
+  template_code_str << "\n          raise NotImplementedError, 'Not yet implemented'"
   template_code_str << "\n        end"
   template_code_str << "\n"
   template_code_str << "\n        def export_html_file(plot, path='./plot.html')"
   template_code_str << "\n          # TODO"
+  template_code_str << "\n          raise NotImplementedError, 'Not yet implemented'"
   template_code_str << "\n        end"
   template_code_str << "\n"
   template_code_str << "\n        def show_in_iruby(plot)"
   template_code_str << "\n          # TODO"
+  template_code_str << "\n          raise NotImplementedError, 'Not yet implemented'"
   template_code_str << "\n        end"
   template_code_str << "\n"
   template_code_str << "\n        def init_script"
   template_code_str << "\n          # TODO"
+  template_code_str << "\n          raise NotImplementedError, 'Not yet implemented'"
+  template_code_str << "\n        end"
+  template_code_str << "\n"
+  template_code_str << "\n        def generate_body(plot)"
+  template_code_str << "\n          # TODO"
+  template_code_str << "\n          raise NotImplementedError, 'Not yet implemented'"
   template_code_str << "\n        end"
   template_code_str << "\n"
   template_code_str << "\n        def init_iruby"
   template_code_str << "\n          # TODO"
+  template_code_str << "\n          raise NotImplementedError, 'Not yet implemented'"
   template_code_str << "\n        end"
   template_code_str << "\n      end"
   template_code_str << "\n    end"
@@ -35,7 +45,7 @@ namespace :new do
   task :adapter do
     print "Creating new adapter..."
     ARGV.each { |a| task a.to_sym do ; end }
-    file_name = ARGV[1].to_s
+    file_name = ARGV[1].to_s.downcase
     path = File.expand_path(
             '../daru/view/adapters/' + file_name + '.rb', __dir__
           )
