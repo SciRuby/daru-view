@@ -39,19 +39,19 @@ describe GoogleVisualr::DataTable do
   }
 
   describe "#to_js_full_script" do
-  	it "generates valid JS of the table" do
-  	  js = data_table.table.to_js_full_script('id')
+    it "generates valid JS of the table" do
+      js = data_table.table.to_js_full_script('id')
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(/google.load\(/i)
       expect(js).to match(/google.visualization.DataTable\(\)/i)
-  	  expect(js).to match(
+      expect(js).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
       )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
       expect(js).to match(/table.draw\(data_table, \{\}/i)
-  	end
+    end
   end
 
   describe "#extract_option_view" do
@@ -81,17 +81,17 @@ describe GoogleVisualr::DataTable do
   end
 
   describe "#draw_js" do
-  	it "draws valid JS of the table" do
-  	  js = data_table.table.draw_js('id')
-  	  expect(js).to match(/google.visualization.DataTable\(\)/i)
-  	  expect(js).to match(
+    it "draws valid JS of the table" do
+      js = data_table.table.draw_js('id')
+      expect(js).to match(/google.visualization.DataTable\(\)/i)
+      expect(js).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
       )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
       expect(js).to match(/table.draw\(data_table, \{\}/i)
-  	end
+    end
   end
 
   describe "#draw_js_chart_wrapper" do

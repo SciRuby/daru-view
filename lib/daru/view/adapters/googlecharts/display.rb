@@ -6,7 +6,7 @@ require 'daru/view/constants'
 
 module GoogleVisualr
   def self.init_script(
-    dependent_js=GOOGLECHARTS_DEPENDENCIES
+    dependent_js=GOOGLECHARTS_DEPENDENCIES_WEB
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
@@ -63,7 +63,11 @@ module GoogleVisualr
     def get_html(dom)
       html = ''
       html << load_js(dom)
-      html << draw_js(dom)
+      html << if is_a?(GoogleVisualr::DataTable)
+                draw_js(dom)
+              else
+                draw_chart_js(dom)
+              end
       html
     end
 
@@ -118,12 +122,50 @@ module GoogleVisualr
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id
+      add_listener_to_chart
       chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end
 
     def show_in_iruby(dom=SecureRandom.uuid)
       IRuby.html to_html(dom)
+    end
+
+    # @return [void] Adds listener to the chart from the
+    #   user_options[:listeners]
+    def add_listener_to_chart
+      return unless user_options && user_options[:listeners]
+      user_options[:listeners].each do |event, callback|
+        add_listener(event.to_s.downcase, callback)
+      end
+    end
+
+    # @return [String] js function to add the listener to the chart
+    def add_listeners_js(type)
+      js = ''
+      @listeners.each do |listener|
+        js << "\n    google.visualization.events.addListener("
+        js << "#{type}, '#{listener[:event]}', function (e) {"
+        js << "\n      #{listener[:callback]}"
+        js << "\n    });"
+      end
+      js
+    end
+
+    # @param (see #draw_js_chart_editor)
+    # @return [String] options of the ChartWrapper
+    def extract_chart_wrapper_options(data, element_id)
+      js = ''
+      js << if is_a?(GoogleVisualr::DataTable)
+              "\n  \t\tchartType: 'Table',"
+            else
+              "\n  \t\tchartType: '#{chart_name}',"
+            end
+      js << append_data(data)
+      js << "\n  \t\toptions: #{js_parameters(@options)},"
+      js << "\n  \t\tcontainerId: '#{element_id}',"
+      js << "\n  \t\tview: #{extract_option_view}"
+      js
     end
 
     # @param element_id [String] The ID of the DIV element that the Google
@@ -237,6 +279,7 @@ module GoogleVisualr
       js << extract_chart_wrapper_options(data, element_id)
       js << "\n  \t});"
       js << draw_wrapper(element_id)
+      js << add_listeners_js('wrapper_#{element_id.tr('-', '_')}')
       js << "\n  };"
       js
     end

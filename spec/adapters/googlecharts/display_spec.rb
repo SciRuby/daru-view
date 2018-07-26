@@ -26,19 +26,28 @@ describe GoogleVisualr::Display do
   let(:user_options) {{chart_class: 'Chartwrapper'}}
   let(:data_table) {Daru::View::Table.new(data)}
   let(:area_chart_options) {{
-      type: :area
-    }}
+    type: :area
+  }}
   let(:column_chart_options) {{
-      type: :column
-    }}
-  let(:area_chart_chart) {Daru::View::Plot.
+    type: :column
+  }}
+  let(:user_options_listener) {{
+    listeners: {
+      select: "alert('A table row was selected');"
+    }
+  }}
+  let(:data_table) {Daru::View::Table.new(data, {}, user_options_listener)}
+  let(:area_chart_chart) { Daru::View::Plot.
     new(data_table.table, area_chart_options)}
-  let(:column_chart_chart) {Daru::View::Plot.
-  new(data_table.table, column_chart_options)}
+  let(:column_chart_chart) { Daru::View::Plot.new(
+    data_table.table,
+    column_chart_options,
+    user_options_listener)
+  }
   let(:area_chart_wrapper) {Daru::View::Plot.new(
     data_table.table,
     area_chart_options,
-    user_options)
+    {chart_class: 'Chartwrapper'})
   }
   let(:table_chart_wrapper) {Daru::View::Table.new(
     data, {}, user_options)
@@ -65,7 +74,7 @@ describe GoogleVisualr::Display do
     Daru::View::Plot.new(
       data_spreadsheet,
       {type: :area},
-      chart_class: 'ChartWrapper'
+      user_options
     )
   }
   let (:table_spreadsheet_chartwrapper) {
@@ -100,6 +109,12 @@ describe GoogleVisualr::Display do
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.ColumnChart/i)
       expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "adds the listener to the chart from user_options" do
+      js = column_chart_chart.chart.to_html("id")
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/chart, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
     end
     it "generates valid JS of the google chart when data is imported " \
        "from google spreadsheet" do
@@ -361,6 +376,40 @@ describe GoogleVisualr::Display do
     end
   end
 
+  describe "#add_listener_to_chart" do
+    it "adds the listener mentioned in user_options to the chart" do
+      column_chart_chart.chart.add_listener_to_chart
+      expect(column_chart_chart.chart.listeners[0][:event]).to eq('select')
+      expect(column_chart_chart.chart.listeners[0][:callback]).to eq(
+        "alert('A table row was selected');"
+      )
+    end
+    it "adds the listener mentioned in user_options to the datatable" do
+      data_table.table.add_listener_to_chart
+      expect(data_table.table.listeners[0][:event]).to eq('select')
+      expect(data_table.table.listeners[0][:callback]).to eq(
+        "alert('A table row was selected');"
+      )
+    end
+  end
+
+  describe "#add_listeners_js" do
+    it "appends the js to add the listener in google charts" do
+      plot_spreadsheet.chart.add_listener('select', "alert('A table row was selected');")
+      js = plot_spreadsheet.chart.add_listeners_js('chart')
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/chart, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
+    end
+    it "appends the js to add the listener in google datatables" do
+      data_table.table.add_listener('select', "alert('A table row was selected');")
+      js = data_table.table.add_listeners_js('table')
+      expect(js).to match(/google.visualization.events.addListener\(/)
+      expect(js).to match(/table, 'select', function \(e\) {/)
+      expect(js).to match(/alert\('A table row was selected'\);/)
+    end
+  end
+
   describe "#query_response_function_name" do
     it "should generate unique function name to handle query response" do
       func = data_table.table.query_response_function_name('i-d')
@@ -489,10 +538,10 @@ describe GoogleVisualr::Display do
       end
     end
     context 'when chart is drawn' do
-      it "generates valid JS of the table when "\
-         "data is imported from google spreadsheets" do
+      it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
         js = area_wrapper_spreadsheet.chart.to_js_chart_wrapper(
-          data_spreadsheet, 'id'
+          data_spreadsheet,
+          'id'
         )
         expect(js).to match(/google.load\('visualization'/)
         expect(js).to match(/callback: draw_id/)
@@ -597,6 +646,28 @@ describe GoogleVisualr::Display do
         expect(js).to match(/chartEditor_id.openDialog\(wrapper_id, {}\)/)
         expect(js).to match(/containerId: 'id'/)
       end
+    end
+  end
+
+  describe "#draw_js_chart_wrapper" do
+    it "draws valid JS of the ChartWrapper table" do
+      js = table_chart_wrapper.table.draw_js_chart_wrapper(data, 'id')
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: \{\}/)
+      expect(js).to match(/containerId: 'id'/)
+    end
+    it "draws valid JS of the ChartWrapper" do
+      js = area_chart_wrapper.chart.draw_js_chart_wrapper(data, 'id')
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
     end
   end
 end

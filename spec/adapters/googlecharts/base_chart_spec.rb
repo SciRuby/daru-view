@@ -12,6 +12,16 @@ describe GoogleVisualr::BaseChart do
       {type: :column, width: 800}
     )
   }
+  let(:user_options) {{
+    listeners: {
+      select: "alert('A table row was selected');"
+    }
+  }}
+  let(:column_chart) { Daru::View::Plot.new(
+    data_spreadsheet,
+    { type: :column },
+    user_options)
+  }
   let(:data) {
     [
       ['Year', 'Sales', 'Expenses'],
@@ -63,19 +73,6 @@ describe GoogleVisualr::BaseChart do
       expect(js).to match(/google.load\('visualization', '1.0',/i)
       expect(js).to match(/\{packages: \['charteditor'\], callback:/i)
       expect(js).to match(/draw_id\}\)/i)
-    end
-  end
-
-  describe "#draw_js_chart_wrapper" do
-    it "draws valid JS of the ChartWrapper" do
-      js = area_chart.chart.draw_js_chart_wrapper(data, 'id')
-      expect(js).to match(/new google.visualization.DataTable/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'AreaChart'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: {width: 800/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: {columns: \[0,1\]}/)
     end
   end
 
