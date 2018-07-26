@@ -135,7 +135,7 @@ module GoogleVisualr
       end
       js
     end
-  
+
     # @param file_name [String] The name of the file after exporting the chart
     # @return [String] the script to export the chart in png format
     def extract_export_png_code(file_name)
