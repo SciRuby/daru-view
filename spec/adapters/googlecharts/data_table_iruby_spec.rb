@@ -30,19 +30,19 @@ describe GoogleVisualr::DataTable do
   }
 
   describe "#to_js_full_script" do
-  	it "generates valid JS of the table" do
-  	  js = data_table.table.to_js_full_script('id')
+    it "generates valid JS of the table" do
+      js = data_table.table.to_js_full_script('id')
       expect(js).to match(/<script type='text\/javascript'>/i)
       expect(js).to match(/google.load\(/i)
       expect(js).to match(/google.visualization.DataTable\(\)/i)
-  	  expect(js).to match(
+      expect(js).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
       )
       expect(js).to match(
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
       expect(js).to match(/table.draw\(data_table, \{\}/i)
-  	end
+    end
   end
 
   describe "#extract_option_view" do
@@ -65,19 +65,19 @@ describe GoogleVisualr::DataTable do
   end
 
   describe "#load_js" do
-  	it "loads valid packages" do
-    js = data_table.table.load_js('id')
-  	expect(js).to match(/google.load\('visualization', 1.0,/i)
-  	expect(js).to match(/\{packages: \['table'\], callback:/i)
-    expect(js).to match(/draw_id\}\)/i)
-  	end
+    it "loads valid packages" do
+      js = data_table.table.load_js('id')
+      expect(js).to match(/google.load\('visualization', 1.0,/i)
+      expect(js).to match(/\{packages: \['table'\], callback:/i)
+      expect(js).to match(/draw_id\}\)/i)
+    end
   end
 
   describe "#draw_js" do
-  	it "draws valid JS of the table" do
-  	  js = data_table.table.draw_js('id')
-  	  expect(js).to match(/google.visualization.DataTable\(\)/i)
-  	  expect(js).to match(
+    it "draws valid JS of the table" do
+      js = data_table.table.draw_js('id')
+      expect(js).to match(/google.visualization.DataTable\(\)/i)
+      expect(js).to match(
         /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/
       )
       expect(js).to match(
@@ -107,18 +107,6 @@ describe GoogleVisualr::DataTable do
         /google.visualization.Table\(document.getElementById\(\'id\'\)/
       )
       expect(js).to match(/table.draw\(data_table, \{width: 800\}/i)
-    end
-  end
-
-  describe "#draw_js_chart_wrapper" do
-    it "draws valid JS of the ChartWrapper" do
-      js = table_chartwrapper.table.draw_js_chart_wrapper(data, 'id')
-      expect(js).to match(/new google.visualization.DataTable/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'Table'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: \{\}/)
-      expect(js).to match(/containerId: 'id'/)
     end
   end
 end

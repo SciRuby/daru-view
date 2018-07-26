@@ -6,7 +6,7 @@ require 'daru/view/constants'
 
 module GoogleVisualr
   def self.init_script(
-    dependent_js=GOOGLECHARTS_DEPENDENCIES
+    dependent_js=GOOGLECHARTS_DEPENDENCIES_WEB
   )
     js =  ''
     js << "\n<script type='text/javascript'>"
@@ -97,6 +97,7 @@ module GoogleVisualr
       template = File.read(path)
       id ||= SecureRandom.uuid
       @html_id = id
+      add_listener_to_chart
       chart_script = show_script(id, script_tag: false)
       ERB.new(template).result(binding)
     end
@@ -134,6 +135,28 @@ module GoogleVisualr
       end
       js
     end
+  
+    # @param file_name [String] The name of the file after exporting the chart
+    # @return [String] the script to export the chart in png format
+    def extract_export_png_code(file_name)
+      js = ''
+      js << "\n \tvar a = document.createElement('a');"
+      js << "\n \ta.href = chart.getImageURI();"
+      js << "\n \ta.download = '#{file_name}.png';"
+      js << "\n \tdocument.body.appendChild(a);"
+      js << "\n \ta.click();"
+      js << "\n \tdocument.body.removeChild(a);"
+      js
+    end
+
+    # @return [void] Adds listener to the chart from the
+    #   user_options[:listeners]
+    def add_listener_to_chart
+      return unless user_options && user_options[:listeners]
+      user_options[:listeners].each do |event, callback|
+        add_listener(event.to_s.downcase, callback)
+      end
+    end
 
     # @return [String] js function to add the listener to the chart
     def add_listeners_js(type)
@@ -147,16 +170,19 @@ module GoogleVisualr
       js
     end
 
-    # @param file_name [String] The name of the file after exporting the chart
-    # @return [String] the script to export the chart in png format
-    def extract_export_png_code(file_name)
+    # @param (see #draw_js_chart_editor)
+    # @return [String] options of the ChartWrapper
+    def extract_chart_wrapper_options(data, element_id)
       js = ''
-      js << "\n \tvar a = document.createElement('a');"
-      js << "\n \ta.href = chart.getImageURI();"
-      js << "\n \ta.download = '#{file_name}.png';"
-      js << "\n \tdocument.body.appendChild(a);"
-      js << "\n \ta.click();"
-      js << "\n \tdocument.body.removeChild(a);"
+      js << if is_a?(GoogleVisualr::DataTable)
+              "\n  \t\tchartType: 'Table',"
+            else
+              "\n  \t\tchartType: '#{chart_name}',"
+            end
+      js << append_data(data)
+      js << "\n  \t\toptions: #{js_parameters(@options)},"
+      js << "\n  \t\tcontainerId: '#{element_id}',"
+      js << "\n  \t\tview: #{extract_option_view}"
       js
     end
 
@@ -220,6 +246,27 @@ module GoogleVisualr
       js << load_js(element_id)
       js << draw_js_spreadsheet(data, element_id)
       js << "\n</script>"
+      js
+    end
+
+    # Generates JavaScript function for rendering the chartwrapper
+    #
+    # @param (see #to_js_chart_wrapper)
+    # @return [String] JS function to render the chartwrapper
+    def draw_js_chart_wrapper(data, element_id)
+      js = ''
+      js << "\n  function #{chart_function_name(element_id)}() {"
+      js << if is_a?(GoogleVisualr::DataTable)
+              "\n  \t#{to_js}"
+            else
+              "\n  \t#{@data_table.to_js}"
+            end
+      js << "\n  \tvar wrapper = new google.visualization.ChartWrapper({"
+      js << extract_chart_wrapper_options(data, element_id)
+      js << "\n  \t});"
+      js << draw_wrapper
+      js << add_listeners_js('wrapper')
+      js << "\n  };"
       js
     end
   end

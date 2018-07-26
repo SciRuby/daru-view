@@ -106,29 +106,9 @@ module GoogleVisualr
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << "\n    #{to_js}"
       js << "\n    var table = new google.visualization.Table("
-      js << "\n    document.getElementById('#{element_id}'));"
+      js << "document.getElementById('#{element_id}'));"
       js << add_listeners_js('table')
       js << "\n    table.draw(data_table, #{js_parameters(@options)}); "
-      js << "\n  };"
-      js
-    end
-
-    # Generates JavaScript function for rendering the chartwrapper
-    #
-    # @param (see #to_js_chart_wrapper)
-    # @return [String] JS function to render the chartwrapper
-    def draw_js_chart_wrapper(data, element_id)
-      js = ''
-      js << "\n  function #{chart_function_name(element_id)}() {"
-      js << "\n  \t#{to_js}"
-      js << "\n  \tvar wrapper = new google.visualization.ChartWrapper({"
-      js << "\n  \t\tchartType: 'Table',"
-      js << append_data(data)
-      js << "\n  \t\toptions: #{js_parameters(@options)},"
-      js << "\n  \t\tcontainerId: '#{element_id}',"
-      js << "\n  \t\tview: #{extract_option_view}"
-      js << "\n  \t});"
-      js << draw_wrapper
       js << "\n  };"
       js
     end
@@ -149,7 +129,8 @@ module GoogleVisualr
       js << "\n   var data_table = response.getDataTable();"
       js << "\n   var table = new google.visualization.Table"\
             "(document.getElementById('#{element_id}'));"
-      js << "\n   table.draw(data_table, #{js_parameters(@options)});"
+      js << add_listeners_js('table')
+      js << "\n 	table.draw(data_table, #{js_parameters(@options)});"
       js << "\n };"
       js
     end
