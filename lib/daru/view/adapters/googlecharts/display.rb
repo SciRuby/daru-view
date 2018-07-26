@@ -266,8 +266,7 @@ module GoogleVisualr
     # @param (see #to_js_chart_wrapper)
     # @return [String] JS function to render the chartwrapper
     def draw_js_chart_wrapper(data, element_id)
-      js = ''
-      js << "\n  var wrapper_#{element_id.tr('-', '_')} = null;"
+      js = "\n  var wrapper_#{element_id.tr('-', '_')} = null;"
       js << "\n  function #{chart_function_name(element_id)}() {"
       js << if is_a?(GoogleVisualr::DataTable)
               "\n  \t#{to_js}"
@@ -279,7 +278,7 @@ module GoogleVisualr
       js << extract_chart_wrapper_options(data, element_id)
       js << "\n  \t});"
       js << draw_wrapper(element_id)
-      js << add_listeners_js('wrapper_#{element_id.tr('-', '_')}')
+      js << add_listeners_js("wrapper_#{element_id.tr('-', '_')}")
       js << "\n  };"
       js
     end
