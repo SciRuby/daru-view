@@ -12,6 +12,16 @@ describe GoogleVisualr::BaseChart do
       {type: :column, width: 800}
     )
   }
+  let(:user_options) {{
+    listeners: {
+      select: "alert('A table row was selected');"
+    }
+  }}
+  let(:column_chart) { Daru::View::Plot.new(
+    data_spreadsheet,
+    { type: :column },
+    user_options)
+  }
   let(:data) {
     [
       ['Year', 'Sales', 'Expenses'],
@@ -44,35 +54,6 @@ describe GoogleVisualr::BaseChart do
     it "should return '' if view option is not provided" do
       js = area_chart_spreadsheet.chart.extract_option_view
       expect(js).to eq('\'\'')
-    end
-  end
-
-  describe "#to_js_chart_wrapper" do
-    it "draws valid JS of the ChartWrapper when data is URL of the spreadsheet" do
-      js = area_chart_spreadsheet.chart.to_js_chart_wrapper(
-        data_spreadsheet,
-        'id'
-      )
-      expect(js).to match(/google.load\('visualization'/)
-      expect(js).to match(/callback: draw_id/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'AreaChart'/)
-      expect(js).to match(/dataSourceUrl: 'https:\/\/docs.google/)
-      expect(js).to match(/options: {}/)
-      expect(js).to match(/containerId: 'id'/)
-    end
-  end
-
-  describe "#draw_js_chart_wrapper" do
-    it "draws valid JS of the ChartWrapper" do
-      js = area_chart.chart.draw_js_chart_wrapper(data, 'id')
-      expect(js).to match(/new google.visualization.DataTable/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'AreaChart'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: {width: 800/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: {columns: \[0,1\]}/)
     end
   end
 
