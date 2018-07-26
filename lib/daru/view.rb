@@ -71,8 +71,13 @@ module Daru
       # dependent script for the library. It must be added in the head tag
       # of the web application.
       #
+      # @param lib [String, Symbol] library whose dependencies are to be loaded
+      # @return [void, String] dependent script for the library
       # @example
       #   dep_js = Daru::View.dependent_script(:highcharts)
+      #   use in Rails app : <%=raw dep_js %>
+      # @example
+      #   dep_js = Daru::View.dependent_script('highcharts')
       #   use in Rails app : <%=raw dep_js %>
       #
       # @example
@@ -102,11 +107,16 @@ module Daru
         end
       end
 
-      # loads dependent scripts for the library.
+      # @param libraries [Array] libraries whose dependencies are to be
+      #   loaded
+      # @return [void, String] dependent script for the libraries
       #
       # @example
       #   To load the dependent JS file for Nyaplot and GoogleCharts libraries
-      #   Daru::View.dependent_scripts(['nyaplot','googlecharts'])
+      #   Daru::View.dependent_scripts(['nyaplot', 'googlecharts'])
+      # @example
+      #   To load the dependent JS file for Nyaplot and GoogleCharts libraries
+      #   Daru::View.dependent_scripts([:nyaplot, :googlecharts])
       def dependent_scripts(libraries=[])
         load_libs_in_iruby(libraries) if defined? IRuby
       rescue NameError
@@ -120,7 +130,8 @@ module Daru
       private
 
       # @param libraries [Array] Adapters whose JS files will be loaded
-      # @return [void] load the dependent JS files for the adapter in IRuby notebook
+      # @return [void] load the dependent JS files for the adapter in IRuby
+      #   notebook
       def load_libs_in_iruby(libraries=[])
         libraries.each do |library|
           load_lib_in_iruby(library.to_s)
