@@ -87,7 +87,6 @@ describe GoogleVisualr::BaseChart do
   describe "#draw_chart_js" do
     subject(:js) { column_chart.chart.draw_chart_js('id') }
     it "adds correct data" do
-      expect(js).to match(/var chart = null;/)
       expect(js).to match(
         /data_table.addColumn\({"type":"string","label":"Year"}\)/
       )
