@@ -57,19 +57,6 @@ describe GoogleVisualr::BaseChart do
     end
   end
 
-  describe "#draw_js_chart_wrapper" do
-    it "draws valid JS of the ChartWrapper" do
-      js = area_chart.chart.draw_js_chart_wrapper(data, 'id')
-      expect(js).to match(/new google.visualization.DataTable/)
-      expect(js).to match(/new google.visualization.ChartWrapper/)
-      expect(js).to match(/chartType: 'AreaChart'/)
-      expect(js).to match(/dataTable: data_table/)
-      expect(js).to match(/options: {width: 800/)
-      expect(js).to match(/containerId: 'id'/)
-      expect(js).to match(/view: {columns: \[0,1\]}/)
-    end
-  end
-
   describe "#draw_js_spreadsheet" do
     it "draws valid JS of the chart when "\
        "data is imported from google spreadsheets" do

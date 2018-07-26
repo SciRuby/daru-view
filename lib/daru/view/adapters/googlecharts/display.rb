@@ -106,6 +106,15 @@ module GoogleVisualr
       IRuby.html to_html(dom)
     end
 
+    # @return [void] Adds listener to the chart from the
+    #   user_options[:listeners]
+    def add_listener_to_chart
+      return unless user_options && user_options[:listeners]
+      user_options[:listeners].each do |event, callback|
+        add_listener(event.to_s.downcase, callback)
+      end
+    end
+
     # @return [String] js function to add the listener to the chart
     def add_listeners_js(type)
       js = ''
@@ -197,13 +206,25 @@ module GoogleVisualr
       js
     end
 
-    # @return [void] Adds listener to the chart from the
-    #   user_options[:listeners]
-    def add_listener_to_chart
-      return unless user_options && user_options[:listeners]
-      user_options[:listeners].each do |event, callback|
-        add_listener(event.to_s.downcase, callback)
-      end
+    # Generates JavaScript function for rendering the chartwrapper
+    #
+    # @param (see #to_js_chart_wrapper)
+    # @return [String] JS function to render the chartwrapper
+    def draw_js_chart_wrapper(data, element_id)
+      js = ''
+      js << "\n  function #{chart_function_name(element_id)}() {"
+      js << if is_a?(GoogleVisualr::DataTable)
+              "\n  \t#{to_js}"
+            else
+              "\n  \t#{@data_table.to_js}"
+            end
+      js << "\n  \tvar wrapper = new google.visualization.ChartWrapper({"
+      js << extract_chart_wrapper_options(data, element_id)
+      js << "\n  \t});"
+      js << draw_wrapper
+      js << add_listeners_js('wrapper')
+      js << "\n  };"
+      js
     end
   end
 

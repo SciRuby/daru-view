@@ -113,23 +113,6 @@ module GoogleVisualr
       js
     end
 
-    # Generates JavaScript function for rendering the chartwrapper
-    #
-    # @param (see #to_js_chart_wrapper)
-    # @return [String] JS function to render the chartwrapper
-    def draw_js_chart_wrapper(data, element_id)
-      js = ''
-      js << "\n  function #{chart_function_name(element_id)}() {"
-      js << "\n  \t#{to_js}"
-      js << "\n  \tvar wrapper = new google.visualization.ChartWrapper({"
-      js << extract_chart_wrapper_options(data, element_id)
-      js << "\n  \t});"
-      js << draw_wrapper
-      js << add_listeners_js('wrapper')
-      js << "\n  };"
-      js
-    end
-
     # Generates JavaScript function for rendering the google chart table when
     #   data is URL of the google spreadsheet
     #

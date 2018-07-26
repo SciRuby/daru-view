@@ -464,4 +464,26 @@ describe GoogleVisualr::Display do
       end
     end
   end
+
+  describe "#draw_js_chart_wrapper" do
+    it "draws valid JS of the ChartWrapper table" do
+      js = table_chart_wrapper.table.draw_js_chart_wrapper(data, 'id')
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: \{\}/)
+      expect(js).to match(/containerId: 'id'/)
+    end
+    it "draws valid JS of the ChartWrapper" do
+      js = area_chart_wrapper.chart.draw_js_chart_wrapper(data, 'id')
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'AreaChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
+      expect(js).to match(/view: ''/)
+    end
+  end
 end
