@@ -109,8 +109,7 @@ module GoogleVisualr
     # @see #Daru::View::Plot.export
     def export(export_type='png', file_name='chart')
       add_listener('ready', extract_export_code(export_type, file_name))
-      js = to_html
-      js
+      to_html
     end
 
     # Exports chart to different formats in IRuby notebook
@@ -131,9 +130,8 @@ module GoogleVisualr
     def extract_export_code(export_type='png', file_name='chart')
       case export_type
       when 'png'
-        js = extract_export_png_code(file_name)
+        extract_export_png_code(file_name)
       end
-      js
     end
 
     # @param file_name [String] The name of the file after exporting the chart
