@@ -85,11 +85,8 @@ module Daru
       #   plotting system (Nyaplot.js, d3.js):
       #
       #   Daru::View.dependent_script(:nyaplot)
-      #
-      #   To load the HighCharts dependent JS
-      #   files (highcharts.js, highcharts-3d.js, highstock.js):
-      #
-      #   Daru::View.dependent_script(:highcharts)
+      # @example
+      #   Daru::View.dependent_script('nyaplot')
       def dependent_script(lib=:nyaplot)
         load_lib_in_iruby(lib.to_s) if defined? IRuby
       rescue NameError
