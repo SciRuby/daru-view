@@ -188,6 +188,173 @@ describe GoogleVisualr::Display do
       expect(js).to match(/containerId: 'id'/)
       expect(js).to match(/view: ''/)
     end
+
+    context 'when formatters are applied in datatables' do
+      let(:data_tf) {
+        [
+          ['Galaxy', 'Distance', 'Brightness', 'Galaxy-Distance', 'Date'],
+          ['Canis Major Dwarf', 8000, 230.3, 0, Date.parse('1920-11-16')],
+          ['Sagittarius Dwarf', 24000, 4000.5, 0, Date.parse('1901-08-10')],
+          ['Ursa Major II Dwarf', 30000, 1412.3, 0, Date.parse('1960-02-27')],
+          ['Lg. Magellanic Cloud', 50000, 120.9, 0, Date.parse('1857-01-23')],
+          ['Bootes I', 60000, 1223.1, 0, Date.parse('1947-08-15')]
+        ]
+      }
+      let(:user_options_arrow) {{
+        formatters: {
+          formatter1: {
+            type: 'Arrow',
+            options: {
+              base: 30000
+            },
+            columns: 1
+          }
+        }
+      }}
+      let(:user_options_bar) {{
+        formatters: {
+          formatter: {
+            type: 'Bar',
+            options: {
+              base: 1000,
+              width: 120
+            },
+            columns: 2
+          }
+        }
+      }}
+      let(:user_options_color) {{
+        formatters: {
+          formatter3: {
+            type: 'Color',
+            range: [[1000, 30000, 'red', '#000000'],
+                    [40000, nil, 'green', 'pink']],
+            columns: [1,2]
+          }
+        }
+      }}
+      let(:user_options_pattern) {{
+        formatters: {
+          formatter4: {
+            type: 'Pattern',
+            format_string: "{0} - {1}",
+            src_cols: [0, 1],
+            des_col: 3
+          }
+        }
+      }}
+      let(:user_options_number) {{
+        formatters: {
+          formatter5: {
+            type: 'Number',
+            options: {prefix: '*', negativeParens: true},
+            columns: 2
+          }
+        }
+      }}
+      let(:user_options_date) {{
+        formatters: {
+          formatter6: {
+            type: 'Date',
+            options: {
+              formatType: 'long'
+            },
+            columns: 4
+          }
+        }
+      }}
+      let(:table_arrow) {
+        Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_arrow)
+      }
+      let(:table_bar) {
+        Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_bar)
+      }
+      let(:table_date) {
+        Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_date)
+      }
+      let(:table_number) {
+        Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_number)
+      }
+      let(:table_color) {
+        Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_color)
+      }
+      let(:table_pattern) {
+        Daru::View::Table.new(data_tf, {allowHtml: true}, user_options_pattern)
+      }
+      it "generates ArrowFormat object" do
+        table_arrow.table.to_html
+        expect(table_arrow.table.formatters[0]).to be_a GoogleVisualr::ArrowFormat
+      end
+      it "generates BarFormat object" do
+        table_bar.table.to_html
+        expect(table_bar.table.formatters[0]).to be_a GoogleVisualr::BarFormat
+      end
+      it "generates ColorFormat object" do
+        table_color.table.to_html
+        expect(table_color.table.formatters[0]).to be_a GoogleVisualr::ColorFormat
+      end
+      it "generates DateFormat object" do
+        table_date.table.to_html
+        expect(table_date.table.formatters[0]).to be_a GoogleVisualr::DateFormat
+      end
+      it "generates NumberFormat object" do
+        table_number.table.to_html
+        expect(
+          table_number.table.formatters[0]
+        ).to be_a GoogleVisualr::NumberFormat
+      end
+      it "generates PatternFormat object" do
+        table_pattern.table.to_html
+        expect(
+          table_pattern.table.formatters[0]
+        ).to be_a GoogleVisualr::PatternFormat
+      end
+      it "generates valid JS of the Arrow formatter" do
+        expect(table_arrow.table.to_html).to match(
+          /formatter = new google.visualization.ArrowFormat\({base: 30000}\);/
+        )
+        expect(table_arrow.table.to_html).to match(/formatter.format\(data_table, 1\);/)
+      end
+      it "generates valid JS of the Bar formatter" do
+        expect(table_bar.table.to_html).to match(
+          /formatter = new google.visualization.BarFormat\({base: 1000, width: 120}\)/
+        )
+        expect(table_bar.table.to_html).to match(/formatter.format\(data_table, 2\);/)
+      end
+      it "generates valid JS of the Color formatter" do
+        expect(table_color.table.to_html).to match(
+          /formatter = new google.visualization.ColorFormat\(\);/
+        )
+        expect(table_color.table.to_html).to match(
+          /formatter.addRange\(1000, 30000, "red", "#000000"\);/
+        )
+        expect(table_color.table.to_html).to match(
+          /formatter.addRange\(40000, null, "green", "pink"\);/
+        )
+        expect(table_color.table.to_html).to match(/formatter.format\(data_table, 1\);/)
+        expect(table_color.table.to_html).to match(/formatter.format\(data_table, 2\);/)
+      end
+      it "generates valid JS of the Pattern formatter" do
+        expect(table_pattern.table.to_html).to match(
+          /formatter = new google.visualization.PatternFormat\('\{0\} - \{1\}'\);/
+        )
+        expect(table_pattern.table.to_html).to match(
+          /formatter.format\(data_table, \[0, 1\], 3\);/
+        )
+      end
+      it "generates valid JS of the Number formatter" do
+        expect(table_number.table.to_html).to match(
+          /google.visualization.NumberFormat\({prefix: "\*", negativeParens: true}\);/
+        )
+        expect(table_number.table.to_html).to match(/formatter.format\(data_table, 2\);/)
+      end
+      it "generates valid JS of the Date formatter" do
+        expect(table_date.table.to_html).to match(
+          /google.visualization.DateFormat\({formatType: "long"}\);/
+        )
+        expect(table_date.table.to_html).to match(/formatter.format\(data_table, 4\);/)
+      end
+    end
   end
 
   describe "#get_html_chart_wrapper" do
