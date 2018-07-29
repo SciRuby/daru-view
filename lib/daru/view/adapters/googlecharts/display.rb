@@ -134,6 +134,17 @@ module GoogleVisualr
       end
     end
 
+    # @return [void] Adds listener to the chart from the
+    #   user_options[:listeners]
+    def add_listener_to_chart
+      return unless user_options && user_options[:listeners]
+      user_options[:listeners].each do |event, callback|
+        add_listener(event.to_s.downcase, callback)
+      end
+    end
+  end
+
+  module DisplayJavascript
     # @param file_name [String] The name of the file after exporting the chart
     # @return [String] the script to export the chart in png format
     def extract_export_png_code(file_name)
@@ -145,15 +156,6 @@ module GoogleVisualr
       js << "\n \ta.click();"
       js << "\n \tdocument.body.removeChild(a);"
       js
-    end
-
-    # @return [void] Adds listener to the chart from the
-    #   user_options[:listeners]
-    def add_listener_to_chart
-      return unless user_options && user_options[:listeners]
-      user_options[:listeners].each do |event, callback|
-        add_listener(event.to_s.downcase, callback)
-      end
     end
 
     # @return [String] js function to add the listener to the chart
@@ -271,9 +273,11 @@ module GoogleVisualr
 
   class DataTable
     include Display
+    include DisplayJavascript
   end
 
   class BaseChart
     include Display
+    include DisplayJavascript
   end
 end
