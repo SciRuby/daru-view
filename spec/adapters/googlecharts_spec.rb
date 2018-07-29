@@ -332,6 +332,10 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/a.href = chart.getImageURI()/)
       expect(js).to match(/a.download = 'chart.png'/)
     end
+    it 'raises error for not implemented export types' do
+      expect{area_chart_chart.adapter.export(area_chart_chart.chart, 'jpeg')}
+      .to raise_error(NotImplementedError, 'Not yet implemented!')
+    end
   end
 
   describe "#export_html_file" do

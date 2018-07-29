@@ -195,6 +195,8 @@ module Daru
         #
         # @see #Daru::View::Plot.export
         def export(plot, export_type='png', file_name='chart')
+          raise NotImplementedError, 'Not yet implemented!' unless
+          export_type == 'png'
           plot.export_iruby(export_type, file_name) if defined? IRuby
         rescue NameError
           plot.export(export_type, file_name)
