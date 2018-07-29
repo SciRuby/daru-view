@@ -17,7 +17,7 @@ AllCops:
     - 'daru-view.gemspec'
     - '**/*.rake'
   DisplayCopNames: true
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.2
 
 # Preferred codebase style ---------------------------------------------
 Layout/ExtraSpacing:
@@ -64,6 +64,12 @@ Style/SingleLineBlockParams:
 
 Style/PerlBackrefs:
   Enabled: false
+
+# Tried to disable in the file itself but this style rubocop was not there in
+#   ruby 2.0, so it threw Lint/UnneededDisable rubocop offence.
+Style/MixinUsage:
+  Exclude:
+    - 'lib/daru/view/plot_list.rb'
 
 Layout/SpaceAfterComma:
   Enabled: false

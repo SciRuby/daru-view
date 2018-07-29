@@ -7,13 +7,17 @@ module Daru
     module Adapter
       module NyaplotAdapter
         extend self # rubocop:disable Style/ModuleFunction
-        def init(data, options)
+        def init(data, options, _user_options={})
           data_new = guess_data(data)
           data_new.plot(options)
         end
 
         def export_html_file(plot, path)
           plot.export_html path
+        end
+
+        def export(_plot, _export_type='png', _file_name='chart')
+          raise 'Not implemented yet'
         end
 
         def show_in_iruby(plot)

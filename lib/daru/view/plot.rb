@@ -1,7 +1,7 @@
 module Daru
   module View
     class Plot
-      attr_reader :chart, :data, :options
+      attr_reader :chart, :data, :options, :user_options
       attr_accessor :adapter
       class << self
         # class method
@@ -33,12 +33,13 @@ module Daru
       # To use a particular adapter in certain plot object(s), then user
       # must pass the adapter in `options` hash. e.g. `adapter: :highcharts`
       #
-      def initialize(data=[], options={}, &block)
+      def initialize(data=[], options={}, user_options={}, &block)
         # TODO: &block is not used, right now.
         @data = data
         @options = options
+        @user_options = user_options
         self.adapter = options.delete(:adapter) unless options[:adapter].nil?
-        @chart = plot_data(data, options, &block)
+        @chart = plot_data(data, options, user_options, &block)
       end
 
       # instance method
@@ -77,6 +78,18 @@ module Daru
         @adapter.export_html_file(@chart, path)
       end
 
+      # @param type [String] format to which chart has to be exported
+      # @param file_name [String] The name of the file after exporting the chart
+      # @return [String, void] js code of chart along with the code to export it
+      #   and loads the js code to export it in IRuby.
+      # @example Export a HighChart
+      #   data = Daru::Vector.new([5 ,3, 4])
+      #   hchart = Daru::View::Plot.new(data)
+      #   hchart.export('png', 'daru')
+      def export(export_type='png', file_name='chart')
+        @adapter.export(@chart, export_type, file_name)
+      end
+
       # load the corresponding JS files in IRuby notebook.
       # This is done automatically when plotting library is set using
       # Daru::View.plotting_library = :new_library
@@ -95,11 +108,11 @@ module Daru
 
       private
 
-      def plot_data(data, options)
+      def plot_data(data, options, user_options)
         # class variable @@aapter is used in instance variable @adapter.
         # so in each object `adapter` variable can be accessed.
         @adapter ||= @@adapter
-        @adapter.init(data, options)
+        @adapter.init(data, options, user_options)
       end
     end
   end

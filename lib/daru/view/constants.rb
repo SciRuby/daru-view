@@ -6,6 +6,7 @@ MAP_CSS = 'js/map.js'.freeze
 EXPORTING = 'modules/exporting.js'.freeze
 HIGHCHARTS_3D = 'highcharts-3d.js'.freeze
 DATA = 'modules/data.js'.freeze
+OFFLINE_EXPORTING = 'modules/offline-exporting.js'.freeze
 
 # HighCharts IRuby notebook dependencies
 HIGHCHARTS_DEPENDENCIES_IRUBY = [HIGHSTOCK, MAP, EXPORTING, HIGHCHARTS_3D,
@@ -13,10 +14,16 @@ HIGHCHARTS_DEPENDENCIES_IRUBY = [HIGHSTOCK, MAP, EXPORTING, HIGHCHARTS_3D,
 
 # HighCharts Web Frameworks dependencies
 HIGHCHARTS_DEPENDENCIES_WEB = [HIGHSTOCK_CSS, MAP_CSS, EXPORTING,
-                               HIGHCHARTS_3D, DATA].freeze
+                               HIGHCHARTS_3D, DATA, OFFLINE_EXPORTING].freeze
 
 # HighCharts CSS dependencies
 HIGHCHARTS_DEPENDENCIES_CSS = ['highcharts.css'].freeze
+
+# Dependent GoogleCharts JS constants for IRuby notebook
+GOOGLECHARTS_DEPENDENCIES_IRUBY = ['google_visualr.js', 'loader.js'].freeze
+
+# Dependent GoogleCharts JS constants for web frameworks
+GOOGLECHARTS_DEPENDENCIES_WEB = ['google_visualr.js', 'loader.js', 'jspdf.min.js'].freeze
 
 # Regex pattern to match a valid URL
 PATTERN_URL = Regexp.new(

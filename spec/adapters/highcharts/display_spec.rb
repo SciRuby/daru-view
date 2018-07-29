@@ -328,28 +328,80 @@ describe LazyHighCharts::HighChart do
     end
   end
 
-  describe "#to_html_iruby" do
-    it "should plot HighMap when chart_class is set to map" do
-      @hc.options[:chart_class] = "Map";
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Map/)
+  describe "#export" do
+    it "should generate the valid script to export the chart in different"\
+       " formats" do
+      js = @hc.chart.export('jpg','daru')
+      expect(js).to match(/\s+new\s+Highcharts.Chart/)
+      expect(js).to match(/var\s+options\s+=/)
+      expect(js).to match(/window.chart_/)
+      expect(js).to match(/\"chart\": \{ \"type\": \"bar\"/)
+      expect(js).to match(/\"data\": \[ \[ 5,2,3 \],\[ 3,2,4 \],\[ 4,3,4 \]/)
+      expect(js).to match(/script/)
+      expect(js).to match(/image\/jpeg/)
+      expect(js).to match(/daru/)
+      expect(js).to match(/chart.exportChartLocal/)
     end
-    it "should plot HighStock when chart_class is set to stock" do
-      @hc.options[:chart_class] = "SToCk";
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
+  end
+
+  describe "#extract_export_code" do
+    it "should generate the valid script to export the chart in different"\
+       " formats in web frameworks" do
+      js = @hc.chart.extract_export_code(@placeholder)
+      expect(js).to match(/script/)
+      expect(js).to match(/var onload = window.onload/)
+      expect(js).to match(/window.onload = function()/)
+      expect(js).to match(/typeof onload == 'function'/)
+      expect(js).to match(
+        /var chartDom = document.getElementById\('placeholder'\)/
+      )
+      expect(js).to match(
+        /Highcharts.charts\[Highcharts.attr\(chartDom, 'data-highcharts-chart'\)/
+      )
+      expect(js).to match(/image\/png/)
+      expect(js).to match(/chart.exportChartLocal/)
     end
-    it "should plot HighChart otherwise" do
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Chart/)
+  end
+
+  describe "#extract_export_code_iruby" do
+    it "should generate the valid script to export the chart in different"\
+       " formats in IRuby notebook" do
+      js = @hc.chart.extract_export_code_iruby(@placeholder, 'png', 'daru')
+      expect(js).to match(/script/)
+      expect(js).to match(
+        /var chartDom = document.getElementById\('placeholder'\)/
+      )
+      expect(js).to match(
+        /Highcharts.charts\[Highcharts.attr\(chartDom, 'data-highcharts-chart'\)/
+      )
+      expect(js).to match(/image\/png/)
+      expect(js).to match(/filename: 'daru'/)
+      expect(js).to match(/chart.exportChart/)
     end
-    it "should set css correctly" do
-      expect(@hc.chart.to_html_iruby(
-        @placeholder)
-      ).to match(/#placeholder .highcharts-background {fill/)
+  end
+
+  describe "#append_chart_type" do
+    it "should return correct code stating the type to which chart has"\
+        " to be exported" do
+      expect(@hc.chart.append_chart_type).to eq("type: 'image/png',")
+      expect(@hc.chart.append_chart_type(
+        'pdf')
+      ).to eq("type: 'application/pdf',")
+      expect(@hc.chart.append_chart_type(
+        'png')
+      ).to eq("type: 'image/png',")
+      expect(@hc.chart.append_chart_type(
+        'jpg')
+      ).to eq("type: 'image/jpeg',")
+      expect(@hc.chart.append_chart_type(
+        'jpeg')
+      ).to eq("type: 'image/jpeg',")
+      expect(@hc.chart.append_chart_type(
+        'svg')
+      ).to eq("type: 'image/svg+xml',")
+      expect{@hc.chart.append_chart_type(
+        'daru')
+      }.to raise_error(TypeError, 'Invalid format')
     end
   end
 
