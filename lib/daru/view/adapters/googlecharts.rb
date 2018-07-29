@@ -58,6 +58,16 @@ module Daru
         #   options = {type: :area}
         #   chart = Daru::View::Plot.new(data, options)
         #
+        # @example ChartEditor
+        #   data = [
+        #         ['Year', 'Sales', 'Expenses'],
+        #         ['2013',  1000,      400],
+        #         ['2014',  1170,      460],
+        #         ['2015',  660,       1120],
+        #         ['2016',  1030,      540]
+        #   ]
+        #   plot = Daru::View::Plot.new(data, {}, chart_class: 'Charteditor')
+        #
         # @example Multiple Charts in a row
         #   Draw the Daru::View::PlotList object with the data as an array of
         #   Daru::View::Plots(s) or Daru::View::Table(s) or both
@@ -115,6 +125,16 @@ module Daru
         #   query = 'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'
         #   data << query
         #   chart = Daru::View::Table.new(data)
+        #
+        # @example ChartEditor
+        #   data = [
+        #         ['Year', 'Sales', 'Expenses'],
+        #         ['2013',  1000,      400],
+        #         ['2014',  1170,      460],
+        #         ['2015',  660,       1120],
+        #         ['2016',  1030,      540]
+        #   ]
+        #   table = Daru::View::Table.new(data, {}, chart_class: 'Charteditor')
         def init_table(data=[], options={}, user_options={})
           # if `options` is something like this :
           # {

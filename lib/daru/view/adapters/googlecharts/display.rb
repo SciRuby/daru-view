@@ -32,12 +32,7 @@ module GoogleVisualr
         show_script_with_script_tag(dom)
       # Without checking for user_options, data as hash was not working!
       elsif user_options && user_options[:chart_class]
-        case user_options[:chart_class].to_s.capitalize
-        when 'Chartwrapper'
-          get_html_chart_wrapper(data, dom)
-        when 'Charteditor'
-          get_html_chart_editor(data, dom)
-        end
+        extract_chart_wrapper_editor_js(dom)
       elsif data.is_a?(String)
         get_html_spreadsheet(data, dom)
       else
@@ -59,6 +54,21 @@ module GoogleVisualr
         to_js_full_script(dom)
       else
         to_js(dom)
+      end
+    end
+
+    # ChartEditor and ChartWrapper works for both Google Charts and DataTables
+    # @see dummy_rails examples for ChartEditor in shekharrajak/demo_daru-view
+    #
+    # @param dom [String] The ID of the DIV element that the Google
+    #   Chart should be rendered in
+    # @return [String] JS to draw ChartWrapper or ChartEditor
+    def extract_chart_wrapper_editor_js(dom)
+      case user_options[:chart_class].to_s.capitalize
+      when 'Chartwrapper'
+        get_html_chart_wrapper(data, dom)
+      when 'Charteditor'
+        get_html_chart_editor(data, dom)
       end
     end
 
@@ -145,6 +155,122 @@ module GoogleVisualr
       end
     end
 
+    private
+
+    # @return [void] applies formatters provided by the user in the
+    #   third parameter
+    def apply_formatters
+      return unless user_options && user_options[:formatters]
+      @formatters = []
+      user_options[:formatters].each_value do |formatter|
+        frmttr = case formatter[:type].to_s.capitalize
+                 when 'Color'
+                   apply_color_formatter(formatter)
+                 when 'Pattern'
+                   apply_pattern_formatter(formatter)
+                 else
+                   apply_date_arrow_bar_number_formatter(formatter)
+                 end
+        @formatters << frmttr
+      end
+    end
+
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [GoogleVisualr::ColorFormat] adds the ColorFormat to
+    #   defined columns
+    # @example Color Formatter
+    #   df = Daru::DataFrame.new({b: [11,12,13,14,15], a: [1,2,3,4,5],
+    #     c: [11,22,33,44,55]},
+    #     order: [:a, :b, :c],
+    #     index: [:one, :two, :three, :four, :five])
+    #
+    #   user_options = {
+    #     formatters: {
+    #       formatter: {
+    #         type: 'Color',
+    #         range: [[1, 3, 'yellow', 'red'],
+    #                 [20, 50, 'green', 'pink']],
+    #         columns: [0,2]
+    #       },
+    #       formatter2: {
+    #         type: 'Color',
+    #         range: [[14, 15, 'blue', 'orange']],
+    #         columns: 1
+    #       }
+    #     }
+    #   }
+    #
+    #   # option `allowHtml: true` is necessary to make this work
+    #   table = Daru::View::Table.new(df, {allowHtml: true}, user_options)
+    def apply_color_formatter(formatter)
+      initialize_default_values(formatter)
+      frmttr = GoogleVisualr::ColorFormat.new
+      formatter[:range].each do |range|
+        # add_range parameters: (from, to, color, bgcolor)
+        frmttr.add_range(range[0], range[1], range[2], range[3])
+      end
+      formatter[:gradient_range].each do |gr|
+        # add_range parameters: (from, to, color, fromBgColor, toBgColor)
+        frmttr.add_gradient_range(gr[0], gr[1], gr[2], gr[3], gr[4])
+      end
+      frmttr.columns(formatter[:columns])
+      frmttr
+    end
+
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [void] initializes default values for the color format
+    def initialize_default_values(formatter)
+      formatter[:range] ||= []
+      formatter[:gradient_range] ||= []
+      formatter[:columns] ||= 0
+    end
+
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [GoogleVisualr::PatternFormat] adds the PatternFormat to
+    #   destined columns
+    def apply_pattern_formatter(formatter)
+      formatter[:format_string] ||= ''
+      formatter[:src_cols] ||= 0
+      formatter[:des_col] ||= 0
+      frmttr = GoogleVisualr::PatternFormat.new(formatter[:format_string].to_s)
+      frmttr.src_cols = formatter[:src_cols]
+      frmttr.des_col = formatter[:des_col]
+      frmttr
+    end
+
+    # @param formatter [Hash] formatter hash provided by the user
+    # @return [GoogleVisualr::DateFormat, GoogleVisualr::NumberFormat,
+    #   GoogleVisualr::BarFormat, GoogleVisualr::ArrowFormat] adds the required
+    #   format to the destined columns
+    # @example
+    #   df = Daru::DataFrame.new({b: [11,-12,13,14,-15], a: [-1,2,3,4,5],
+    #     c: [11,22,-33,-44,55]},
+    #     order: [:a, :b, :c],
+    #     index: [:one, :two, :three, :four, :five])
+    #
+    #   user_options = {
+    #     formatters: {
+    #       formatter: {
+    #         type: 'Number',
+    #         options: {negativeParens: true},
+    #         columns: [0,1,2]
+    #       }
+    #     }
+    #   }
+    #
+    #   table = Daru::View::Table.new(df, {}, user_options)
+    def apply_date_arrow_bar_number_formatter(formatter)
+      formatter[:options] ||= {}
+      formatter[:columns] ||= 0
+      frmttr = GoogleVisualr.const_get(
+        formatter[:type].to_s.capitalize + 'Format'
+      ).new(formatter[:options])
+      frmttr.columns(formatter[:columns])
+      frmttr
+    end
+  end
+
+  module DisplayJavascript
     # @return [String] js function to add the listener to the chart
     def add_listeners_js(type)
       js = ''
@@ -154,22 +280,6 @@ module GoogleVisualr
         js << "\n      #{listener[:callback]}"
         js << "\n    });"
       end
-      js
-    end
-
-    # @param (see #draw_js_chart_editor)
-    # @return [String] options of the ChartWrapper
-    def extract_chart_wrapper_options(data, element_id)
-      js = ''
-      js << if is_a?(GoogleVisualr::DataTable)
-              "\n  \t\tchartType: 'Table',"
-            else
-              "\n  \t\tchartType: '#{chart_name}',"
-            end
-      js << append_data(data)
-      js << "\n  \t\toptions: #{js_parameters(@options)},"
-      js << "\n  \t\tcontainerId: '#{element_id}',"
-      js << "\n  \t\tview: #{extract_option_view}"
       js
     end
 
@@ -307,127 +417,15 @@ module GoogleVisualr
       js << "\n  }"
       js
     end
-
-    private
-
-    # @return [void] applies formatters provided by the user in the
-    #   third parameter
-    def apply_formatters
-      return unless user_options && user_options[:formatters]
-      @formatters = []
-      user_options[:formatters].each_value do |formatter|
-        frmttr = case formatter[:type].to_s.capitalize
-                 when 'Color'
-                   apply_color_formatter(formatter)
-                 when 'Pattern'
-                   apply_pattern_formatter(formatter)
-                 else
-                   apply_date_arrow_bar_number_formatter(formatter)
-                 end
-        @formatters << frmttr
-      end
-    end
-
-    # @param formatter [Hash] formatter hash provided by the user
-    # @return [GoogleVisualr::ColorFormat] adds the ColorFormat to
-    #   defined columns
-    # @example Color Formatter
-    #   df = Daru::DataFrame.new({b: [11,12,13,14,15], a: [1,2,3,4,5],
-    #     c: [11,22,33,44,55]},
-    #     order: [:a, :b, :c],
-    #     index: [:one, :two, :three, :four, :five])
-    #
-    #   user_options = {
-    #     formatters: {
-    #       formatter: {
-    #         type: 'Color',
-    #         range: [[1, 3, 'yellow', 'red'],
-    #                 [20, 50, 'green', 'pink']],
-    #         columns: [0,2]
-    #       },
-    #       formatter2: {
-    #         type: 'Color',
-    #         range: [[14, 15, 'blue', 'orange']],
-    #         columns: 1
-    #       }
-    #     }
-    #   }
-    #
-    #   # option `allowHtml: true` is necessary to make this work
-    #   table = Daru::View::Table.new(df, {allowHtml: true}, user_options)
-    def apply_color_formatter(formatter)
-      initialize_default_values(formatter)
-      frmttr = GoogleVisualr::ColorFormat.new
-      formatter[:range].each do |range|
-        # add_range parameters: (from, to, color, bgcolor)
-        frmttr.add_range(range[0], range[1], range[2], range[3])
-      end
-      formatter[:gradient_range].each do |gr|
-        # add_range parameters: (from, to, color, fromBgColor, toBgColor)
-        frmttr.add_gradient_range(gr[0], gr[1], gr[2], gr[3], gr[4])
-      end
-      frmttr.columns(formatter[:columns])
-      frmttr
-    end
-
-    # @param formatter [Hash] formatter hash provided by the user
-    # @return [void] initializes default values for the color format
-    def initialize_default_values(formatter)
-      formatter[:range] ||= []
-      formatter[:gradient_range] ||= []
-      formatter[:columns] ||= 0
-    end
-
-    # @param formatter [Hash] formatter hash provided by the user
-    # @return [GoogleVisualr::PatternFormat] adds the PatternFormat to
-    #   destined columns
-    def apply_pattern_formatter(formatter)
-      formatter[:format_string] ||= ''
-      formatter[:src_cols] ||= 0
-      formatter[:des_col] ||= 0
-      frmttr = GoogleVisualr::PatternFormat.new(formatter[:format_string].to_s)
-      frmttr.src_cols = formatter[:src_cols]
-      frmttr.des_col = formatter[:des_col]
-      frmttr
-    end
-
-    # @param formatter [Hash] formatter hash provided by the user
-    # @return [GoogleVisualr::DateFormat, GoogleVisualr::NumberFormat,
-    #   GoogleVisualr::BarFormat, GoogleVisualr::ArrowFormat] adds the required
-    #   format to the destined columns
-    # @example
-    #   df = Daru::DataFrame.new({b: [11,-12,13,14,-15], a: [-1,2,3,4,5],
-    #     c: [11,22,-33,-44,55]},
-    #     order: [:a, :b, :c],
-    #     index: [:one, :two, :three, :four, :five])
-    #
-    #   user_options = {
-    #     formatters: {
-    #       formatter: {
-    #         type: 'Number',
-    #         options: {negativeParens: true},
-    #         columns: [0,1,2]
-    #       }
-    #     }
-    #   }
-    #
-    #   table = Daru::View::Table.new(df, {}, user_options)
-    def apply_date_arrow_bar_number_formatter(formatter)
-      formatter[:options] ||= {}
-      formatter[:columns] ||= 0
-      frmttr = GoogleVisualr.const_get(
-        formatter[:type].to_s.capitalize + 'Format'
-      ).new(formatter[:options])
-      frmttr.columns(formatter[:columns])
-      frmttr
-    end
   end
 
   class DataTable
     include Display
+    include DisplayJavascript
   end
 
   class BaseChart
     include Display
+    include DisplayJavascript
   end
 end
