@@ -1,6 +1,7 @@
 require 'rspec'
 require 'simplecov'
 require 'daru/view'
+require 'daru/data_tables'
 require 'daru'
 require 'coveralls'
 require 'simplecov-console'

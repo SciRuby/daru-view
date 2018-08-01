@@ -99,7 +99,7 @@ module Daru
         when 'googlecharts'
           GoogleVisualr.init_script
         when 'datatables'
-          DataTables.init_script
+          init_script
         else
           raise ArgumentError, "Unsupported library #{lib}"
         end
@@ -146,8 +146,7 @@ module Daru
           library = 'GoogleVisualr'
           Object.const_get(library).init_iruby
         elsif library.match('datatables')
-          library = 'DataTables'
-          Object.const_get(library).init_iruby
+          init_iruby
         else
           Object.const_get(library.capitalize).init_iruby
         end
