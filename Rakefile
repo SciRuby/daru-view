@@ -19,7 +19,7 @@ Coveralls::RakeTask.new
 import 'lib/tasks/high_charts.rake'
 import 'lib/tasks/nyaplot.rake'
 import 'lib/tasks/google_charts.rake'
+import 'lib/tasks/new_adapter.rake'
 
 # TODO: add Nyaplot
 task :update_all => ["googlecharts:update", "highcharts:update"]
-
