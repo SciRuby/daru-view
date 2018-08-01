@@ -18,11 +18,6 @@ describe Display do
       {type: :column, width: 800}
     )
   }
-  let (:table_spreadsheet) {
-    Daru::View::Table.new(
-      data_spreadsheet, {width: 800}
-    )
-  }
   let(:user_options) {{chart_class: 'Chartwrapper'}}
   let(:data_table) {Daru::View::Table.new(data)}
   let(:area_chart_options) {{
@@ -55,34 +50,8 @@ describe Display do
   let(:plot_charteditor) {Daru::View::Plot.new(
     data, {}, chart_class: 'Charteditor')
   }
-  let (:plot_spreadsheet_charteditor) {
-    Daru::View::Plot.new(
-      data_spreadsheet,
-      {width: 800}, chart_class: 'Charteditor'
-    )
-  }
-  let (:table_spreadsheet_charteditor) {
-    Daru::View::Table.new(
-      data_spreadsheet,
-      {width: 800}, chart_class: 'Charteditor'
-    )
-  }
   let(:table_charteditor) {Daru::View::Table.new(
     data, {}, chart_class: 'Charteditor')
-  }
-  let(:area_wrapper_spreadsheet) {
-    Daru::View::Plot.new(
-      data_spreadsheet,
-      {type: :area},
-      user_options
-    )
-  }
-  let (:table_spreadsheet_chartwrapper) {
-    Daru::View::Table.new(
-      data_spreadsheet,
-      {width: 800, view: {columns: [0, 1]}},
-      chart_class: 'ChartWrapper'
-    )
   }
 
   describe "#to_html" do

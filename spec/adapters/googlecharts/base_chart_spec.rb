@@ -45,13 +45,6 @@ describe GoogleVisualr::BaseChart do
       chart_class: 'ChartWrapper'
     )
   }
-  let (:plot_spreadsheet_charteditor) {
-    Daru::View::Plot.new(
-      data_spreadsheet,
-      {width: 800, view: {columns: [0, 1]}},
-      chart_class: 'Charteditor'
-    )
-  }
   let(:plot_charteditor) {
     Daru::View::Plot.new(data, {}, chart_class: 'Charteditor')
   }

@@ -28,12 +28,6 @@ describe GoogleVisualr::DataTable do
   let(:table_chartwrapper) {
     Daru::View::Table.new(data, {}, chart_class: 'ChartWrapper')
   }
-  let (:table_spreadsheet_charteditor) {
-    Daru::View::Table.new(
-      data_spreadsheet,
-      {width: 800, view: {columns: [0, 1]}}, chart_class: 'Charteditor'
-    )
-  }
   let(:table_charteditor) {
     Daru::View::Table.new(data, {}, chart_class: 'Charteditor')
   }
