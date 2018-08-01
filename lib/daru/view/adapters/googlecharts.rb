@@ -1,6 +1,6 @@
 require 'google_visualr'
 require_relative 'googlecharts/iruby_notebook'
-require_relative 'googlecharts/display'
+require_relative 'googlecharts/google_visualr'
 require 'daru'
 require 'bigdecimal'
 require 'daru/view/constants'
