@@ -28,6 +28,9 @@ describe GoogleVisualr::DataTable do
   let(:table_chartwrapper) {
     Daru::View::Table.new(data, {}, chart_class: 'ChartWrapper')
   }
+  let(:table_charteditor) {
+    Daru::View::Table.new(data, {}, chart_class: 'Charteditor')
+  }
 
   describe "#to_js_full_script" do
     it "generates valid JS of the table" do
@@ -63,6 +66,12 @@ describe GoogleVisualr::DataTable do
       expect(js).to match(/\{packages: \['table'\], callback:/i)
       expect(js).to match(/draw_id\}\)/i)
     end
+    it "loads valid packages" do
+      js = table_charteditor.table.load_js('id')
+      expect(js).to match(/google.load\('visualization', 1.0,/i)
+      expect(js).to match(/\{packages: \['charteditor'\], callback:/i)
+      expect(js).to match(/draw_id\}\)/i)
+    end
   end
 
   describe "#draw_js" do
@@ -76,6 +85,18 @@ describe GoogleVisualr::DataTable do
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
       expect(js).to match(/table.draw\(data_table, \{\}/i)
+    end
+  end
+
+  describe "#draw_js_chart_wrapper" do
+    it "draws valid JS of the ChartWrapper" do
+      js = table_chartwrapper.table.draw_js_chart_wrapper(data, 'id')
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ChartWrapper/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/containerId: 'id'/)
     end
   end
 

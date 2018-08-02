@@ -1,6 +1,6 @@
 require 'google_visualr'
 require_relative 'googlecharts/iruby_notebook'
-require_relative 'googlecharts/display'
+require_relative 'googlecharts/google_visualr'
 require 'daru'
 require 'bigdecimal'
 require 'daru/view/constants'
@@ -57,6 +57,16 @@ module Daru
         #   data << query
         #   options = {type: :area}
         #   chart = Daru::View::Plot.new(data, options)
+        #
+        # @example ChartEditor
+        #   data = [
+        #         ['Year', 'Sales', 'Expenses'],
+        #         ['2013',  1000,      400],
+        #         ['2014',  1170,      460],
+        #         ['2015',  660,       1120],
+        #         ['2016',  1030,      540]
+        #   ]
+        #   plot = Daru::View::Plot.new(data, {}, chart_class: 'Charteditor')
         #
         # @example Multiple Charts in a row
         #   Draw the Daru::View::PlotList object with the data as an array of
@@ -115,6 +125,16 @@ module Daru
         #   query = 'SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'
         #   data << query
         #   chart = Daru::View::Table.new(data)
+        #
+        # @example ChartEditor
+        #   data = [
+        #         ['Year', 'Sales', 'Expenses'],
+        #         ['2013',  1000,      400],
+        #         ['2014',  1170,      460],
+        #         ['2015',  660,       1120],
+        #         ['2016',  1030,      540]
+        #   ]
+        #   table = Daru::View::Table.new(data, {}, chart_class: 'Charteditor')
         def init_table(data=[], options={}, user_options={})
           # if `options` is something like this :
           # {
@@ -139,23 +159,6 @@ module Daru
           add_data_in_table(data) unless data.is_a?(String)
           validate_url(data) if data.is_a?(String)
           @table
-        end
-
-        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table]
-        #   The data provided by the user to generate the google datatable.
-        #   Data in String format represents the URL of the google spreadsheet
-        #   from which data has to invoked
-        # @return [GoogleVisualr::DataTable] the table object will the data
-        #   filled
-        def get_table(data)
-          if data.is_a?(Daru::View::Table) &&
-             data.table.is_a?(GoogleVisualr::DataTable)
-            data.table
-          elsif data.is_a?(GoogleVisualr::DataTable)
-            data
-          else
-            add_data_in_table(data)
-          end
         end
 
         # @param data [String] URL of the google spreadsheet from which data
@@ -215,6 +218,23 @@ module Daru
         end
 
         private
+
+        # @param data [Array, Daru::DataFrame, Daru::Vector, Daru::View::Table]
+        #   The data provided by the user to generate the google datatable.
+        #   Data in String format represents the URL of the google spreadsheet
+        #   from which data has to invoked
+        # @return [GoogleVisualr::DataTable] the table object with the data
+        #   filled
+        def get_table(data)
+          if data.is_a?(Daru::View::Table) &&
+             data.table.is_a?(GoogleVisualr::DataTable)
+            data.table
+          elsif data.is_a?(GoogleVisualr::DataTable)
+            data
+          else
+            add_data_in_table(data)
+          end
+        end
 
         def extract_chart_type(options)
           # TODO: Imprvoe this method.
