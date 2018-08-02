@@ -316,22 +316,24 @@ module Daru
           end
         end
 
-        # TODO : fix Metrics/PerceivedComplexity rubocop error
-        def return_js_type(data) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+        def return_js_type(data)
+          return if data.nil?
           data = data.is_a?(Hash) ? data[:v] : data
+          extract_js_type(data)
+        end
+
+        def extract_js_type(data)
           case
-          when data.nil?
-            return
           when data.is_a?(String)
-            return 'string'
-          when data.is_a?(Integer) || data.is_a?(Float) || data.is_a?(BigDecimal)
-            return 'number'
-          when data.is_a?(TrueClass) || data.is_a?(FalseClass)
-            return 'boolean'
-          when data.is_a?(DateTime)  || data.is_a?(Time)
-            return 'datetime'
+            'string'
+          when data.is_a?(Integer), data.is_a?(Float), data.is_a?(BigDecimal)
+            'number'
+          when data.is_a?(TrueClass), data.is_a?(FalseClass)
+            'boolean'
+          when data.is_a?(DateTime), data.is_a?(Time)
+            'datetime'
           when data.is_a?(Date)
-            return 'date'
+            'date'
           end
         end
       end
