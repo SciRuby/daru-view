@@ -17,6 +17,8 @@ require 'daru/view/app/rails/railtie.rb' if defined?(Rails)
 
 module Daru
   module View
+    class Engine < ::Rails::Engine; end if defined?(Rails)
+
     # default Nyaplot library is used.
     @plotting_library = :nyaplot
     Daru::View::Plot.adapter = @plotting_library
