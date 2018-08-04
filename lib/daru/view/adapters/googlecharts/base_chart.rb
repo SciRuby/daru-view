@@ -18,6 +18,18 @@ module GoogleVisualr
       '\'\''
     end
 
+    # @param element_id [String] The ID of the DIV element that the Google
+    #   ChartEditor should be rendered in
+    # @return [String] Generates JavaScript for loading the charteditor package,
+    #   with callback to render ChartEditor
+    def load_js_chart_editor(element_id)
+      js = ''
+      js << "\n  google.load('visualization', '#{version}', "
+      js << " {packages: ['charteditor'], callback:"
+      js << " #{chart_function_name(element_id)}});"
+      js
+    end
+
     # Generates JavaScript function for rendering the chart when data is URL of
     #   the google spreadsheet
     #

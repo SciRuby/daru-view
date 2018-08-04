@@ -4,6 +4,7 @@ require 'daru/view/plot_list'
 require 'daru/view/adapters/highcharts/display'
 require 'daru/view/adapters/nyaplot/display'
 require 'daru/view/adapters/googlecharts/display'
+require 'daru/view/adapters/googlecharts/google_visualr'
 require 'daru/view/table'
 
 # needed in load_lib_in_iruby method
@@ -69,21 +70,75 @@ module Daru
         end
       end
 
-      # Load the dependent JS files in IRuby notebook. Those JS will help in
-      # plotting the charts in IRuby cell.
+      # dependent script for the library. It must be added in the head tag
+      # of the web application.
+      #
+      # @param lib [String, Symbol] library whose dependencies are to be loaded
+      # @return [void, String] dependent script for the library
+      # @example
+      #   dep_js = Daru::View.dependent_script(:highcharts)
+      #   use in Rails app : <%=raw dep_js %>
+      # @example
+      #   dep_js = Daru::View.dependent_script('highcharts')
+      #   use in Rails app : <%=raw dep_js %>
       #
       # @example
+      #   To load the dependent JS file for Nyaplot library
+      #   plotting system (Nyaplot.js, d3.js):
       #
-      # To load the dependent JS file for Nyaplot library
-      # plotting system (Nyaplot.js, d3.js):
+      #   Daru::View.dependent_script(:nyaplot)
+      # @example
+      #   Daru::View.dependent_script('nyaplot')
+      def dependent_script(lib=:nyaplot)
+        load_lib_in_iruby(lib.to_s) if defined? IRuby
+      rescue NameError
+        case lib.to_s
+        when 'nyaplot'
+          Nyaplot.init_script
+        when 'highcharts'
+          LazyHighCharts.init_script
+        when 'googlecharts'
+          GoogleVisualr.init_script
+        when 'datatables'
+          DataTables.init_script
+        else
+          raise ArgumentError, "Unsupported library #{lib}"
+        end
+      end
+
+      # @param libraries [Array] libraries whose dependencies are to be
+      #   loaded
+      # @return [void, String] dependent script for the libraries
       #
-      # Daru::View.load_lib_in_iruby('nyaplot')
-      #
-      # To load the HighCharts dependent JS
-      # files (highcharts.js, highcharts-3d.js, highstock.js):
-      #
-      # Daru::View.load_lib_in_iruby('highcharts')
-      #
+      # @example
+      #   To load the dependent JS file for Nyaplot and GoogleCharts libraries
+      #   Daru::View.dependent_scripts(['nyaplot', 'googlecharts'])
+      # @example
+      #   To load the dependent JS file for Nyaplot and GoogleCharts libraries
+      #   Daru::View.dependent_scripts([:nyaplot, :googlecharts])
+      def dependent_scripts(libraries=[])
+        load_libs_in_iruby(libraries) if defined? IRuby
+      rescue NameError
+        script = ''
+        libraries.each do |library|
+          script << dependent_script(library)
+        end
+        script
+      end
+
+      private
+
+      # @param libraries [Array] Adapters whose JS files will be loaded
+      # @return [void] load the dependent JS files for the adapter in IRuby
+      #   notebook
+      def load_libs_in_iruby(libraries=[])
+        libraries.each do |library|
+          load_lib_in_iruby(library.to_s)
+        end
+      end
+
+      # Load the dependent JS files in IRuby notebook. Those JS will help in
+      # plotting the charts in IRuby cell.
       def load_lib_in_iruby(library)
         if library.match('highcharts')
           library = 'LazyHighCharts'
@@ -96,30 +151,6 @@ module Daru
           Object.const_get(library).init_iruby
         else
           Object.const_get(library.capitalize).init_iruby
-        end
-      end
-
-      # dependent script for the library. It must be added in the head tag
-      # of the web application.
-      #
-      # @example
-      #
-      # dep_js = Daru::View.dependent_script(:highcharts)
-      #
-      # use in Rails app : <%=raw dep_js %>
-      #
-      def dependent_script(lib=:nyaplot)
-        case lib
-        when :nyaplot
-          Nyaplot.init_script
-        when :highcharts
-          LazyHighCharts.init_script
-        when :googlecharts
-          GoogleVisualr.init_script
-        when :datatables
-          DataTables.init_script
-        else
-          raise ArgumentError, "Unsupported library #{lib}"
         end
       end
     end

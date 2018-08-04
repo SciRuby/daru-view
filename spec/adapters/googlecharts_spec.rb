@@ -82,6 +82,12 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
   let(:table_chart_wrapper) {Daru::View::Table.new(
     data, {}, user_options)
   }
+  let(:plot_charteditor) {Daru::View::Plot.new(
+    data_table.table, {}, chart_class: 'Charteditor')
+  }
+  let(:table_charteditor) {Daru::View::Table.new(
+    data, {}, chart_class: 'Charteditor')
+  }
   let(:table_wrapper_spreadsheet) {Daru::View::Table.new(
     data_spreadsheet, {}, user_options)
   }
@@ -262,6 +268,26 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
       expect(js).to match(/chartType: 'Table'/)
       expect(js).to match(/dataTable: data_table/)
       expect(js).to match(/options: {}/)
+    end
+    it "should generate the valid JS of charteditor" do
+      js = plot_charteditor.adapter.generate_body(plot_charteditor.chart)
+      expect(js).to match(/<input id="loadcharteditor_/)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
+      expect(js).to match(/chartType: 'LineChart'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/view: ''/)
+    end
+    it "should generate the valid JS of datatable charteditor" do
+      js = table_charteditor.adapter.generate_body(table_charteditor.table)
+      expect(js).to match(/<input id="loadcharteditor_/)
+      expect(js).to match(/google.load\('visualization'/)
+      expect(js).to match(/new google.visualization.ChartEditor/)
+      expect(js).to match(/chartType: 'Table'/)
+      expect(js).to match(/dataTable: data_table/)
+      expect(js).to match(/options: {}/)
+      expect(js).to match(/view: ''/)
     end
   end
 

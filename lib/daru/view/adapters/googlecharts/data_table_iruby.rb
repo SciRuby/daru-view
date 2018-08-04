@@ -72,7 +72,9 @@ module GoogleVisualr
     end
 
     def package_name
-      'table'
+      return 'table' unless
+      user_options && user_options[:chart_class].to_s.capitalize == 'Charteditor'
+      'charteditor'
     end
 
     # @return [String] Returns value of the view option provided by the user
@@ -91,8 +93,8 @@ module GoogleVisualr
     def load_js(element_id)
       js = ''
       js << "\n  google.load('visualization', #{google_table_version}, "
-      js << "\n {packages: ['#{package_name}'], callback:"
-      js << "\n #{chart_function_name(element_id)}});"
+      js << " {packages: ['#{package_name}'], callback:"
+      js << " #{chart_function_name(element_id)}});"
       js
     end
 

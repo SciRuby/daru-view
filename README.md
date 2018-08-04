@@ -280,7 +280,7 @@ For now, other applications (Rails/Sinatra) you need to run it locally.
   daru-view
   ```
 
-  - To update al the JS files:
+  - To update all the JS files:
   ```
   daru-view update
   ```
@@ -297,7 +297,7 @@ For now, other applications (Rails/Sinatra) you need to run it locally.
 
 ### 2. Developers
 
-  To update to the current highcharts.js directly from http://code.highcharts.com/",  you can always run
+  To update to the current highcharts.js directly from http://code.highcharts.com/", you can always run
 
     rake highcharts:update
 
@@ -309,6 +309,14 @@ For now, other applications (Rails/Sinatra) you need to run it locally.
 
     rake update_all
 
+## Creating a new adapter (Developers)
+
+  To create a new adapter `Demo`, run
+  ```
+  rake new:adapter Demo
+  ```
+
+  and a file demo.rb will be created in the daru/view/adapters folder with all the necessary methods (init, init_script, init_ruby, generate_body, show_in_iruby and export_html_file) as TODO.
 
 ## Development
 

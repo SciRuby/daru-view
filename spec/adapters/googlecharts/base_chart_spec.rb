@@ -52,6 +52,9 @@ describe GoogleVisualr::BaseChart do
       chart_class: 'ChartWrapper'
     )
   }
+  let(:plot_charteditor) {
+    Daru::View::Plot.new(data, {}, chart_class: 'Charteditor')
+  }
 
   describe "#extract_option_view" do
     it "should return value of view option if view option is provided" do
@@ -61,6 +64,15 @@ describe GoogleVisualr::BaseChart do
     it "should return '' if view option is not provided" do
       js = area_chart_spreadsheet.chart.extract_option_view
       expect(js).to eq('\'\'')
+    end
+  end
+
+  describe "#load_js_chart_editor" do
+    it "loads valid packages" do
+      js = plot_charteditor.chart.load_js_chart_editor('id')
+      expect(js).to match(/google.load\('visualization', '1.0',/i)
+      expect(js).to match(/\{packages: \['charteditor'\], callback:/i)
+      expect(js).to match(/draw_id\}\)/i)
     end
   end
 
