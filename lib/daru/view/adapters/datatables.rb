@@ -64,7 +64,7 @@ module Daru
 
         # @return [String] returns code of the dependent JS and CSS file(s)
         def init_script
-          Daru::View.init_script
+          Daru::View::DataTables.init_script
         end
 
         # @param table [Daru::DataTables::DataTable] table object to access
@@ -116,7 +116,7 @@ module Daru
         #   table = Daru::View::Table.new(data, options)
         #   table.init_iruby
         def init_iruby
-          Daru::View.init_iruby
+          Daru::View::DataTables.init_iruby
         end
       end
     end
