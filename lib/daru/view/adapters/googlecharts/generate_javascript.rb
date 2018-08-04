@@ -66,6 +66,19 @@ module GenerateJavascript
     js
   end
 
+  # @param file_name [String] The name of the file after exporting the chart
+  # @return [String] the script to export the chart in png format
+  def extract_export_png_code(file_name)
+    js = ''
+    js << "\n \tvar a = document.createElement('a');"
+    js << "\n \ta.href = chart.getImageURI();"
+    js << "\n \ta.download = '#{file_name}.png';"
+    js << "\n \tdocument.body.appendChild(a);"
+    js << "\n \ta.click();"
+    js << "\n \tdocument.body.removeChild(a);"
+    js
+  end
+
   # Generates JavaScript and renders the Google Chartwrapper in the
   #   final HTML output.
   #

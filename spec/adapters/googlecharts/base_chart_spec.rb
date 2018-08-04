@@ -12,13 +12,20 @@ describe GoogleVisualr::BaseChart do
       {type: :column, width: 800}
     )
   }
+
+  let(:data_array) do
+    [
+      ['Year'],
+      ['2013'],
+    ]
+  end
   let(:user_options) {{
     listeners: {
       select: "alert('A table row was selected');"
     }
   }}
   let(:column_chart) { Daru::View::Plot.new(
-    data_spreadsheet,
+    data_array,
     { type: :column },
     user_options)
   }
@@ -81,6 +88,28 @@ describe GoogleVisualr::BaseChart do
         /google.visualization.ColumnChart\(document.getElementById\(\'id\'\)/
       )
       expect(js).to match(/chart.draw\(data_table, \{width: 800\}/i)
+    end
+  end
+
+  describe "#draw_chart_js" do
+    subject(:js) { column_chart.chart.draw_chart_js('id') }
+    it "adds correct data" do
+      expect(js).to match(
+        /data_table.addColumn\({"type":"string","label":"Year"}\)/
+      )
+      expect(js).to match(/data_table.addRow\(\[{v: "2013"}\]\)/)
+    end
+    it "adds correct listener" do
+      column_chart.chart.add_listener('ready', "alert('hi');")
+      expect(js).to match(
+        /google.visualization.events.addListener\(chart, 'ready', function \(e\) {/
+      )
+      expect(js).to match(/alert\('hi'\);/)
+    end
+    it "generates the valid chart script" do
+      expect(js).to match(/new google.visualization.DataTable/)
+      expect(js).to match(/new google.visualization.ColumnChart/)
+      expect(js).to match(/chart.draw\(data_table, {}\)/)
     end
   end
 end

@@ -4,6 +4,7 @@ require 'daru/view/plot_list'
 require 'daru/view/adapters/highcharts/display'
 require 'daru/view/adapters/nyaplot/display'
 require 'daru/view/adapters/googlecharts/display'
+require 'daru/view/adapters/googlecharts/google_visualr'
 require 'daru/view/table'
 
 # needed in load_lib_in_iruby method

@@ -512,6 +512,44 @@ describe Display do
     end
   end
 
+  describe "#export" do
+    it "adds ready listener" do
+      area_chart_chart.chart.export
+      expect(area_chart_chart.chart.listeners[0][:event]).to eq('ready')
+    end
+    it "generates correct code of the chart" do
+      js = area_chart_chart.chart.export
+      expect(js).to match(/google.visualization.DataTable\(\);/i)
+      expect(js).to match(
+        /data_table.addColumn\(\{\"type\":\"string\",\"label\":\"Year\"\}\);/)
+      expect(js).to match(
+        /data_table.addRow\(\[\{v: \"2013\"\}\]\);/)
+      expect(js).to match(/google.visualization.AreaChart/i)
+      expect(js).to match(
+        /google.visualization.events.addListener\(chart, 'ready'/)
+      expect(js).to match(/chart.draw\(data_table, \{\}/i)
+    end
+    it "generates correct png code" do
+      js = area_chart_chart.chart.export
+      expect(js).to match(/document.createElement\('a'\);/)
+      expect(js).to match(/a.href = chart.getImageURI()/)
+      expect(js).to match(/a.download = 'chart.png'/)
+    end
+  end
+
+  describe "#extract_export_code" do
+    it "extracts correct png code" do
+      area_chart_chart.chart.html_id = 'id'
+      js = area_chart_chart.chart.extract_export_code('png', 'daru')
+      expect(js).to match(/document.createElement\('a'\);/)
+      expect(js).to match(/a.href = chart.getImageURI()/)
+      expect(js).to match(/a.download = 'daru.png'/)
+      expect(js).to match(/document.body.appendChild\(a\)/)
+      expect(js).to match(/a.click\(\)/)
+      expect(js).to match(/document.body.removeChild\(a\)/)
+    end
+  end
+
   describe "#add_listener_to_chart" do
     it "adds the listener mentioned in user_options to the chart" do
       column_chart_chart.chart.add_listener_to_chart

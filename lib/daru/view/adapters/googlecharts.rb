@@ -187,12 +187,22 @@ module Daru
           File.write(path, str)
         end
 
-        def export(_plot, _export_type='png', _file_name='chart')
-          raise 'Not implemented yet'
-        end
-
         def show_in_iruby(plot)
           plot.show_in_iruby
+        end
+
+        # Exporting a googlchart to pdf is not working in IRuby notebook because
+        #   the dependency of jspdf is not properly loaded in IRuby notebook.
+        #   TODO: Need to find some other way to export the chart to pdf in
+        #     IRuby notebook.
+        #
+        # @see #Daru::View::Plot.export
+        def export(plot, export_type='png', file_name='chart')
+          raise NotImplementedError, 'Not yet implemented!' unless
+          export_type == 'png'
+          plot.export_iruby(export_type, file_name) if defined? IRuby
+        rescue NameError
+          plot.export(export_type, file_name)
         end
 
         def generate_html(plot)

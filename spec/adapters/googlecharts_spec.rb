@@ -350,6 +350,20 @@ describe Daru::View::Plot, 'plotting with googlecharts' do
     end
   end
 
+  describe "#export" do
+    it "generates valid script to export a chart to png" do
+      js = area_chart_chart.adapter.export(area_chart_chart.chart)
+      expect(js).to match(/google.visualization.DataTable\(\);/)
+      expect(js).to match(/google.visualization.AreaChart/)
+      expect(js).to match(/a.href = chart.getImageURI()/)
+      expect(js).to match(/a.download = 'chart.png'/)
+    end
+    it 'raises error for not implemented export types' do
+      expect{area_chart_chart.adapter.export(area_chart_chart.chart, 'jpeg')}
+      .to raise_error(NotImplementedError, 'Not yet implemented!')
+    end
+  end
+
   describe "#export_html_file" do
     it "writes valid html code of the Area Chart to the file" do
       area_chart_chart.export_html_file('./plot.html')

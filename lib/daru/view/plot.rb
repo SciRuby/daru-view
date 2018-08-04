@@ -82,10 +82,10 @@ module Daru
       # @param file_name [String] The name of the file after exporting the chart
       # @return [String, void] js code of chart along with the code to export it
       #   and loads the js code to export it in IRuby.
-      # @example Export a HighChart
+      # @example
       #   data = Daru::Vector.new([5 ,3, 4])
-      #   hchart = Daru::View::Plot.new(data)
-      #   hchart.export('png', 'daru')
+      #   chart = Daru::View::Plot.new(data)
+      #   chart.export('png', 'daru')
       def export(export_type='png', file_name='chart')
         @adapter.export(@chart, export_type, file_name)
       end

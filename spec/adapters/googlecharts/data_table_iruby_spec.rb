@@ -59,6 +59,14 @@ describe GoogleVisualr::DataTable do
     end
   end
 
+  describe "#add_listener" do
+    it "adds ready listener for Google datatables" do
+        data_table.table.add_listener('ready', 'callback')
+        expect(data_table.table.listeners[0][:event]).to eq('ready')
+        expect(data_table.table.listeners[0][:callback]).to eq('callback')
+      end
+  end
+
   describe "#load_js" do
     it "loads valid packages" do
       js = data_table.table.load_js('id')
@@ -85,6 +93,14 @@ describe GoogleVisualr::DataTable do
         /data_table.addRow\(\[\{v: \"2013\"\}\]\);/i)
       expect(js).to match(/google.visualization.Table/i)
       expect(js).to match(/table.draw\(data_table, \{\}/i)
+  	end
+    it "adds correct listener" do
+      data_table.table.add_listener('ready', "alert('hi');")
+      js = data_table.table.draw_js('id')
+      expect(js).to match(
+        /google.visualization.events.addListener\(table, 'ready', function \(e\) {/
+      )
+      expect(js).to match(/alert\('hi'\);/)
     end
   end
 
