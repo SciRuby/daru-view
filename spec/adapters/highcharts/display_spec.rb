@@ -60,9 +60,6 @@ describe LazyHighCharts::HighChart do
       chart: {
         type: 'bar'
       },
-      css: ['.highcharts-color-1 {fill: #90ed7d;stroke: #90ed7d;}',
-            '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
-            'stroke-width: 2px;}'],
       title: {
         text: 'Bar chart'
       },
@@ -76,16 +73,20 @@ describe LazyHighCharts::HighChart do
         reversed: true
       }
     }
+    @user_opts = {
+      css: ['.highcharts-color-1 {fill: #90ed7d;stroke: #90ed7d;}',
+            '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
+            'stroke-width: 2px;}']
+    }
     @data_vec1 = Daru::Vector.new([5, 3, 4])
     @data_vec2 = Daru::Vector.new([2, 2, 3])
     @data_vec3 = Daru::Vector.new([3,4,4])
     @data_df = Daru::DataFrame.new({John: @data_vec1, Jane: @data_vec2, Joe: @data_vec3})
-    @hc = Daru::View::Plot.new(@data_df, @opts)
+    @hc = Daru::View::Plot.new(@data_df, @opts, @user_opts)
     @placeholder = "placeholder"
   end
   let(:opts_map) do
   {
-    chart_class: 'map',
     chart: {
       map: 'custom/europe',
       borderWidth: 1
@@ -111,21 +112,15 @@ describe LazyHighCharts::HighChart do
     )
   end
   let(:map) do
-    Daru::View::Plot.new(df, opts_map)
+    Daru::View::Plot.new(df, opts_map, chart_class: 'map')
   end
 
   describe "#to_html" do
     before(:each) do
       @opts = {
-          chart_class: 'stock',
-          css: [
-            '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
-            'stroke-width: 2px;}'
-          ],
           chart: {
             type: 'arearange'
           },
-          modules: ['highcharts-more'],
           rangeSelector: {
               selected: 1
           },
@@ -133,6 +128,14 @@ describe LazyHighCharts::HighChart do
           title: {
               text: 'AAPL Stock Price'
           }
+      }
+      @user_opts = {
+        chart_class: 'stock',
+        modules: ['highcharts-more'],
+        css: [
+          '.highcharts-background {fill: #efefef;stroke: #a4edba;'\
+          'stroke-width: 2px;}'
+        ]
       }
       @series_dt = [
         {
@@ -177,19 +180,17 @@ describe LazyHighCharts::HighChart do
           }
         }
       ]
-      @chart = Daru::View::Plot.new
-      @chart.chart.options = @opts;
-      @chart.chart.series_data = @series_dt
-
+      @chart = Daru::View::Plot.new(@series_dt, @opts, @user_opts)
     end
+
     it "should plot HighMap when chart_class is set to map" do
-      @hc.options[:chart_class] = "Map";
+      @hc.user_options[:chart_class] = "Map";
       expect(@hc.chart.to_html(
         @placeholder)
       ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.Map/)
     end
     it "should plot Highstock when chart_class is set to stock" do
-      @hc.options[:chart_class] = "STock";
+      @hc.user_options[:chart_class] = "STock";
       expect(@hc.chart.to_html(
         @placeholder)
       ).to match(/window\.chart_placeholder\s+=\s+new\s+Highcharts.StockChart/)
@@ -407,18 +408,18 @@ describe LazyHighCharts::HighChart do
 
   describe "#extract_chart_class" do
     it "should return Map class when chart_class is set to map" do
-      @hc.options[:chart_class] = "map";
+      @hc.user_options[:chart_class] = "map";
       expect(@hc.chart.extract_chart_class).to eq 'Map'
     end
     it "should return StockChart class when chart_class is set to stock" do
-      @hc.options[:chart_class] = "SToCk";
+      @hc.user_options[:chart_class] = "SToCk";
       expect(@hc.chart.extract_chart_class).to eq 'StockChart'
     end
     it "should return Chart class when chart_class is not set" do
       expect(@hc.chart.extract_chart_class).to eq 'Chart'
     end
     it "should raise error when wrong input is given" do
-      @hc.options[:chart_class] = "Daru"
+      @hc.user_options[:chart_class] = "Daru"
       expect{@hc.chart.extract_chart_class}.to raise_error(
         'chart_class must be selected as either chart, stock or map'
       )

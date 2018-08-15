@@ -53,6 +53,7 @@ module LazyHighCharts
     # @return [String] The ID of the DIV element that the HighChart should
     #   be rendered in
     attr_accessor :div_id
+    attr_accessor :user_options
     # @example
     #
     # To display the html code of the chart, use `to_html`. To see the same
@@ -106,7 +107,11 @@ module LazyHighCharts
     # @return [String] css code of the chart
     def high_chart_css(placeholder)
       # contains the css provided by the user as a String array
-      css_data = options[:css].nil? ? '' : options.delete(:css)
+      css_data = if user_options && user_options[:css]
+                   user_options[:css]
+                 else
+                   ''
+                 end
       css_script = ''
       if css_data != ''
         css_script << "\n<style>"
@@ -151,16 +156,17 @@ module LazyHighCharts
       get_map_data_dependencies(dep_js)
       # Dependencies provided in modules option (of highcharts mainly
       #   like tilemap) by the user
-      dep_js |= options.delete(:modules).map! { |js| "#{js}.js" } unless
-      options[:modules].nil?
+      dep_js |= user_options.delete(:modules).map! { |js| "#{js}.js" } if
+      user_options && user_options[:modules]
       dep_js
     end
 
     # @param dep_js [Array] JS dependencies required for drawing a map(mapdata)
     # @return [void] Appends the map data in dep_js
     def get_map_data_dependencies(dep_js)
-      if !options[:chart_class].nil? && options[:chart_class].capitalize == 'Map' &&
-         options[:chart] && options[:chart][:map]
+      if user_options && user_options[:chart_class] &&
+         user_options[:chart_class].capitalize == 'Map' && options[:chart] &&
+         options[:chart][:map]
         dep_js.push(options[:chart][:map].to_s)
         dep_js.map! { |js| "mapdata/#{js}.js" }
       end
@@ -258,8 +264,8 @@ module LazyHighCharts
     # @return [String] the class of the chart
     def extract_chart_class
       # Provided by user and can take two values ('stock' or 'map').
-      chart_class = options.delete(:chart_class).to_s.capitalize unless
-      options[:chart_class].nil?
+      chart_class = user_options[:chart_class].to_s.capitalize if
+      user_options && user_options[:chart_class]
       chart_class = 'StockChart' if chart_class == 'Stock'
       chart_class = 'Chart' if chart_class.nil?
       unless %w[Chart StockChart Map].include?(chart_class)
