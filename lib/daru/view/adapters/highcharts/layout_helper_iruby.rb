@@ -28,23 +28,27 @@ module LazyHighCharts
       encapsulate_js_iruby core_js
     end
 
-    # rubocop:disable Metrics/PerceivedComplexity
     def encapsulate_js_iruby(core_js)
       js_output =
         if request_is_xhr?
           "#{js_start_iruby} #{core_js} #{js_end_iruby}"
         # Turbolinks.version < 5
-        elsif defined?(Turbolinks) && request_is_referrer?
-          eventlistener_page_load(core_js)
-        elsif defined?(Turbolinks) && request_turbolinks_5_tureferrer?
-          eventlistener_turbolinks_load(core_js)
+        elsif defined?(Turbolinks)
+          encapsulate_js_for_turbolinks(core_js)
         else
           call_core_js(core_js)
         end
 
       defined?(raw) ? raw(js_output) : js_output
     end
-    # rubocop:enable Metrics/PerceivedComplexity
+
+    def encapsulate_js_for_turbolinks(core_js)
+      if request_is_referrer?
+        eventlistener_page_load(core_js)
+      elsif request_turbolinks_5_tureferrer?
+        eventlistener_turbolinks_load(core_js)
+      end
+    end
 
     def eventlistener_page_load(core_js)
       <<-EOJS
