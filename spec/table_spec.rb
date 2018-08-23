@@ -70,14 +70,14 @@ describe Daru::View::Table, 'Generating Table with daru-data_tables library' do
 
     it 'daru-data_tables table using DataFrame' do
       expect(table_df).to be_a Daru::View::Table
-      expect(table_df.table).to be_a Daru::DataTables::DataTable
+      expect(table_df.table).to be_a Daru::View::DataTable
       expect(table_df.options).to eq options
       expect(table_df.data).to eq df
     end
 
     it 'daru-data_tables table using Vector' do
       expect(table_dv).to be_a Daru::View::Table
-      expect(table_dv.table).to be_a Daru::DataTables::DataTable
+      expect(table_dv.table).to be_a Daru::View::DataTable
       expect(table_dv.options).to eq options
       expect(table_dv.data).to eq dv
     end

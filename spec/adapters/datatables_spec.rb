@@ -18,20 +18,20 @@ describe Daru::View::Table, 'table using daru-data_tables' do
   let(:table_dv) { Daru::View::Table.new(@data_vec1, @options) }
 
   describe "initialization Tables" do
-    it "Table class must be Daru::DataTables::DataTable" do
-      expect(Daru::View::Table.new.table).to be_a Daru::DataTables::DataTable
+    it "Table class must be Daru::View::DataTable" do
+      expect(Daru::View::Table.new.table).to be_a Daru::View::DataTable
     end
 
-    it "Table class must be Daru::DataTables::DataTable when data objects" \
+    it "Table class must be Daru::View::DataTable when data objects" \
        " are of class Array" do
-      expect(table_string_array.table).to be_a Daru::DataTables::DataTable
+      expect(table_string_array.table).to be_a Daru::View::DataTable
       expect(table_string_array.data).to eq string_array
       expect(table_string_array.options).to eq options
     end
 
-    it "Table class must be Daru::DataTables::DataTable when data objects" \
+    it "Table class must be Daru::View::DataTable when data objects" \
        " are of class Array of Arrays" do
-      expect(table_array.table).to be_a Daru::DataTables::DataTable
+      expect(table_array.table).to be_a Daru::View::DataTable
       expect(table_array.data).to eq data_array
       expect(table_array.options).to eq options
     end

@@ -1,4 +1,3 @@
-require 'daru/data_tables'
 require 'daru'
 require 'securerandom'
 require 'erb'
@@ -59,13 +58,13 @@ module Daru
         #     table2 = Daru::View::Table.new(df_sale_exp, options2)
         #     table3 = Daru::View::Table.new(df_sale_exp)
         def init_table(data=[], options={}, _user_options={})
-          @table = Daru::DataTables::DataTable.new(data, options)
+          @table = Daru::View::DataTable.new(data, options)
           @table
         end
 
         # @return [String] returns code of the dependent JS and CSS file(s)
         def init_script
-          Daru::DataTables.init_script
+          Daru::View::DataTables.init_script
         end
 
         # @param table [Daru::DataTables::DataTable] table object to access
@@ -117,7 +116,7 @@ module Daru
         #   table = Daru::View::Table.new(data, options)
         #   table.init_iruby
         def init_iruby
-          Daru::DataTables.init_iruby
+          Daru::View::DataTables.init_iruby
         end
       end
     end
