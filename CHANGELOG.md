@@ -1,3 +1,19 @@
+## 0.2.0 (2017-08-29)
+
+**Major Enhancements:**
+
+- Added Highstock feature in highcharts plotting.
+
+
+**Minor Enhancements:**
+
+- TODO
+
+**Fixes:**
+
+- TODO
+
+
 ## 0.1.0 (2017-09-20)
 
 **Features:**
