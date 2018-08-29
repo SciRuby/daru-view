@@ -31,6 +31,8 @@ GoogleCharts/HighCharts/DataTables in Rails application.js file: #115
 
 - Fix generate_html method in googlecharts.rb: #84 (by @Prakriti-nith)
 - Update JS files for the libraries: #83 (by @rohitner)
+- Improved the coverage report.
+- Replace shekharrajak with SciRuby: #75 (by @Abhishek-sopho)
 
 **Note:**
 
