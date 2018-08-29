@@ -2,7 +2,11 @@
 
 **Major Enhancements:**
 
-- Added Highstock feature in highcharts plotting.
+- Added Highstock feature of HighCharts plotting: #89 (by @Prakriti-nith)
+- Added HighMaps feature of HighCharts plotting: #92 (by @Prakriti-nith)
+- Added Custom Styling CSS feature of HighCharts plotting: #93 (by @Prakriti-nith)
+- Exporting HighCharts to different formats: #94 (by @Prakriti-nith)
+- Added ChartWrapper feature of GoogleCharts: #95 (by @Prakriti-nith)
 
 
 **Minor Enhancements:**
