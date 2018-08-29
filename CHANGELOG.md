@@ -4,14 +4,20 @@
 
 - Added Highstock feature of HighCharts plotting: #89 (by @Prakriti-nith)
 - Added HighMaps feature of HighCharts plotting: #92 (by @Prakriti-nith)
-- Added Custom Styling CSS feature of HighCharts plotting: #93 (by @Prakriti-nith)
+- Added Custom Styling CSS feature of HighCharts plotting: #93
+(by @Prakriti-nith)
 - Exporting HighCharts to different formats: #94 (by @Prakriti-nith)
 - Added ChartWrapper feature of GoogleCharts: #95 (by @Prakriti-nith)
+- Import data from google spreadsheet: PR #88 (by @Prakriti-nith)
+- Added ChartEditor feature of GoogleCharts plotting: #96 (by @Prakriti-nith)
+- Multiple Charts having different (or same plotting library)
+in a single row(or in single cell in IRuby notebook): #97 (by @Prakriti-nith)
 
 
 **Minor Enhancements:**
 
-- TODO
+- Exporting charts in PNG formate for GoogleCharts: #98 (by @Prakriti-nith)
+- Handling Events in GoogleCharts: #100 (by @Prakriti-nith)
 
 **Fixes:**
 
