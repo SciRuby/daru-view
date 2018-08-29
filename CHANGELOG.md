@@ -12,17 +12,29 @@
 - Added ChartEditor feature of GoogleCharts plotting: #96 (by @Prakriti-nith)
 - Multiple Charts having different (or same plotting library)
 in a single row(or in single cell in IRuby notebook): #97 (by @Prakriti-nith)
+- Different formatters feature of GoogleCharts: #110 (by @Prakriti-nith)
+- Require dependent JS for the plotting libraries
+GoogleCharts/HighCharts/DataTables in Rails application.js file: #115
+(by @Prakriti-nith)
 
 
 **Minor Enhancements:**
 
 - Exporting charts in PNG formate for GoogleCharts: #98 (by @Prakriti-nith)
 - Handling Events in GoogleCharts: #100 (by @Prakriti-nith)
+- Added a method to load dependent scripts for multiple adapters: #107
+(by @Prakriti-nith)
+- Rake Task to add new adapter templates: #112 (by @Prakriti-nith)
+- (by @Prakriti-nith)
 
 **Fixes:**
 
-- TODO
+- Fix generate_html method in googlecharts.rb: #84 (by @Prakriti-nith)
+- Update JS files for the libraries: #83 (by @rohitner)
 
+**Note:**
+
+* https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report
 
 ## 0.1.0 (2017-09-20)
 
