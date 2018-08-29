@@ -36,7 +36,7 @@ GoogleCharts/HighCharts/DataTables in Rails application.js file: #115
 
 **Note:**
 
-* https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report
+* [GSoC 2018 project](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report)
 
 ## 0.1.0 (2017-09-20)
 
