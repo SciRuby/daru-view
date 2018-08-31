@@ -26,6 +26,7 @@ GoogleCharts/HighCharts/DataTables in Rails application.js file: #115
 (by @Prakriti-nith)
 - Rake Task to add new adapter templates: #112 (by @Prakriti-nith)
 - (by @Prakriti-nith)
+- export_html method, generate_html method is implemented and load large set of data piece by piece using datatables adaptor: #104 (by @Prakriti-nith)
 
 **Fixes:**
 
