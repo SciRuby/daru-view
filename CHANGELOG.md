@@ -1,3 +1,44 @@
+## 0.2.0 (2017-08-29)
+
+**Major Enhancements:**
+
+- Added Highstock feature of HighCharts plotting: #89 (by @Prakriti-nith)
+- Added HighMaps feature of HighCharts plotting: #92 (by @Prakriti-nith)
+- Added Custom Styling CSS feature of HighCharts plotting: #93
+(by @Prakriti-nith)
+- Exporting HighCharts to different formats: #94 (by @Prakriti-nith)
+- Added ChartWrapper feature of GoogleCharts: #95 (by @Prakriti-nith)
+- Import data from google spreadsheet: PR #88 (by @Prakriti-nith)
+- Added ChartEditor feature of GoogleCharts plotting: #96 (by @Prakriti-nith)
+- Multiple Charts having different (or same plotting library)
+in a single row(or in single cell in IRuby notebook): #97 (by @Prakriti-nith)
+- Different formatters feature of GoogleCharts: #110 (by @Prakriti-nith)
+- Require dependent JS for the plotting libraries
+GoogleCharts/HighCharts/DataTables in Rails application.js file: #115
+(by @Prakriti-nith)
+
+
+**Minor Enhancements:**
+
+- Exporting charts in PNG formate for GoogleCharts: #98 (by @Prakriti-nith)
+- Handling Events in GoogleCharts: #100 (by @Prakriti-nith)
+- Added a method to load dependent scripts for multiple adapters: #107
+(by @Prakriti-nith)
+- Rake Task to add new adapter templates: #112 (by @Prakriti-nith)
+- (by @Prakriti-nith)
+- export_html method, generate_html method is implemented and load large set of data piece by piece using datatables adaptor: #104 (by @Prakriti-nith)
+
+**Fixes:**
+
+- Fix generate_html method in googlecharts.rb: #84 (by @Prakriti-nith)
+- Update JS files for the libraries: #83 (by @rohitner)
+- Improved the coverage report.
+- Replace shekharrajak with SciRuby: #75 (by @Abhishek-sopho)
+
+**Note:**
+
+* [GSoC 2018 project](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report)
+
 ## 0.1.0 (2017-09-20)
 
 **Features:**
