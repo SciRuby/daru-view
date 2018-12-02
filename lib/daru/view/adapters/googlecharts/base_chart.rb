@@ -15,6 +15,7 @@ module GoogleVisualr
     # @see #GooleVisualr::DataTable.extract_option_view
     def extract_option_view
       return js_parameters(@options.delete('view')) unless @options['view'].nil?
+
       '\'\''
     end
 
