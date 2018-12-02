@@ -116,6 +116,7 @@ module Daru
           when data_set.is_a?(Daru::DataFrame)
             # TODO : Currently I didn't find use case for multi index.
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
+
             index_val = data_set.index.to_a
             data_set.access_row_tuples_by_indexs(*index_val)
           when data_set.is_a?(Daru::Vector)
