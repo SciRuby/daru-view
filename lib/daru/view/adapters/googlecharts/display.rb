@@ -167,6 +167,7 @@ module Display
   #   user_options[:listeners]
   def add_listener_to_chart
     return unless user_options && user_options[:listeners]
+
     user_options[:listeners].each do |event, callback|
       add_listener(event.to_s.downcase, callback)
     end
@@ -178,6 +179,7 @@ module Display
   #   third parameter
   def apply_formatters
     return unless user_options && user_options[:formatters]
+
     @formatters = []
     user_options[:formatters].each_value do |formatter|
       frmttr = case formatter[:type].to_s.capitalize
