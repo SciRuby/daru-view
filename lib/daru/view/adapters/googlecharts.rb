@@ -170,6 +170,7 @@ module Daru
           #  versions
           # For testing purpose, it is returning true
           return true if data.match(PATTERN_URL)
+
           raise 'Invalid URL'
         end
 
