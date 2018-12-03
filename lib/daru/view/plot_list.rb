@@ -77,6 +77,7 @@ module Daru
         return plot.div unless defined?(IRuby.html) &&
                                plot.is_a?(Daru::View::Plot) &&
                                plot.chart.is_a?(LazyHighCharts::HighChart)
+
         plot.chart.to_html_iruby
       end
 

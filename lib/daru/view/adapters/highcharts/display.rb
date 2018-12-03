@@ -271,6 +271,7 @@ module LazyHighCharts
       unless %w[Chart StockChart Map].include?(chart_class)
         raise 'chart_class must be selected as either chart, stock or map'
       end
+
       chart_class
     end
 

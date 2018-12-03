@@ -33,6 +33,7 @@ module GoogleVisualr
       new_columns(options[:cols]) unless options[:cols].nil?
 
       return if options[:rows].nil?
+
       rows = options[:rows]
       rows.each do |row|
         add_row(row[:c])
@@ -74,6 +75,7 @@ module GoogleVisualr
     def package_name
       return 'table' unless
       user_options && user_options[:chart_class].to_s.capitalize == 'Charteditor'
+
       'charteditor'
     end
 
@@ -81,6 +83,7 @@ module GoogleVisualr
     #   and '' otherwise
     def extract_option_view
       return js_parameters(@options.delete(:view)) unless @options[:view].nil?
+
       '\'\''
     end
 

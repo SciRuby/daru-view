@@ -170,6 +170,7 @@ module Daru
           #  versions
           # For testing purpose, it is returning true
           return true if data.match(PATTERN_URL)
+
           raise 'Invalid URL'
         end
 
@@ -200,6 +201,7 @@ module Daru
         def export(plot, export_type='png', file_name='chart')
           raise NotImplementedError, 'Not yet implemented!' unless
           export_type == 'png'
+
           plot.export_iruby(export_type, file_name) if defined? IRuby
         rescue NameError
           plot.export(export_type, file_name)
@@ -267,11 +269,13 @@ module Daru
           case
           when data_set.is_a?(Daru::DataFrame)
             return ArgumentError unless data_set.index.is_a?(Daru::Index)
+
             rows = add_dataframe_data(data_set)
           when data_set.is_a?(Daru::Vector)
             rows = add_vector_data(data_set)
           when data_set.is_a?(Array)
             return GoogleVisualr::DataTable.new if data_set.empty?
+
             rows = add_array_data(data_set)
           when data_set.is_a?(Hash)
             @table = GoogleVisualr::DataTable.new(data_set)
@@ -328,6 +332,7 @@ module Daru
 
         def return_js_type(data)
           return if data.nil?
+
           data = data.is_a?(Hash) ? data[:v] : data
           extract_js_type(data)
         end

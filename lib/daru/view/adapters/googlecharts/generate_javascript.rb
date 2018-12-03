@@ -24,6 +24,7 @@ module GenerateJavascript
   #   draw the Chartwrapper based upon the data provided.
   def append_data(data)
     return "\n  \t\tdataSourceUrl: '#{data}'," if data.is_a? String
+
     "\n  \t\tdataTable: data_table,"
   end
 
