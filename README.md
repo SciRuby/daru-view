@@ -6,11 +6,15 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 
 ## Documentation :
 
-[http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/)
+- [http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/)
 
-[daru-view/wiki](https://github.com/Shekharrajak/daru-view/wiki)
+- [daru-view/wiki](https://github.com/Shekharrajak/daru-view/wiki)
 
-[ScirRuby/blog](http://sciruby.com/blog/2017/09/01/gsoc-2017-data-visualization-using-daru-view/)
+## Blogs :
+
+- [ScirRuby/blog](http://sciruby.com/blog/2017/09/01/gsoc-2017-data-visualization-using-daru-view/)
+- [GSoC 2017 Blog posts](http://shekharrajak.github.io/gsoc_2017_posts/)
+- [GSoC 2018: Work Product](https://32teethglitter.wordpress.com/2018/08/07/work-product-gsoc-2018/)
 
 ## Examples :
 
