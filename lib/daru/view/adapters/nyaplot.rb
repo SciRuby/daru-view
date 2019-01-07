@@ -6,7 +6,7 @@ module Daru
   module View
     module Adapter
       module NyaplotAdapter
-        extend self # rubocop:disable Style/ModuleFunction
+        extend self
         def init(data, options, _user_options={})
           data_new = guess_data(data)
           data_new.plot(options)

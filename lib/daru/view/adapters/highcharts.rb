@@ -8,7 +8,7 @@ module Daru
   module View
     module Adapter
       module HighchartsAdapter
-        extend self # rubocop:disable Style/ModuleFunction
+        extend self
 
         # Read : https://www.highcharts.com/docs/chart-concepts to understand
         # the highcharts option concept.
