@@ -16,6 +16,11 @@ after_script:
   - bundle exec rake coveralls:push
 
 install:
-  - gem install bundler
+  - if [ $TRAVIS_RUBY_VERSION == '2.2' || $TRAVIS_RUBY_VERSION == '2.1' || $TRAVIS_RUBY_VERSION == '2.0']; then
+      echo $TRAVIS_RUBY_VERSION
+      gem install bundler -v '~> 1.6'
+    else
+      gem install bundler
+    fi
   - gem install rainbow -v '2.2.1'
   - bundle install
