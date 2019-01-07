@@ -129,7 +129,7 @@ Daru::View.plotting_library = :highcharts
 
 ```
 
-[[ https://github.com/shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighChart blog/lineChart.gif]]
+![Line Graph](https://github.com/shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighChart blog/lineChart.gif)
 
 
 Nyaplot example :
