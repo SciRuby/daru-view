@@ -102,11 +102,37 @@ _Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added 
 
 - Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
 
-- In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
+- To setup the dependencies of HighCharts/DataTables in rails app, we can use below line in app/assets/javascript/application.js file :
+
+```
+//= require highcharts/highcharts                                                           
+//= require highcharts/highcharts-more
+//= require highcharts/map
+//= require jquery-latest.min
+//= require jquery.dataTables
+```
+
+and CSS files can be included as:
+
+```
+ *= require jquery.dataTables
+```
+
+Include the below line in the head of the layout file(whereever you want to plot charts):
+
+```
+
+<%= javascript_include_tag "application" %>
+<%= stylesheet_link_tag "application" %>
+```
+
+
+NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
 
 The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
 
-- Plot library using by passing `data` and `options` :
+You can read more about this feature in [this wiki page section](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report#reduce-a-bunch-of-lines-due-to-js-files-in-source-html-in-rails-pr-115-in-daru-view-pr-23-in-daru-data_tables).
+
 
 HighCharts example :
 
