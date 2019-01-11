@@ -102,71 +102,90 @@ _Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added 
 
 - Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
 
-- In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
+- To setup the dependencies of HighCharts/DataTables in rails app, we can use below line in app/assets/javascript/application.js file :
+
+```
+//= require highcharts/highcharts                                                           
+//= require highcharts/highcharts-more
+//= require highcharts/map
+//= require jquery-latest.min
+//= require jquery.dataTables
+```
+
+and CSS files can be included as:
+
+```
+ *= require jquery.dataTables
+```
+
+Include the below line in the head of the layout file(whereever you want to plot charts):
+
+```
+
+<%= javascript_include_tag "application" %>
+<%= stylesheet_link_tag "application" %>
+```
+
+
+NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
 
 The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
 
-- Plot library using by passing `data` and `options` :
+You can read more about this feature in [this wiki page section](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report#reduce-a-bunch-of-lines-due-to-js-files-in-source-html-in-rails-pr-115-in-daru-view-pr-23-in-daru-data_tables).
 
-HighCharts example :
+
+##### HighCharts example :
 
 ```ruby
 
 # set the library, to plot charts
 Daru::View.plotting_library = :highcharts
 
-# options for the charts
-opts = {
-      chart: {defaultSeriesType: 'line'},
-      title: {
-        text: 'Solar Employment Growth by Sector, 2010-2016'
-        },
+# Simple line chart
+@line_graph = Daru::View::Plot.new(
+  data=[43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+)
 
-      subtitle: {
-          text: 'Source: thesolarfoundation.com'
-      },
+# to see graph in IRuby noteboook
+@line_graph.show_in_iruby
 
-      yAxis: {
-          title: {
-              text: 'Number of Employees'
-          }
-      },
-      legend: {
-          layout: 'vertical',
-          align: 'right',
-          verticalAlign: 'middle'
-      },
-
-      plotOptions: {
-          # this is not working. Find the bug
-          # series: {
-          #     pointStart: 43934
-          # }
-      },
-  }
-
-# data for the charts
-series_dt = ([{
-      name: 'Tokyo',
-      data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-  }, {
-      name: 'London',
-      data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-  }])
-
-# initialize
-@line_graph = Daru::View::Plot.new(series_dt, opts)
-
+# to see graph in any ruby web application framework
 # Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
-
 <%=raw @line_graph.div %>
-
-# Now refresh the page, you will be able to see your graph.
 
 ```
 
+![Line Graph](https://github.com/shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighChartBlog/lineChart.gif)
 
-Nyaplot example :
+
+##### GoogleChart example:
+
+```ruby
+
+# Default chart type is Line.
+data = [
+        [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
+        [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
+        [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
+        [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
+        [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
+        [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
+        [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
+        [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
+        [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
+        [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
+        [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
+        [66, 70], [67, 72], [68, 75], [69, 80]
+      ]
+line_basic_chart = Daru::View::Plot.new(data)
+line_basic_chart.show_in_iruby
+
+```
+
+![Line Graph GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/lineChart.gif)
+
+
+##### Nyaplot example :
 
 ```ruby
 
@@ -189,8 +208,8 @@ data_df = Daru::DataFrame.new({
 data_df.to_category :c
 
 # initialize
-@bar_graph1 = Daru::View::Plot.new(data_vector ,opts)
-@bar_graph2 = Daru::View::Plot.new(data_df, type: :bar, x: :c)
+@bar_graph_vector = Daru::View::Plot.new(data_vector ,opts)
+@bar_graph_df = Daru::View::Plot.new(data_df, type: :bar, x: :c)
 
 # Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
 
@@ -199,7 +218,24 @@ data_df.to_category :c
 
 # Now refresh the page, you will be able to see your graph.
 
+
+# IRuby notebook
+@bar_graph_vector.show_in_iruby
+
 ```
+
+![Bar Graph Nyaplot Vector](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/Nyaplot/nyaplot%2Bvector.gif)
+
+
+```
+@bar_graph_df.show_in_iruby
+
+```
+
+![Bar Graph Nyaplot Dataframe](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/Nyaplot/nyaplot_df.gif)
+
+
+
 
 - User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
 

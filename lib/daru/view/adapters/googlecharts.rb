@@ -9,7 +9,7 @@ module Daru
   module View
     module Adapter
       module GooglechartsAdapter
-        extend self # rubocop:disable Style/ModuleFunction
+        extend self
 
         # Read : https://developers.google.com/chart/ to understand
         # the google charts option concept.
