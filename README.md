@@ -58,6 +58,8 @@ gem specific_install https://github.com/SciRuby/daru-view
 
 ### Use in IRuby notebook
 
+- To install IRuby notebook in your system, follow the steps given in [IRuby repo](https://github.com/SciRuby/iruby#quick-start).
+
 - Create separate folder and Gemfile inside it. Add minimum these lines in it
 
 ```ruby
@@ -81,60 +83,7 @@ gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.g
 
 - You may like to try some examples that is added in specs : [spec/dummy_iruby/](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
 
-### Use in web application
-
-- Add this line in your Gemfile :
-```ruby
-
-gem 'daru-view', :git => 'https://github.com/sciruby/daru-view.git'
-
-gem "daru", git: 'https://github.com/SciRuby/daru.git'
-gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
-gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
-gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
-```
-
-_Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added as development_dependency. Since daru-view required the latest github version of the Daru and Nyaplot gem and we can't fetch gem from the github in the gemspec.
-
-#### Rails application
-
-- In controller, do the data analysis process using daru operations and get the DataFrame/Vectors.
-
-- Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
-
-- To setup the dependencies of HighCharts/DataTables in rails app, we can use below line in app/assets/javascript/application.js file :
-
-```
-//= require highcharts/highcharts                                                           
-//= require highcharts/highcharts-more
-//= require highcharts/map
-//= require jquery-latest.min
-//= require jquery.dataTables
-```
-
-and CSS files can be included as:
-
-```
- *= require jquery.dataTables
-```
-
-Include the below line in the head of the layout file(whereever you want to plot charts):
-
-```
-
-<%= javascript_include_tag "application" %>
-<%= stylesheet_link_tag "application" %>
-```
-
-
-NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
-
-The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
-
-You can read more about this feature in [this wiki page section](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report#reduce-a-bunch-of-lines-due-to-js-files-in-source-html-in-rails-pr-115-in-daru-view-pr-23-in-daru-data_tables).
-
-
-##### HighCharts example :
+#### HighCharts example :
 
 ```ruby
 
@@ -184,8 +133,129 @@ line_basic_chart.show_in_iruby
 
 ![Line Graph GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/lineChart.gif)
 
+#### GoogleChart - GeoChart
 
-##### Nyaplot example :
+```ruby
+
+country_population = [
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+]
+
+df_cp = Daru::DataFrame.rows(country_population)
+df_cp.vectors = Daru::Index.new(['Country', 'Population'])
+geo_table = Daru::View::Table.new(df_cp, pageSize: 5, adapter: :googlecharts, height: 200, width: 200)
+geochart = Daru::View::Plot.new(
+    geo_table.table, type: :geo, adapter: :googlecharts, height: 500, width: 800)
+geochart.show_in_iruby
+
+```
+
+![World map GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/worldMap.gif)
+
+
+- You can find more examples in this [IRuby notebook example](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/Google%20Charts%20%7C%20Geo%20Charts%20examples.ipynb).
+
+#### GoogleChart - datatable
+
+```ruby
+
+data = {
+  cols: [{id: 'Name', label: 'Name', type: 'string'},
+          {id: 'Salary', label: 'Salary', type: 'number'},
+          {type: 'boolean', label: 'Full Time Employee' },
+        ],
+  rows: [
+    {c:[{v: 'Mike'}, {v: 10000, f: '$10,000'}, {v: true}]},
+    {c:[{v: 'Jim'}, {v:8000,   f: '$8,000'}, {v: false}]},
+    {c:[{v: 'Alice'}, {v: 12500, f: '$12,500'}, {v: true}]},
+    {c:[{v: 'Bob'}, {v: 7000,  f: '$7,000'}, {v: true}]},
+    ]
+  }
+table = Daru::View::Table.new(data, {height: 300, width: 200})
+table.show_in_iruby
+
+```
+
+![GoogleChart datatable](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/GoogleChartDatatable.gif)
+
+- Checkout more amazing examples of GoogleChart datatable in [IRuby notebook](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/GoolgeChart%20%7C%20Datatables.ipynb).
+
+#### DataTable example
+
+```ruby
+
+arrayOfArray = [
+      [1, 3, 5, 7, 5, 0],
+      [1, 5, 2, 5, 1, 0],
+      [1, 6, 7, 2, 6, 0]
+    ]
+arrayOfArrayTable = Daru::View::Table.new(arrayOfArray, pageLength: 3, adapter: :datatables)
+
+# paste the div part of the table in view part of the app or any html file. 
+# First load the dependency for the datatable using this line : `Daru::View.dependent_script(:datatables)`
+arrayOfArrayTable.div
+
+# For Rails application, we can use this line  <%=raw arrayOfArrayTable.div %>
+# For Nanoc and Sinatra application, we can use this line  <%= arrayOfArrayTable.div %>
+
+```
+
+- NOTE: It works seamlessly in Ruby web applications, but currently DataTable doesn't work in IRuby notebook, 
+because of conflict in DataTable dependent js and IRuby dependent js. 
+
+- To see more examples, please check datatables examples written in [demo_daru-view](https://github.com/Shekharrajak/demo_daru-view) repository for different Ruby web application frameworks.
+
+#### HighMap example
+
+```ruby
+
+opts = {
+      chart: {
+        map: 'countries/in/in-all'
+      },
+
+      title: {
+          text: 'Highmaps basic demo'
+      },
+
+      subtitle: {
+          text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/in/in-all.js">India</a>'
+      },
+
+      mapNavigation: {
+          enabled: true,
+          buttonOptions: {
+              verticalAlign: 'bottom'
+          }
+      },
+
+      colorAxis: {
+          min: 0
+      }
+    }
+
+df = Daru::DataFrame.new(
+  {
+    countries: ['in-py', 'in-ld', 'in-wb', 'in-or', 'in-br', 'in-sk', 'in-ct', 'in-tn', 'in-mp', 'in-2984', 'in-ga', 'in-nl', 'in-mn', 'in-ar', 'in-mz', 'in-tr', 'in-3464', 'in-dl', 'in-hr', 'in-ch', 'in-hp', 'in-jk', 'in-kl', 'in-ka', 'in-dn', 'in-mh', 'in-as', 'in-ap', 'in-ml', 'in-pb', 'in-rj', 'in-up', 'in-ut', 'in-jh'],
+    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+  }
+)
+map = Daru::View::Plot.new(df, opts, chart_class: 'map')
+map.show_in_iruby
+
+```
+
+![HighMap example India](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighMap/highMap.gif)
+
+- Read more about HighMap API in daru-view gem in this [wiki page section](https://github.com/SciRuby/daru-view/wiki/HighCharts-features#highmap).
+
+
+#### Nyaplot example :
 
 ```ruby
 
@@ -234,9 +304,6 @@ data_df.to_category :c
 
 ![Bar Graph Nyaplot Dataframe](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/Nyaplot/nyaplot_df.gif)
 
-
-
-
 - User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
 
 ```
@@ -246,6 +313,60 @@ bundle exec rails s
 ```
 Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts and similarly for googlecharts, datatables
 to see the Highcharts examples.
+
+
+### Use in web application
+
+- Add this line in your Gemfile :
+
+```ruby
+
+gem 'daru-view', :git => 'https://github.com/sciruby/daru-view.git'
+
+gem "daru", git: 'https://github.com/SciRuby/daru.git'
+gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
+gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
+```
+
+_Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added as development_dependency. Since daru-view required the latest github version of the Daru and Nyaplot gem and we can't fetch gem from the github in the gemspec.
+
+#### Rails application
+
+- In controller, do the data analysis process using daru operations and get the DataFrame/Vectors.
+
+- Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
+
+- To setup the dependencies of HighCharts/DataTables in rails app, we can use below line in app/assets/javascript/application.js file :
+
+```
+//= require highcharts/highcharts                                                           
+//= require highcharts/highcharts-more
+//= require highcharts/map
+//= require jquery-latest.min
+//= require jquery.dataTables
+```
+
+and CSS files can be included as:
+
+```
+ *= require jquery.dataTables
+```
+
+Include the below line in the head of the layout file(whereever you want to plot charts):
+
+```
+
+<%= javascript_include_tag "application" %>
+<%= stylesheet_link_tag "application" %>
+```
+
+
+NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
+
+The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
+
+You can read more about this feature in [this wiki page section](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report#reduce-a-bunch-of-lines-due-to-js-files-in-source-html-in-rails-pr-115-in-daru-view-pr-23-in-daru-data_tables).
 
 
 #### Sinatra application
