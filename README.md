@@ -239,6 +239,30 @@ table.show_in_iruby
 
 - Checkout more amazing examples of GoogleChart datatable in [IRuby notebook](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/GoolgeChart%20%7C%20Datatables.ipynb).
 
+##### DataTable example
+
+```ruby
+
+arrayOfArray = [
+      [1, 3, 5, 7, 5, 0],
+      [1, 5, 2, 5, 1, 0],
+      [1, 6, 7, 2, 6, 0]
+    ]
+arrayOfArrayTable = Daru::View::Table.new(arrayOfArray, pageLength: 3, adapter: :datatables)
+
+# paste the div part of the table in view part of the app or any html file. 
+# First load the dependency for the datatable using this line : `Daru::View.dependent_script(:datatables)`
+arrayOfArrayTable.div
+
+# For Rails application, we can use this line  <%=raw arrayOfArrayTable.div %>
+# For Nanoc and Sinatra application, we can use this line  <%= arrayOfArrayTable.div %>
+
+```
+
+- NOTE: It works seamlessly in Ruby web applications, but currently DataTable doesn't work in IRuby notebook, 
+because of conflict in DataTable dependent js and IRuby dependent js. 
+
+- To see more examples, please check datatables examples written in [demo_daru-view](https://github.com/Shekharrajak/demo_daru-view) repository for different Ruby web application frameworks.
 
 ##### HighMap example
 
