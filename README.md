@@ -83,61 +83,7 @@ gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.g
 
 - You may like to try some examples that is added in specs : [spec/dummy_iruby/](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
 
-### Use in web application
-
-- Add this line in your Gemfile :
-
-```ruby
-
-gem 'daru-view', :git => 'https://github.com/sciruby/daru-view.git'
-
-gem "daru", git: 'https://github.com/SciRuby/daru.git'
-gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
-gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
-gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
-```
-
-_Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added as development_dependency. Since daru-view required the latest github version of the Daru and Nyaplot gem and we can't fetch gem from the github in the gemspec.
-
-#### Rails application
-
-- In controller, do the data analysis process using daru operations and get the DataFrame/Vectors.
-
-- Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
-
-- To setup the dependencies of HighCharts/DataTables in rails app, we can use below line in app/assets/javascript/application.js file :
-
-```
-//= require highcharts/highcharts                                                           
-//= require highcharts/highcharts-more
-//= require highcharts/map
-//= require jquery-latest.min
-//= require jquery.dataTables
-```
-
-and CSS files can be included as:
-
-```
- *= require jquery.dataTables
-```
-
-Include the below line in the head of the layout file(whereever you want to plot charts):
-
-```
-
-<%= javascript_include_tag "application" %>
-<%= stylesheet_link_tag "application" %>
-```
-
-
-NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
-
-The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
-
-You can read more about this feature in [this wiki page section](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report#reduce-a-bunch-of-lines-due-to-js-files-in-source-html-in-rails-pr-115-in-daru-view-pr-23-in-daru-data_tables).
-
-
-##### HighCharts example :
+#### HighCharts example :
 
 ```ruby
 
@@ -187,7 +133,7 @@ line_basic_chart.show_in_iruby
 
 ![Line Graph GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/lineChart.gif)
 
-##### GoogleChart - GeoChart
+#### GoogleChart - GeoChart
 
 ```ruby
 
@@ -214,7 +160,7 @@ geochart.show_in_iruby
 
 - You can find more examples in this [IRuby notebook example](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/Google%20Charts%20%7C%20Geo%20Charts%20examples.ipynb).
 
-##### GoogleChart - datatable
+#### GoogleChart - datatable
 
 ```ruby
 
@@ -239,7 +185,7 @@ table.show_in_iruby
 
 - Checkout more amazing examples of GoogleChart datatable in [IRuby notebook](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/GoolgeChart%20%7C%20Datatables.ipynb).
 
-##### DataTable example
+#### DataTable example
 
 ```ruby
 
@@ -264,7 +210,7 @@ because of conflict in DataTable dependent js and IRuby dependent js.
 
 - To see more examples, please check datatables examples written in [demo_daru-view](https://github.com/Shekharrajak/demo_daru-view) repository for different Ruby web application frameworks.
 
-##### HighMap example
+#### HighMap example
 
 ```ruby
 
@@ -309,7 +255,7 @@ map.show_in_iruby
 - Read more about HighMap API in daru-view gem in this [wiki page section](https://github.com/SciRuby/daru-view/wiki/HighCharts-features#highmap).
 
 
-##### Nyaplot example :
+#### Nyaplot example :
 
 ```ruby
 
@@ -367,6 +313,60 @@ bundle exec rails s
 ```
 Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts and similarly for googlecharts, datatables
 to see the Highcharts examples.
+
+
+### Use in web application
+
+- Add this line in your Gemfile :
+
+```ruby
+
+gem 'daru-view', :git => 'https://github.com/sciruby/daru-view.git'
+
+gem "daru", git: 'https://github.com/SciRuby/daru.git'
+gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
+gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
+```
+
+_Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added as development_dependency. Since daru-view required the latest github version of the Daru and Nyaplot gem and we can't fetch gem from the github in the gemspec.
+
+#### Rails application
+
+- In controller, do the data analysis process using daru operations and get the DataFrame/Vectors.
+
+- Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
+
+- To setup the dependencies of HighCharts/DataTables in rails app, we can use below line in app/assets/javascript/application.js file :
+
+```
+//= require highcharts/highcharts                                                           
+//= require highcharts/highcharts-more
+//= require highcharts/map
+//= require jquery-latest.min
+//= require jquery.dataTables
+```
+
+and CSS files can be included as:
+
+```
+ *= require jquery.dataTables
+```
+
+Include the below line in the head of the layout file(whereever you want to plot charts):
+
+```
+
+<%= javascript_include_tag "application" %>
+<%= stylesheet_link_tag "application" %>
+```
+
+
+NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
+
+The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
+
+You can read more about this feature in [this wiki page section](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report#reduce-a-bunch-of-lines-due-to-js-files-in-source-html-in-rails-pr-115-in-daru-view-pr-23-in-daru-data_tables).
 
 
 #### Sinatra application
