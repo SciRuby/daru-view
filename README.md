@@ -86,6 +86,7 @@ gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.g
 ### Use in web application
 
 - Add this line in your Gemfile :
+
 ```ruby
 
 gem 'daru-view', :git => 'https://github.com/sciruby/daru-view.git'
@@ -185,6 +186,78 @@ line_basic_chart.show_in_iruby
 ```
 
 ![Line Graph GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/lineChart.gif)
+
+##### GoogleChart - GeoChart
+
+```ruby
+
+country_population = [
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+]
+
+df_cp = Daru::DataFrame.rows(country_population)
+df_cp.vectors = Daru::Index.new(['Country', 'Population'])
+geo_table = Daru::View::Table.new(df_cp, pageSize: 5, adapter: :googlecharts, height: 200, width: 200)
+geochart = Daru::View::Plot.new(
+    geo_table.table, type: :geo, adapter: :googlecharts, height: 500, width: 800)
+geochart.show_in_iruby
+
+```
+
+![World map GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/worldMap.gif)
+
+
+- You can find more examples in this [IRuby notebook example](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/Google%20Charts%20%7C%20Geo%20Charts%20examples.ipynb).
+
+
+##### HighMap example
+
+```ruby
+
+opts = {
+      chart: {
+        map: 'countries/in/in-all'
+      },
+
+      title: {
+          text: 'Highmaps basic demo'
+      },
+
+      subtitle: {
+          text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/in/in-all.js">India</a>'
+      },
+
+      mapNavigation: {
+          enabled: true,
+          buttonOptions: {
+              verticalAlign: 'bottom'
+          }
+      },
+
+      colorAxis: {
+          min: 0
+      }
+    }
+
+df = Daru::DataFrame.new(
+  {
+    countries: ['in-py', 'in-ld', 'in-wb', 'in-or', 'in-br', 'in-sk', 'in-ct', 'in-tn', 'in-mp', 'in-2984', 'in-ga', 'in-nl', 'in-mn', 'in-ar', 'in-mz', 'in-tr', 'in-3464', 'in-dl', 'in-hr', 'in-ch', 'in-hp', 'in-jk', 'in-kl', 'in-ka', 'in-dn', 'in-mh', 'in-as', 'in-ap', 'in-ml', 'in-pb', 'in-rj', 'in-up', 'in-ut', 'in-jh'],
+    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+  }
+)
+map = Daru::View::Plot.new(df, opts, chart_class: 'map')
+map.show_in_iruby
+
+```
+
+![highMap example India](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighMap/highMap.gif)
+
+- Read more about HighMap API in daru-view gem in this [wiki page section](https://github.com/SciRuby/daru-view/wiki/HighCharts-features#highmap).
 
 
 ##### Nyaplot example :
