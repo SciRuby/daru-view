@@ -214,6 +214,31 @@ geochart.show_in_iruby
 
 - You can find more examples in this [IRuby notebook example](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/Google%20Charts%20%7C%20Geo%20Charts%20examples.ipynb).
 
+##### GoogleChart - datatable
+
+```ruby
+
+data = {
+  cols: [{id: 'Name', label: 'Name', type: 'string'},
+          {id: 'Salary', label: 'Salary', type: 'number'},
+          {type: 'boolean', label: 'Full Time Employee' },
+        ],
+  rows: [
+    {c:[{v: 'Mike'}, {v: 10000, f: '$10,000'}, {v: true}]},
+    {c:[{v: 'Jim'}, {v:8000,   f: '$8,000'}, {v: false}]},
+    {c:[{v: 'Alice'}, {v: 12500, f: '$12,500'}, {v: true}]},
+    {c:[{v: 'Bob'}, {v: 7000,  f: '$7,000'}, {v: true}]},
+    ]
+  }
+table = Daru::View::Table.new(data, {height: 300, width: 200})
+table.show_in_iruby
+
+```
+
+![GoogleChart datatable](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/GoogleChartDatatable.gif)
+
+- Checkout more amazing examples of GoogleChart datatable in [IRuby notebook](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/GoolgeChart%20%7C%20Datatables.ipynb).
+
 
 ##### HighMap example
 
@@ -255,7 +280,7 @@ map.show_in_iruby
 
 ```
 
-![highMap example India](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighMap/highMap.gif)
+![HighMap example India](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighMap/highMap.gif)
 
 - Read more about HighMap API in daru-view gem in this [wiki page section](https://github.com/SciRuby/daru-view/wiki/HighCharts-features#highmap).
 
