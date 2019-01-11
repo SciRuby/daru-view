@@ -2,8 +2,8 @@ language:
   ruby
 
 rvm:
-  - '2.0'
-  - '2.1'
+  # - '2.0'
+  # - '2.1' NOTE: For ruby <2.3,rubocop Offense : adapters/*charts.rb:11:9: C: Style/ModuleFunction: Use module_function instead of extend self.
   - '2.2'
   - '2.3.0'
   - '2.4.0'
