@@ -58,6 +58,8 @@ gem specific_install https://github.com/SciRuby/daru-view
 
 ### Use in IRuby notebook
 
+- To install IRuby notebook in your system, follow the steps given in [IRuby repo](https://github.com/SciRuby/iruby#quick-start).
+
 - Create separate folder and Gemfile inside it. Add minimum these lines in it
 
 ```ruby
@@ -233,9 +235,6 @@ data_df.to_category :c
 ```
 
 ![Bar Graph Nyaplot Dataframe](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/Nyaplot/nyaplot_df.gif)
-
-
-
 
 - User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
 
