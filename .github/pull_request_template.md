@@ -10,7 +10,13 @@ open. -->
 
 
 #### Brief description of what is fixed or changed
-<!-- Description with demonstrating the changes with example(s) will be better. Attach screenshort for graphs. -->
+<!-- Description with demonstrating the changes with example(s). Attach screenshort for graph related changes. -->
+
+#### Testcase / documentation
+
+<!-- Make sure you have added the testcases for your code changes and documented (or updated the docs) with examples. -->
 
 #### Other comments
 <!-- Any pending work (TODO) -->
+
+<!-- Contribution guide : https://github.com/SciRuby/daru-view/blob/master/CONTRIBUTING.md -->
