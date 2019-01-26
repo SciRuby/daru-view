@@ -11,7 +11,7 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 
 ## Documentation :
 
-- [http://www.rubydoc.info/github/Shekharrajak/daru-view/](http://www.rubydoc.info/github/Shekharrajak/daru-view/)
+- [Documentation present in Rubydoc](http://www.rubydoc.info/github/sciruby/daru-view/)
 
 - [daru-view/wiki](https://github.com/SciRuby/daru-view/wiki)
 
