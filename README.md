@@ -283,8 +283,8 @@ data_df.to_category :c
 
 # Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
 
-<%=raw @bar_graph1.div %>
-<%=raw @bar_graph2.div %>
+<%=raw @bar_graph_vector.div %>
+<%=raw @bar_graph_df.div %>
 
 # Now refresh the page, you will be able to see your graph.
 
