@@ -104,7 +104,7 @@ Daru::View.plotting_library = :highcharts
 
 ```
 
-![Line Graph](https://github.com/shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighChartBlog/lineChart.gif)
+![Line Graph](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/HighChartBlog/lineChart.gif)
 
 
 ##### GoogleChart example:
@@ -131,7 +131,7 @@ line_basic_chart.show_in_iruby
 
 ```
 
-![Line Graph GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/lineChart.gif)
+![Line Graph GoogleChart](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/GoogleChart/lineChart.gif)
 
 #### GoogleChart - GeoChart
 
@@ -155,7 +155,7 @@ geochart.show_in_iruby
 
 ```
 
-![World map GoogleChart](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/worldMap.gif)
+![World map GoogleChart](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/GoogleChart/worldMap.gif)
 
 
 - You can find more examples in this [IRuby notebook example](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/Google%20Charts%20%7C%20Geo%20Charts%20examples.ipynb).
@@ -181,7 +181,7 @@ table.show_in_iruby
 
 ```
 
-![GoogleChart datatable](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/GoogleChart/GoogleChartDatatable.gif)
+![GoogleChart datatable](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/GoogleChart/GoogleChartDatatable.gif)
 
 - Checkout more amazing examples of GoogleChart datatable in [IRuby notebook](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/GoolgeChart%20%7C%20Datatables.ipynb).
 
@@ -250,7 +250,7 @@ map.show_in_iruby
 
 ```
 
-![HighMap example India](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/HighMap/highMap.gif)
+![HighMap example India](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/HighMap/highMap.gif)
 
 - Read more about HighMap API in daru-view gem in this [wiki page section](https://github.com/SciRuby/daru-view/wiki/HighCharts-features#highmap).
 
@@ -283,8 +283,8 @@ data_df.to_category :c
 
 # Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
 
-<%=raw @bar_graph1.div %>
-<%=raw @bar_graph2.div %>
+<%=raw @bar_graph_vector.div %>
+<%=raw @bar_graph_df.div %>
 
 # Now refresh the page, you will be able to see your graph.
 
@@ -294,7 +294,7 @@ data_df.to_category :c
 
 ```
 
-![Bar Graph Nyaplot Vector](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/Nyaplot/nyaplot%2Bvector.gif)
+![Bar Graph Nyaplot Vector](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/Nyaplot/nyaplot%2Bvector.gif)
 
 
 ```
@@ -302,7 +302,7 @@ data_df.to_category :c
 
 ```
 
-![Bar Graph Nyaplot Dataframe](https://github.com/Shekharrajak/medium-daru-view-blog/blob/master/GIF_Images/Nyaplot/nyaplot_df.gif)
+![Bar Graph Nyaplot Dataframe](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/Nyaplot/nyaplot_df.gif)
 
 - User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
 
