@@ -1,6 +1,7 @@
 require 'daru'
 require 'securerandom'
 require 'erb'
+require 'daru/data_tables'
 
 module Daru
   module View
