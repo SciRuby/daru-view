@@ -1,5 +1,5 @@
 module Daru
   module View
-    VERSION = '0.2.4'.freeze
+    VERSION = '0.2.5'.freeze
   end
 end
