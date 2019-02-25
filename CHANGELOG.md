@@ -1,4 +1,14 @@
-## 0.2.0 (2017-08-29)
+## 0.2.5 (2019-02-25)
+
+**Fixes:**
+
+- Fixed Rubocop offenses coming from version 0.60 #125 (by @Shekharrajak)
+- Updated README.md and Contribution Guide #129, #131, #133, 
+    #139, #141 (by @Shekharrajak)
+- Removed the duplicate highcharts.css #145 (by @[snpd25](/snpd25)) 
+- [Majaor Fix] Windows installation error fix #147 (by @kojix2 & @Shekharrajak)
+
+## 0.2.4 (2017-08-29)
 
 **Major Enhancements:**
 
