@@ -23,6 +23,12 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 
 - [GSoC 2018: Work Product](https://32teethglitter.wordpress.com/2018/08/07/work-product-gsoc-2018/)
 
+- [Rubyist’s, so called Powerful Future Plotting library](https://medium.com/@Shekharrajak/rubyists-so-called-powerful-future-plotting-library-1c4e202eee6d)
+
+- [I am a Ruby developer. How can I use Highcharts?](https://www.highcharts.com/blog/post/i-am-ruby-developer-how-can-i-use-highcharts/?__cf_chl_jschl_tk__=338bba242759c7d002887f58fad0e75aa46ed51a-1590914540-0-AQMW--o2s08ZWLQPqt7pePLoMu7ffsDtNrL-9goaQigUbeCmxrCFfev9yAtGpwnEl3W6SDFy3NUKf04OfUXff8rKSfSRZDr32vJdkHnjnvgaaFWz1o3zeuneNUSriZsyFOGQ3OD5Gr5qWQJc-lWOI9X7Dc8g6qiV36RH2hUS1WLloOy23igNvfODDZwSt5WXQNh7-SoiJbJfiUXb7k_k3a49sqY9qmHvUsz6qTlMs1QivPkDU17-CdhNLK6tfOO6YEqSFy9tvvj-WzdMIUXCwa5x6OmOpJPo9qzfPqz7hCmnZcGBjepS1LLQmFKt4d1vAoRquLZPJI4oHBh0CVKi6LMcayOHXmwbq-tnRfNuhqyIAx-pD56OY0B2-rmLE3h3UB9FoDfI5hpOE1XAI7YB-9M)
+
+- [How to create charts with daru-view and Highcharts in any Ruby web application framework](https://www.highcharts.com/blog/tutorials/how-to-create-charts-with-daru-view-and-highcharts/?__cf_chl_jschl_tk__=55ff70069823ebbf589d04997c7d68914e94a5dc-1590914539-0-AbSHzGQB6RsWEv-9EV-Ia-Lgk281WXlDwulwWHMivv_SZ8D2SmSEA3xWLfyFVubIrBi0DYER-Y8A7M37WKJmsbPAO5EGfoOL-0GLwl6An3Ol0iwkUN_BFvtntg3oS2sysjvCakfMJvo50yDgLAzFAiJuxeHfUhpn9ejs4Qxk0xQy3coVmH6qjpFXjDb9ZEJxbEZ2F7LmUW4DBg9MmgWyu7KNMZn5B0P7c6TFhOxv4xBb6__A17QWGOb-Af8_a1-y_8aKAVtTE2uJOuil5tPL9IuWI1oDZ2kMaeg04es9VLJOv6MFH0u9ayN3OyEUPYN7xVkn8b-weKpo8sJoEc60UvX9zDyx-1StSVWbGUbHgOLlNPZT6Xz6365q7MLHXaYAFICXSafLDGY6DSizy147MDuZbNVg6glgFosbgHjeCXK4)
+
 ## Examples :
 
 - [IRuby notebook examples](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
