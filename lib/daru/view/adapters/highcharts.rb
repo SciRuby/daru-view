@@ -46,6 +46,11 @@ module Daru
             #   Daru::DataFrame/Daru::Vector
             if data.is_a?(Array) && data[0].is_a?(Hash)
               f.series_data = data
+            elsif data.is_a?(Daru::DataFrame)
+              data.vectors.each do |vector|
+                series_type = options[:type] unless options[:type].nil?
+                f.series(type: series_type, name: vector, data: data[vector])
+              end
             else
               data_new = guess_data(data)
               series_type = options[:type] unless options[:type].nil?
