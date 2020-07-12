@@ -50,10 +50,9 @@ module Daru
               # TODO : Currently I didn't find use case for multi index.
               return ArgumentError unless data.index.is_a?(Daru::Index)
 
-              index = data.index.to_a
               series_type = options[:type] unless options[:type].nil?
-              
-              f.xAxis(categories: index)
+              f.xAxis(categories: data.index.to_a)
+
               data.vectors.each do |vector|
                 f.series(type: series_type, name: vector, data: data[vector])
               end
