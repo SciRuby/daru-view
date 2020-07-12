@@ -53,12 +53,12 @@ module Daru
               series_type = options[:type] unless options[:type].nil?
 
               data.vectors.each do |vector|
-                if date_based_index?(data)
+                if date_based_index?(data.index)
                   f.xAxis(type: 'datetime') unless f.options.dig(:xAxis, :type) == 'datetime'
                   f.series(
                     type: series_type,
                     name: vector,
-                    date: data.index.zip(data[vector])
+                    data: data.index.zip(data[vector])
                   )
                 else
                   f.series(type: series_type, name: vector, data: data[vector])
@@ -144,8 +144,8 @@ module Daru
           end
         end
 
-        def date_based_index?(data)
-          data.index.is_a?(Daru::DateTimeIndex) || data.index.all? { |index_element| [Date, DateTime, Time].member?(index_element.class) }
+        def date_based_index?(index)
+          index.is_a?(Daru::DateTimeIndex) || index.all? { |index_element| [Date, DateTime, Time].member?(index_element.class) }
         end
       end
     end
