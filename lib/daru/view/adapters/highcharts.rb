@@ -51,10 +51,18 @@ module Daru
               return ArgumentError unless data.index.is_a?(Daru::Index)
 
               series_type = options[:type] unless options[:type].nil?
-              f.xAxis(categories: data.index.to_a)
 
               data.vectors.each do |vector|
-                f.series(type: series_type, name: vector, data: data[vector])
+                if date_based_index?(data)
+                  f.xAxis(type: 'datetime') unless f.options.dig(:xAxis, :type) == 'datetime'
+                  f.series(
+                    type: series_type,
+                    name: vector,
+                    date: data.index.zip(data[vector])
+                  )
+                else
+                  f.series(type: series_type, name: vector, data: data[vector])
+                end
               end
             else
               data_new = guess_data(data)
@@ -134,6 +142,10 @@ module Daru
             # TODO: error msg
             raise ArgumentError
           end
+        end
+
+        def date_based_index?(data)
+          data.index.is_a?(Daru::DateTimeIndex) || data.index.all? { |index_element| [Date, DateTime, Time].member?(index_element.class) }
         end
       end
     end
