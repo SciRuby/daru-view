@@ -53,7 +53,7 @@ module Daru
               index = data.index.to_a
               series_type = options[:type] unless options[:type].nil?
               
-              f.xAxis = index
+              f.xAxis(categories: index)
               data.vectors.each do |vector|
                 f.series(type: series_type, name: vector, data: data[vector])
               end
