@@ -276,7 +276,11 @@ describe LazyHighCharts::HighChart do
       ).to match(/\"chart\": \{ \"type\": \"bar\"/)
       expect(@hc.chart.to_html(
         @placeholder)
-      ).to match(/\"data\": \[ \[ 5,2,3 \],\[ 3,2,4 \],\[ 4,3,4 \] \]/)
+      ).to include(
+          '"data": [ 5,3,4 ]',
+          '"data": [ 2,2,3 ]',
+          '"data": [ 3,4,4 ]',
+      )
       expect(@hc.chart.to_html(
         @placeholder)
       ).to match(/\"title\": \{ \"text\": \"Bar chart\" \}/)
@@ -296,6 +300,7 @@ describe LazyHighCharts::HighChart do
       expect(map.chart.to_html(
         @placeholder)
       ).to match(/\"legend\": { \"enabled\": false }/)
+      # TODO: Broken due to being mapped as different series
       expect(map.chart.to_html(
         @placeholder)
       ).to match(/\"data\": \[ \[ \"is\",1 \]/)
@@ -337,7 +342,11 @@ describe LazyHighCharts::HighChart do
       expect(js).to match(/var\s+options\s+=/)
       expect(js).to match(/window.chart_/)
       expect(js).to match(/\"chart\": \{ \"type\": \"bar\"/)
-      expect(js).to match(/\"data\": \[ \[ 5,2,3 \],\[ 3,2,4 \],\[ 4,3,4 \]/)
+      expect(js).to include(
+        '"data": [ 5,3,4 ]',
+        '"data": [ 2,2,3 ]',
+        '"data": [ 3,4,4 ]',
+      )
       expect(js).to match(/script/)
       expect(js).to match(/image\/jpeg/)
       expect(js).to match(/daru/)

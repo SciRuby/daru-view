@@ -85,10 +85,10 @@ describe LazyHighCharts::LayoutHelper do
   }}
   let(:df) { Daru::DataFrame.new(
     {
-      countries: ['is', 'no', 'se', 'dk', 'fi'],
       data: [1, 1, 1, 1, 1]
     },
-      index: [:one, :two, :three, :four, :five]
+      index: ['is', 'no', 'se', 'dk', 'fi'],
+      # index: [:one, :two, :three, :four, :five]
   )}
   let(:map) { Daru::View::Plot.new(df, opts_map) }
 
@@ -360,6 +360,7 @@ describe LazyHighCharts::LayoutHelper do
       expect(map.chart.high_map(
         placeholder, map.chart)
       ).to match(/\"legend\": { \"enabled\": false }/)
+      # TODO: Broken due to being mapped as different series
       expect(map.chart.high_map(
         placeholder, map.chart)
       ).to match(/\"data\": \[ \[ \"is\",1 \]/)

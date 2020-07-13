@@ -294,9 +294,10 @@ describe Daru::View::Plot, 'plotting with highcharts' do
         js = @chart_bar.adapter.generate_body(@chart_bar.chart)
         expect(js).to match(/series/)
         expect(js).to match(/\"type\": null/)
-        expect(js).to match(/\"name\": null/)
-        expect(js).to match(
-          /\"data\": \[ \[ 3,9 \],\[ 6,4 \],\[ 8,1 \],\[ 9,3 \],\[ 20,12 \] \]/
+        expect(js).to match(/\"name\": \"rows/)
+        expect(js).to include(
+          '"data": [ 3,6,8,9,20 ]',
+          '"data": [ 9,4,1,3,12 ]'
         )
       end
     end
@@ -378,8 +379,9 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       expect(html).to match(/Highcharts.Chart\(options\)/)
       expect(html).to match(/\"chart\": { \"type\": \"bar\"/)
       expect(html).to match(/\"title\": { \"text\": \"Demo Bar Chart\" }/)
-      expect(html).to match(
-        /\"data\": \[ \[ 3,9 \],\[ 6,4 \],\[ 8,1 \],\[ 9,3 \],\[ 20,12 \] \]/
+      expect(html).to include(
+        '"data": [ 3,6,8,9,20 ]',
+        '"data": [ 9,4,1,3,12 ]'
       )
     end
     it "should generate valid HTML of the Column Chart" do
@@ -428,8 +430,9 @@ describe Daru::View::Plot, 'plotting with highcharts' do
       expect(html).to match(/Highcharts.Chart\(options\)/)
       expect(html).to match(/\"chart\": { \"type\": \"bar\"/)
       expect(html).to match(/\"title\": { \"text\": \"Demo Bar Chart\" }/)
-      expect(html).to match(
-        /\"data\": \[ \[ 3,9 \],\[ 6,4 \],\[ 8,1 \],\[ 9,3 \],\[ 20,12 \] \]/
+      expect(html).to include(
+        '"data": [ 3,6,8,9,20 ]',
+        '"data": [ 9,4,1,3,12 ]'
       )
     end
     it "should write valid html code of the Column Chart to the file" do
