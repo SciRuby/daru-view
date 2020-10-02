@@ -1,3 +1,5 @@
+require: rubocop-performance
+
 AllCops:
   Include:
     - 'lib/**/*'
@@ -18,7 +20,7 @@ AllCops:
     - '**/*.rake'
     - '**/.rb'
   DisplayCopNames: true
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.4
 
 # Preferred codebase style ---------------------------------------------
 Layout/ExtraSpacing:
@@ -127,3 +129,8 @@ Lint/DuplicateMethods:
 Naming/HeredocDelimiterNaming:
   Enabled: false
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
