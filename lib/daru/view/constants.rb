@@ -23,7 +23,7 @@ HIGHCHARTS_DEPENDENCIES_CSS = ['highcharts.css'].freeze
 GOOGLECHARTS_DEPENDENCIES_IRUBY = ['loader.js'].freeze
 
 # Dependent GoogleCharts JS constants for web frameworks
-GOOGLECHARTS_DEPENDENCIES_WEB = [ 'loader.js', 'jspdf.min.js'].freeze
+GOOGLECHARTS_DEPENDENCIES_WEB = ['loader.js', 'jspdf.min.js'].freeze
 
 # Regex pattern to match a valid URL
 PATTERN_URL = Regexp.new(
