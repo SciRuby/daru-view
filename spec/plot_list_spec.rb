@@ -77,7 +77,9 @@ describe Daru::View::PlotList do
       content = File.read(path)
       expect(content).to match(/html/i)
       expect(content).to match(/loader.js/i)
-      expect(content).to match(/google_visualr.js/)
+      # PR: #157 - need to find out why this js is deprecated in
+      # google chart official site
+      # expect(content).to match(/google_visualr.js/)
       expect(content).to match(/highstock.js/)
       expect(content).to match(/require.min.js/)
       expect(content).to match(/<script>/i)

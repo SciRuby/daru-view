@@ -46,7 +46,7 @@ module Daru
         begin
           load_lib_in_iruby lib.to_s if defined? IRuby
         rescue NameError
-          return
+          # nothing to return
         end
       end
 
@@ -68,7 +68,7 @@ module Daru
         begin
           load_lib_in_iruby lib.to_s if defined? IRuby
         rescue NameError
-          return
+          # nothing to return
         end
       end
 
@@ -142,13 +142,13 @@ module Daru
       # Load the dependent JS files in IRuby notebook. Those JS will help in
       # plotting the charts in IRuby cell.
       def load_lib_in_iruby(library)
-        if library.match('highcharts')
+        if library.match?('highcharts')
           library = 'LazyHighCharts'
           Object.const_get(library).init_iruby
-        elsif library.match('googlecharts')
+        elsif library.match?('googlecharts')
           library = 'GoogleVisualr'
           Object.const_get(library).init_iruby
-        elsif library.match('datatables')
+        elsif library.match?('datatables')
           library = 'DataTables'
           Object.const_get(library).init_iruby
         else
