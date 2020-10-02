@@ -134,3 +134,6 @@ Style/FrozenStringLiteralComment:
 
 Metrics/AbcSize:
   Enabled: false
+
+Lint/HandleExceptions:
+  Enabled: false
