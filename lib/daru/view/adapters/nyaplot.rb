@@ -39,7 +39,7 @@ module Daru
         private
 
         def multi_dimension_check(arr)
-          arr.all? { |a| a.class==Array }
+          arr.all? { |a| a.instance_of?(Array) }
         end
 
         def guess_data(data_set)

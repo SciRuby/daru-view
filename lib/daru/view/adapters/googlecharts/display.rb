@@ -13,7 +13,7 @@ module Display
   attr_accessor :formatters
 
   def show_script(dom=SecureRandom.uuid, options={})
-    script_tag = options.fetch(:script_tag) { true }
+    script_tag = options.fetch(:script_tag, true)
     # To understand different formatters see:
     # https://developers.google.com/chart/interactive/docs/reference#formatters
     apply_formatters if is_a?(GoogleVisualr::DataTable)
@@ -282,7 +282,7 @@ module Display
     formatter[:options] ||= {}
     formatter[:columns] ||= 0
     frmttr = GoogleVisualr.const_get(
-      formatter[:type].to_s.capitalize + 'Format'
+      "#{formatter[:type].to_s.capitalize}Format"
     ).new(formatter[:options])
     frmttr.columns(formatter[:columns])
     frmttr
