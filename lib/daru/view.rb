@@ -13,7 +13,7 @@ require 'daru/view/adapters/nyaplot/iruby_notebook'
 require 'daru/view/adapters/googlecharts/iruby_notebook'
 
 # Rails Helper
-require 'daru/view/app/rails/railtie.rb' if defined?(Rails)
+require 'daru/view/app/rails/railtie' if defined?(Rails)
 
 module Daru
   module View

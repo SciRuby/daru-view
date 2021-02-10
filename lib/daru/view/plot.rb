@@ -3,6 +3,7 @@ module Daru
     class Plot
       attr_reader :chart, :data, :options, :user_options
       attr_accessor :adapter
+
       class << self
         # class method
         #
@@ -15,7 +16,7 @@ module Daru
           require "daru/view/adapters/#{adapter}"
           # rubocop:disable Style/ClassVars
           @@adapter = Daru::View::Adapter.const_get(
-            adapter.to_s.capitalize + 'Adapter'
+            "#{adapter.to_s.capitalize}Adapter"
           )
           # rubocop:enable Style/ClassVars
         end
@@ -46,7 +47,7 @@ module Daru
       def adapter=(adapter)
         require "daru/view/adapters/#{adapter}"
         @adapter = Daru::View::Adapter.const_get(
-          adapter.to_s.capitalize + 'Adapter'
+          "#{adapter.to_s.capitalize}Adapter"
         )
       end
 

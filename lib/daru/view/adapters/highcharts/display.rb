@@ -54,6 +54,7 @@ module LazyHighCharts
     #   be rendered in
     attr_accessor :div_id
     attr_accessor :user_options
+
     # @example
     #
     # To display the html code of the chart, use `to_html`. To see the same
@@ -71,14 +72,15 @@ module LazyHighCharts
       script << high_chart_css(placeholder)
       # Helps to denote either of the three classes.
       chart_class = extract_chart_class
+      case chart_class
       # When user wants to plot a HighMap
-      if chart_class == 'Map'
+      when 'Map'
         script << high_map(placeholder, self)
       # When user wants to plot a HighStock
-      elsif chart_class == 'StockChart'
+      when 'StockChart'
         script << high_stock(placeholder, self)
       # When user wants to plot a HighChart
-      elsif chart_class == 'Chart'
+      when 'Chart'
         script << high_chart(placeholder, self)
       end
       script
@@ -117,7 +119,7 @@ module LazyHighCharts
         css_script << "\n<style>"
         # Applying the css to chart div
         css_data.each do |css|
-          css_script << "\n  #" + placeholder + ' '
+          css_script << "\n  ##{placeholder} "
           css_script << css
         end
         css_script << "\n</style>"
@@ -133,9 +135,10 @@ module LazyHighCharts
     #   notebook and returns initial script of the modules for web frameworks
     def load_dependencies(type)
       dep_js = extract_dependencies
-      if type == 'iruby'
+      case type
+      when 'iruby'
         LazyHighCharts.init_iruby(dep_js) unless dep_js.nil?
-      elsif type == 'web_frameworks'
+      when 'web_frameworks'
         dep_js.nil? ? '' : LazyHighCharts.init_javascript(dep_js)
       end
     end
@@ -214,7 +217,7 @@ module LazyHighCharts
       js << "\n \t\tvar chart = Highcharts.charts[Highcharts.attr(chartDom,"
       js << " 'data-highcharts-chart')]"
       js << "\n \t\tchart.exportChartLocal({"
-      js << "\n \t\t\t" + append_chart_type(export_type)
+      js << "\n \t\t\t#{append_chart_type(export_type)}"
       js << "\n \t\t\tfilename: '#{file_name}'"
       js << "\n \t\t});\n \t};\n })();"
       js << "\n </script>"
@@ -236,7 +239,7 @@ module LazyHighCharts
       js << "\n \tvar chart = Highcharts.charts[Highcharts.attr(chartDom,"
       js << " 'data-highcharts-chart')]"
       js << "\n \tchart.exportChart({"
-      js << "\n \t\t" + append_chart_type(export_type)
+      js << "\n \t\t#{append_chart_type(export_type)}"
       js << "\n \t\tfilename: '#{file_name}'"
       js << "\n \t});"
       js << "\n })();"

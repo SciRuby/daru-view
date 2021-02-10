@@ -65,8 +65,8 @@ module Daru
         charts_script = ''
         @data.each do |plot|
           chart_script = extract_chart_script(plot)
-          charts_id_div_tag << chart_script.partition(%r{<div(.*?)<\/div>}ixm)[1]
-          chart_script.sub!(%r{<div(.*?)<\/div>}ixm, '')
+          charts_id_div_tag << chart_script.partition(%r{<div(.*?)</div>}ixm)[1]
+          chart_script.sub!(%r{<div(.*?)</div>}ixm, '')
           charts_script << chart_script
         end
         charts_script

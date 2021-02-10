@@ -7,14 +7,14 @@ describe Daru::View, "Update JS files" do
   end
 
   context "googlecharts" do
-    it "updates google charts javascript dependent files" do
+    it "updates google charts javascript dependent files",:local=>true do
       flag = system('daru-view update -g')
       expect(flag).to eq(true)
     end
   end
 
   context "highcharts" do
-    it "updates high charts javascript dependent files" do
+    it "updates high charts javascript dependent files",:local=>true do
       flag = system('daru-view update -H')
       expect(flag).to eq(true)
     end
