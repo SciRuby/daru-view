@@ -1,15 +1,14 @@
-language:
-  ruby
+language: ruby
 
 rvm:
   # - '2.0'
   # - '2.1' NOTE: For ruby <2.3,rubocop Offense : adapters/*charts.rb:11:9: C: Style/ModuleFunction: Use module_function instead of extend self.
   # - '2.2' - Not checking because of so many rubocop conflicts with
   # new ruby versions
-  - '2.3.0'
-  - '2.4.0'
-  - '2.5.3'
-  - '2.6.0'
+  - "2.3.0"
+  - "2.4.0"
+  - "2.5.3"
+  - "2.6.0"
 
 script:
   - bundle exec rspec
@@ -20,8 +19,8 @@ after_script:
 
 install:
   - if [ $TRAVIS_RUBY_VERSION == '2.2' ] || [ $TRAVIS_RUBY_VERSION == '2.1' ] || [ $TRAVIS_RUBY_VERSION == '2.0' ];
-      then gem install bundler -v '~> 1.6';
-      else gem install bundler;
-      fi
+    then gem install bundler -v '~> 1.6';
+    else gem install bundler;
+    fi
   - gem install rainbow -v '2.2.1'
   - bundle install
