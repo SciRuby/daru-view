@@ -1,21 +1,31 @@
-# Daru::View
+<div align="center">
+<h1>Daru::View</h1>
+<p>
+daru-view is for easy and interactive plotting in web application & IRuby notebook. daru-view is a plugin gem to the existing daru gem
+</p>
+<a href="https://github.com/SciRuby/daru-view/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/SciRuby/daru-view?color=8c3038"/></a>
+<a href="https://github.com/SciRuby/daru-view/releases"><img src="https://img.shields.io/github/v/release/SciRuby/daru-view?color=8c3038&logoColor=ffffff"/></a>
+<a href="https://github.com/SciRuby/daru-view/stargazers"><img src="https://img.shields.io/github/stars/SciRuby/daru-view?color=8c3038"/></a>
+<a href="https://coveralls.io/github/SciRuby/daru-view?branch=master"><img src="https://coveralls.io/repos/github/SciRuby/daru-view/badge.svg?branch=master" alt="Coverage Status" /></a>
+<a href="code_of_conduct.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg" /></a>
+<a href="https://badge.fury.io/rb/daru-view"><img src="https://badge.fury.io/rb/daru-view.svg" /></a>
+<a href="https://travis-ci.org/SciRuby/daru-view"><img src="https://travis-ci.org/SciRuby/daru-view.svg?branch=master" /></a>
 
-[![Gem Version](https://badge.fury.io/rb/daru-view.svg)](https://badge.fury.io/rb/daru-view)
-[![Build Status](https://travis-ci.org/SciRuby/daru-view.svg?branch=master)](https://travis-ci.org/SciRuby/daru-view)
-[![Coverage Status](https://coveralls.io/repos/github/SciRuby/daru-view/badge.svg?branch=master)](https://coveralls.io/github/SciRuby/daru-view?branch=master)
+</div>
 
+# About
 
-[Daru](https://github.com/sciruby/daru) (Data Analysis in RUby) is a library for analysis, manipulation and visualization of data. Daru-view is for easy and interactive plotting in web application & IRuby notebook. It can work in frameworks like Rails, Sinatra, Nanoc and hopefully in others too.
+[Daru](https://github.com/sciruby/daru) (Data Analysis in Ruby) is a library for analysis, manipulation, and visualization of data. Daru-view is for easy and interactive plotting in web applications & IRuby notebook. It can work in frameworks like Rails, Sinatra, Nanoc, and hopefully in others too.
 
-It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/daru)) for visualisation of data
+It is a plugin gem to Data Analysis in Ruby([Daru](https://github.com/sciruby/daru)) for visualization of data
 
-## Documentation :
+## Documentation:
 
 - [Documentation present in Rubydoc](http://www.rubydoc.info/github/sciruby/daru-view/)
 
 - [daru-view/wiki](https://github.com/SciRuby/daru-view/wiki)
 
-## Blogs :
+## Blogs:
 
 - [ScirRuby/blog](http://sciruby.com/blog/2017/09/01/gsoc-2017-data-visualization-using-daru-view/)
 
@@ -23,13 +33,13 @@ It is a plugin gem to Data Analysis in RUby([Daru](https://github.com/sciruby/da
 
 - [GSoC 2018: Work Product](https://32teethglitter.wordpress.com/2018/08/07/work-product-gsoc-2018/)
 
-- [Rubyist’s, so called Powerful Future Plotting library](https://medium.com/@Shekharrajak/rubyists-so-called-powerful-future-plotting-library-1c4e202eee6d)
+- [Rubyist’s, so-called Powerful Future Plotting library](https://medium.com/@Shekharrajak/rubyists-so-called-powerful-future-plotting-library-1c4e202eee6d)
 
 - [I am a Ruby developer. How can I use Highcharts?](https://www.highcharts.com/blog/post/i-am-ruby-developer-how-can-i-use-highcharts/?__cf_chl_jschl_tk__=338bba242759c7d002887f58fad0e75aa46ed51a-1590914540-0-AQMW--o2s08ZWLQPqt7pePLoMu7ffsDtNrL-9goaQigUbeCmxrCFfev9yAtGpwnEl3W6SDFy3NUKf04OfUXff8rKSfSRZDr32vJdkHnjnvgaaFWz1o3zeuneNUSriZsyFOGQ3OD5Gr5qWQJc-lWOI9X7Dc8g6qiV36RH2hUS1WLloOy23igNvfODDZwSt5WXQNh7-SoiJbJfiUXb7k_k3a49sqY9qmHvUsz6qTlMs1QivPkDU17-CdhNLK6tfOO6YEqSFy9tvvj-WzdMIUXCwa5x6OmOpJPo9qzfPqz7hCmnZcGBjepS1LLQmFKt4d1vAoRquLZPJI4oHBh0CVKi6LMcayOHXmwbq-tnRfNuhqyIAx-pD56OY0B2-rmLE3h3UB9FoDfI5hpOE1XAI7YB-9M)
 
 - [How to create charts with daru-view and Highcharts in any Ruby web application framework](https://www.highcharts.com/blog/tutorials/how-to-create-charts-with-daru-view-and-highcharts/?__cf_chl_jschl_tk__=55ff70069823ebbf589d04997c7d68914e94a5dc-1590914539-0-AbSHzGQB6RsWEv-9EV-Ia-Lgk281WXlDwulwWHMivv_SZ8D2SmSEA3xWLfyFVubIrBi0DYER-Y8A7M37WKJmsbPAO5EGfoOL-0GLwl6An3Ol0iwkUN_BFvtntg3oS2sysjvCakfMJvo50yDgLAzFAiJuxeHfUhpn9ejs4Qxk0xQy3coVmH6qjpFXjDb9ZEJxbEZ2F7LmUW4DBg9MmgWyu7KNMZn5B0P7c6TFhOxv4xBb6__A17QWGOb-Af8_a1-y_8aKAVtTE2uJOuil5tPL9IuWI1oDZ2kMaeg04es9VLJOv6MFH0u9ayN3OyEUPYN7xVkn8b-weKpo8sJoEc60UvX9zDyx-1StSVWbGUbHgOLlNPZT6Xz6365q7MLHXaYAFICXSafLDGY6DSizy147MDuZbNVg6glgFosbgHjeCXK4)
 
-## Examples :
+## Examples:
 
 - [IRuby notebook examples](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
 
@@ -51,8 +61,7 @@ Or install it yourself as:
 
     $ gem install daru-view
 
-If above is not working or you want to install latest version from the
-github repo:
+If the above is not working or you want to install the latest version from the GitHub repo:
 
 ```
 gem install specific_install
@@ -66,7 +75,7 @@ gem specific_install https://github.com/SciRuby/daru-view
 
 - To install IRuby notebook in your system, follow the steps given in [IRuby repo](https://github.com/SciRuby/iruby#quick-start).
 
-- Create separate folder and Gemfile inside it. Add minimum these lines in it
+- Create a separate folder and Gemfile inside it. Add a minimum these lines to it
 
 ```ruby
 source "http://rubygems.org"
@@ -87,9 +96,9 @@ gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.g
 
 - Now do `bundle install` and run `iruby notebook`
 
-- You may like to try some examples that is added in specs : [spec/dummy_iruby/](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
+- You may like to try some examples that are added in specs : [spec/dummy_iruby/](http://nbviewer.jupyter.org/github/sciruby/daru-view/tree/master/spec/dummy_iruby/)
 
-#### HighCharts example :
+#### HighCharts example:
 
 ```ruby
 
@@ -101,17 +110,16 @@ Daru::View.plotting_library = :highcharts
   data=[43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
 )
 
-# to see graph in IRuby noteboook
+# to see graph in IRuby notebook
 @line_graph.show_in_iruby
 
 # to see graph in any ruby web application framework
-# Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
+# Add this line in your view file, where you want to see your graph in the web application. (It will put the HTML code of the line graph on the web page)
 <%=raw @line_graph.div %>
 
 ```
 
 ![Line Graph](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/HighChartBlog/lineChart.gif)
-
 
 ##### GoogleChart example:
 
@@ -163,7 +171,6 @@ geochart.show_in_iruby
 
 ![World map GoogleChart](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/GoogleChart/worldMap.gif)
 
-
 - You can find more examples in this [IRuby notebook example](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/Google%20Charts%20%7C%20Geo%20Charts%20examples.ipynb).
 
 #### GoogleChart - datatable
@@ -189,7 +196,7 @@ table.show_in_iruby
 
 ![GoogleChart datatable](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/GoogleChart/GoogleChartDatatable.gif)
 
-- Checkout more amazing examples of GoogleChart datatable in [IRuby notebook](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/GoolgeChart%20%7C%20Datatables.ipynb).
+- Check out more amazing examples of GoogleChart datatable in [IRuby notebook](https://nbviewer.jupyter.org/github/sciruby/daru-view/blob/master/spec/dummy_iruby/GoolgeChart%20%7C%20Datatables.ipynb).
 
 #### DataTable example
 
@@ -202,7 +209,7 @@ arrayOfArray = [
     ]
 arrayOfArrayTable = Daru::View::Table.new(arrayOfArray, pageLength: 3, adapter: :datatables)
 
-# paste the div part of the table in view part of the app or any html file. 
+# paste the div part of the table in view part of the app or any HTML file.
 # First load the dependency for the datatable using this line : `Daru::View.dependent_script(:datatables)`
 arrayOfArrayTable.div
 
@@ -211,8 +218,8 @@ arrayOfArrayTable.div
 
 ```
 
-- NOTE: It works seamlessly in Ruby web applications, but currently DataTable doesn't work in IRuby notebook, 
-because of conflict in DataTable dependent js and IRuby dependent js. 
+- NOTE: It works seamlessly in Ruby web applications, but currently DataTable doesn't work in IRuby notebook,
+  because of conflict in DataTable dependent js and IRuby dependent js.
 
 - To see more examples, please check datatables examples written in [demo_daru-view](https://github.com/Shekharrajak/demo_daru-view) repository for different Ruby web application frameworks.
 
@@ -260,7 +267,6 @@ map.show_in_iruby
 
 - Read more about HighMap API in daru-view gem in this [wiki page section](https://github.com/SciRuby/daru-view/wiki/HighCharts-features#highmap).
 
-
 #### Nyaplot example :
 
 ```ruby
@@ -287,7 +293,7 @@ data_df.to_category :c
 @bar_graph_vector = Daru::View::Plot.new(data_vector ,opts)
 @bar_graph_df = Daru::View::Plot.new(data_df, type: :bar, x: :c)
 
-# Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
+# Add this line in your view file, where you want to see your graph in the web application. (It will put the HTML code of the line graph on the web page)
 
 <%=raw @bar_graph_vector.div %>
 <%=raw @bar_graph_df.div %>
@@ -302,7 +308,6 @@ data_df.to_category :c
 
 ![Bar Graph Nyaplot Vector](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/Nyaplot/nyaplot%2Bvector.gif)
 
-
 ```
 @bar_graph_df.show_in_iruby
 
@@ -310,16 +315,16 @@ data_df.to_category :c
 
 ![Bar Graph Nyaplot Dataframe](https://raw.githubusercontent.com/Shekharrajak/medium-daru-view-blog/master/GIF_Images/Nyaplot/nyaplot_df.gif)
 
-- User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
+- User can try examples, that are added in [Demo web applications (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To set up the rails app, run the following commands :
 
 ```
 bundle install
 bundle exec rails s
 
 ```
+
 Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts and similarly for googlecharts, datatables
 to see the Highcharts examples.
-
 
 ### Use in web application
 
@@ -335,18 +340,18 @@ gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
 gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
 ```
 
-_Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` is not added as development_dependency. Since daru-view required the latest github version of the Daru and Nyaplot gem and we can't fetch gem from the github in the gemspec.
+_Note_ : Right now, in daru-view gemspec file `daru` and `nyaplot` are not added as development_dependency. Since daru-view required the latest GitHub version of the Daru and Nyaplot gem and we can't fetch gem from GitHub in the gemspec.
 
 #### Rails application
 
-- In controller, do the data analysis process using daru operations and get the DataFrame/Vectors.
+- In the controller, do the data analysis process using daru operations and get the DataFrame/Vectors.
 
 - Set a plotting library using e.g. `Daru::View.plotting_library = :highcharts`
 
-- To setup the dependencies of HighCharts/DataTables in rails app, we can use below line in app/assets/javascript/application.js file :
+- To set up the dependencies of HighCharts/DataTables in rails app, we can use the below line in app/assets/javascript/application.js file :
 
 ```
-//= require highcharts/highcharts                                                           
+//= require highcharts/highcharts
 //= require highcharts/highcharts-more
 //= require highcharts/map
 //= require jquery-latest.min
@@ -359,7 +364,7 @@ and CSS files can be included as:
  *= require jquery.dataTables
 ```
 
-Include the below line in the head of the layout file(whereever you want to plot charts):
+Include the below line in the head of the layout file(wherever you want to plot charts):
 
 ```
 
@@ -367,26 +372,22 @@ Include the below line in the head of the layout file(whereever you want to plot
 <%= stylesheet_link_tag "application" %>
 ```
 
+NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line, e.g.: `Daru::View.dependent_script(:highcharts)`
 
-NOTE: [ Old way ] In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
-
-The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app , must be added in the layout file of the application.
+The line `<%=raw Daru::View.dependent_script(:highcharts) %>` for rails app, must be added in the layout file of the application.
 
 You can read more about this feature in [this wiki page section](https://github.com/SciRuby/daru-view/wiki/GSoC-2018---Progress-Report#reduce-a-bunch-of-lines-due-to-js-files-in-source-html-in-rails-pr-115-in-daru-view-pr-23-in-daru-data_tables).
 
-
 #### Sinatra application
-
 
 - In view, add the required JS files (for the plotting library), in head tag (generally) using the line , e.g. : `Daru::View.dependent_script(:highcharts)`
 
-The line `<%= Daru::View.dependent_script(:highcharts) %>` for sinatra app , must be added in the layout file of the application(inside the head tag).
-
+The line `<%= Daru::View.dependent_script(:highcharts) %>` for sinatra app, must be added in the layout file of the application(inside the head tag).
 
 ```ruby
-# In side the `app.rb` user must do data analysis process using daru features and define the Daru::View::Plot class instance variables to pass into the webpages in the `view` files. You will understand this better, if you will try to run sinatra app present in the `[Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view)`
+# In side the `app.rb` user must do data analysis process using daru features and define the Daru::View::Plot class instance variables to pass into the webpages in the `view` files. You will understand this better if you will try to run sinatra app present in the `[Demo web applications (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view)`
 
-# Add this line in your view file, where you want to see you graph in web application. (It will put the html code of the line graph in web page)
+# Add this line in your view file, where you want to see your graph in the web application. (It will put the HTML code of the line graph on the web page)
 
 <%= @line_graph.div %>
 
@@ -397,21 +398,21 @@ The line `<%= Daru::View.dependent_script(:highcharts) %>` for sinatra app , mus
 
 ```
 
-- User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
+- User can try examples, that are added in [Demo web applications (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To set up the rails app, run the following commands :
 
 ```
 bundle install
 bundle exec ruby app.rb
 
 ```
-Now go to the http://localhost:4567/nyaplot to see the Nyaplot examples or http://localhost:4567/highcharts to see the Highcharts examples.
 
+Now go to the http://localhost:4567/nyaplot to see the Nyaplot examples or http://localhost:4567/highcharts to see the Highcharts examples.
 
 #### Nanoc application
 
-Most of the things similar to Rails application (syntax of the view part of the application).
+Most of the things are similar to the Rails application (syntax of the view part of the application).
 
-- User can try examples, that is added in [Demo web applicatioons (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To setup the rails app, run following commands :
+- User can try examples, that are added in [Demo web applications (Rails, Sinatra, Nanoc)](https://github.com/Shekharrajak/demo_daru-view). To set up the rails app, run the following commands :
 
 ```
 bundle install
@@ -419,15 +420,15 @@ bundle exec nanoc
 bundle exec nanoc view
 
 ```
+
 Now go to the http://localhost:3000/nyaplot to see the Nyaplot examples or http://localhost:3000/highcharts and similarly for googlecharts, datatables
 to see the Highcharts examples.
 
-
 #### Live demo links
 
-Nanoc web application complie and generates the html code of the nanoc web application. So you can see the running Nanoc app here :
+Nanoc web application compiles and generates the HTML code of the nanoc web application. So you can see the running Nanoc app here :
 
-Note : There is some problem in nyaplot (in live link. It works fine locally). Some css is not working so some styling ain't working properly. You can see it properly in local setup.
+Note: There is some problem in nyaplot (in the live link. It works fine locally). Some CSS is not working so some styling ain't working properly. You can see it properly in the local setup.
 
 [index.html](https://sciruby.github.io/daru-view/spec/dummy_nanoc/output/)
 
@@ -437,63 +438,65 @@ Note : There is some problem in nyaplot (in live link. It works fine locally). S
 
 [googlecharts](https://sciruby.github.io/daru-view/spec/dummy_nanoc/output/googlecharts)
 
-For now, other applications (Rails/Sinatra) you need to run it locally.
-
+For now, for other applications (Rails/Sinatra) you need to run it locally.
 
 ## Update to latest js library. Additional command line
 
 ### 1. Users
 
-  - To view command usage:
+- To view command usage:
 
-  ```
-  daru-view
-  ```
+```
+daru-view
+```
 
-  - To update all the JS files:
-  ```
-  daru-view update
-  ```
+- To update all the JS files:
 
-  - To update JS files for google charts:
-  ```
-  daru-view update -g (or) --googlecharts
-  ```
+```
+daru-view update
+```
 
-  - To update JS files for highcharts:
-  ```
-  daru-view update -H (or) --highcharts
-  ```
+- To update JS files for google charts:
+
+```
+daru-view update -g (or) --googlecharts
+```
+
+- To update JS files for highcharts:
+
+```
+daru-view update -H (or) --highcharts
+```
 
 ### 2. Developers
 
-  To update to the current highcharts.js directly from http://code.highcharts.com/", you can always run
+To update to the current highcharts.js directly from http://code.highcharts.com/", you can always run
 
     rake highcharts:update
 
-  And it will be copied to your adapters/js/highcharts_js directory.
+And it will be copied to your adapters/js/highcharts_js directory.
 
-  Similarly for other libraries.
+Similarly for other libraries.
 
-  To update the all libraries Javascript file, run this command :
+To update the all libraries Javascript file, run this command :
 
     rake update_all
 
 ## Creating a new adapter (Developers)
 
-  To create a new adapter `Demo`, run
-  ```
-  rake new:adapter Demo
-  ```
+To create a new adapter `Demo`, run
 
-  and a file demo.rb will be created in the daru/view/adapters folder with all the necessary methods (init, init_script, init_ruby, generate_body, show_in_iruby and export_html_file) as TODO.
+```
+rake new:adapter Demo
+```
+
+and a file demo.rb will be created in the daru/view/adapters folder with all the necessary methods (init, init_script, init_ruby, generate_body, show_in_iruby, and export_html_file) as TODO.
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-Generally I prefer to use `bundle console` for testing few codes and experimenting the gem repo.
-
+Generally, I prefer to use `bundle console` for testing a few codes and experimenting with the gem repo.
 
 ## Contributing
 
@@ -509,6 +512,6 @@ This software has been developed by [Shekhar Prasad Rajak](https://github.com/Sh
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The gem is available as open-source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 Copyright (c) 2017 Shekhar Prasad Rajak(@shekharrajak)

@@ -2,13 +2,12 @@ name: daru-view test
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   test:
-
     strategy:
       fail-fast: false
       matrix:
@@ -17,20 +16,20 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Install dependencies
-      run: | 
-        gem install bundler
-        gem install rainbow -v '2.2.1'
-        bundle install
-    - name: Run tests
-      run: |
-        bundle exec rspec
-        bundle exec rubocop
-    - name: Push coverage report
-      run:  bundle exec rake coveralls:push
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          gem install rainbow -v '2.2.1'
+          bundle install
+      - name: Run tests
+        run: |
+          bundle exec rspec
+          bundle exec rubocop
+      - name: Push coverage report
+        run: bundle exec rake coveralls:push
