@@ -8,7 +8,7 @@ gemspec
 # TODO: later we will use the recent version of daru gem.
 gem "daru", '0.2.0'
 gem "nyaplot", git: 'https://github.com/SciRuby/nyaplot.git'
-gem 'google_visualr', git: 'https://github.com/winston/google_visualr.git'
+gem 'google_visualr_rails5'
 
 gem 'daru-data_tables', git: 'https://github.com/Shekharrajak/daru-data_tables.git'
 
