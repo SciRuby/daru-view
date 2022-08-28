@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop'
 
   # fetching latest gem from the Gemfile
-  spec.add_runtime_dependency 'google_visualr'
+  spec.add_runtime_dependency 'google_visualr_rails5'
   spec.add_runtime_dependency 'lazy_high_charts'
   spec.add_runtime_dependency 'daru'
   spec.add_runtime_dependency 'nyaplot'
